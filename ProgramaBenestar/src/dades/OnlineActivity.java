@@ -1,3 +1,4 @@
+package dades;
 import java.util.Date;
 
 public class OnlineActivity {
