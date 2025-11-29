@@ -36,7 +36,7 @@ public class User {
         return new User(this.userType, this.nickname, this.email);
     }
 
-
+    @Override
     public String toString() {
         return "User [Nickname: " + nickname + ", Email: " + email + "]";
     }
