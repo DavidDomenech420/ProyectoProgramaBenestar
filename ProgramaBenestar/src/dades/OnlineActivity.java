@@ -1,64 +1,49 @@
 package dades;
-import java.util.Date;
+import java.time.LocalDate;
 
-public class OnlineActivity {
-    private String activityName; // El id de las actividades
-    private String collective;
-    private Date startDateInscriptions;
-    private Date finishDateInscriptions;
-    private Date startDateActivity;
-    private Date timeToViewActivity;
+public class OnlineActivity extends Activities {
+    private LocalDate startDateActivity;
+    private LocalDate finishDateActivity;
+    private String linkCourse;
     
     // Constructor
-    public OnlineActivity(String activityName, String collective, Date startDateInscriptions,
-        Date finishDateInscriptions, Date startDateActivity, Date timeToViewActivity) {
-            this.activityName = activityName;
-            this.collective = collective;
-            this.startDateInscriptions = startDateInscriptions;
-        this.finishDateInscriptions = finishDateInscriptions;
+    public OnlineActivity(String activityName, String[] collectives, LocalDate startDateInscriptions,
+        LocalDate finishDateInscriptions, LocalDate startDateActivity, LocalDate finishDateActivity, String linkCourse) {
+        super(activityName, startDateInscriptions, finishDateInscriptions, collectives, 0); // No hay maximo de instrucciones
         this.startDateActivity = startDateActivity;
-        this.timeToViewActivity = timeToViewActivity;
+        this.finishDateActivity = finishDateActivity;
+        this.linkCourse = linkCourse;
     }
     
     // Getters / Setters
-    public String getActivityName() {
-        return activityName;
-    }
-
-    public void setActivityName(String activityName) {
-        this.activityName = activityName;
-    }
-
-    public Date getStartDateInscriptions() {
-        return startDateInscriptions;
-    }
-
-    public void setStartDateInscriptions(Date startDateInscriptions) {
-        this.startDateInscriptions = startDateInscriptions;
-    }
-
-    public Date getFinishDateInscriptions() {
-        return finishDateInscriptions;
-    }
-
-    public void setFinishDateInscriptions(Date finishDateInscriptions) {
-        this.finishDateInscriptions = finishDateInscriptions;
-    }
-
-    public Date getStartDateActivity() {
+    public LocalDate getStartDateActivity() {
         return startDateActivity;
     }
 
-    public void setStartDateActivity(Date startDateActivity) {
+    public void setStartDateActivity(LocalDate startDateActivity) {
         this.startDateActivity = startDateActivity;
     }
 
-    public Date getTimeToViewActivity() {
-        return timeToViewActivity;
+    public LocalDate getFinishDateActivity() {
+        return finishDateActivity;
     }
 
-    public void setTimeToViewActivity(Date timeToViewActivity) {
-        this.timeToViewActivity = timeToViewActivity;
+    public void setFinishDateActivity(LocalDate finishDateActivity) {
+        this.finishDateActivity = finishDateActivity;
+    }
+
+    public String getLinkCourse() {
+        return linkCourse;
+    }
+
+    public void setLinkCourse(String linkCourse) {
+        this.linkCourse = linkCourse;
+    }
+
+    @Override
+    public String toString(){
+        return "Online Activity [Activity Name: " + getActivityName() + ", Start Date Inscriptions: " + getStartDateInscriptions() +
+        ", Finish Date Inscriptions: " + getFinishDateInscriptions() + " Collectives: (" + getCollectiveString() + "), Start Date Activity: " + getStartDateActivity() + ", Time to View Activity: " + getFinishDateActivity() + ", Link Course: " + getLinkCourse() + "]";
     }
 
 

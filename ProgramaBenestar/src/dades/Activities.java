@@ -3,7 +3,7 @@ import java.time.LocalDate;
 
 import Usuaris.User;
 
-public class Activities {
+public abstract class Activities {
     private String activityName;
     private String[] collective = new String[3]; //Max 3 col·lectius
     private int numElemsCollective;
