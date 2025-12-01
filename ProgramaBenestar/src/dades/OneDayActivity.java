@@ -13,7 +13,7 @@ public class OneDayActivity extends Activities{
     public OneDayActivity(String activityName, LocalDate startDateInscriptions,
             LocalDate finishDateInscriptions,String[] collectives, int limitPlaces, String city, LocalDate day, LocalTime startTime, LocalTime finishTime, double price) {
         if (startTime.isAfter(finishTime)) {
-            throw new IllegalArgumentException("Start time cannot be after finish time.");
+            startTime = finishTime.minusMinutes(30);
         }
         super(activityName, startDateInscriptions, finishDateInscriptions, collectives, limitPlaces);
         this.city = city;
