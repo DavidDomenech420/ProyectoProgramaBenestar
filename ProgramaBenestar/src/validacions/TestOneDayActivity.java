@@ -2,6 +2,7 @@ package validacions;
 import dades.OneDayActivity;
 import java.time.LocalDate;
 
+import Usuaris.PDIUser;
 import Usuaris.User;
 
 public class TestOneDayActivity {
@@ -45,7 +46,7 @@ public class TestOneDayActivity {
         OneDayActivity oda3 = new OneDayActivity("Beach Day", LocalDate.of(2024, 7, 1), LocalDate.of(2024, 7, 10), collectives, 15, "Valencia");
         System.out.println("Before adding inscriptions: " + oda3.getInscriptionsString());
         // Add inscriptions and test behavior
-        User user1 = new User("PDI", "john_doe", "john.doe");
+        User user1 = new PDIUser("PDI", "john_doe", "john.doe", "Sescelades", "Informatica");
         oda3.addInscription(user1);
         System.out.println("After adding John Doe: " + oda3.getInscriptionsString());
         

@@ -100,6 +100,10 @@ public abstract class Activities {
         this.numInscriptions = inscriptions.length;
     }
 
+    public int getNumInscriptions(){
+        return this.numInscriptions;
+    }
+
     public void addCollective(String collective){
         if (numElemsCollective < this.collective.length) {
             this.collective[numElemsCollective] = collective;
@@ -122,7 +126,7 @@ public abstract class Activities {
             return;
         }
         if (numElemsWaitingList < waitingList.length) {
-            waitingList[numElemsWaitingList] = member.copy();
+            waitingList[numElemsWaitingList] = member;
             numElemsWaitingList++;
         }
         else {
@@ -164,7 +168,7 @@ public abstract class Activities {
             return;
         }
         if (numInscriptions < inscriptions.length){
-            inscriptions[numInscriptions] = member.copy();
+            inscriptions[numInscriptions] = member;
             numInscriptions++;
         }
         else {

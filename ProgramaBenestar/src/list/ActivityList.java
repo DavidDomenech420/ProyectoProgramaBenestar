@@ -1,5 +1,83 @@
 package list;
 
+import java.time.LocalDate;
+
+import dades.Activities;
+
 public class ActivityList {
-    //TO-DO
+    Activities[] list;
+    int nElem;
+    
+    public ActivityList(int n){
+        list = new Activities[n];
+        nElem = 0;
+    }
+
+    public void addActivity (Activities activity){
+        if (nElem < list.length) {
+            list[nElem] = activity;
+            nElem++;
+        }
+        else {
+            System.out.println("No more space in the list");
+        }
+    }
+
+    @Override
+    public String toString() {
+        String aux = "Activity List: \n";
+        for (int i = 0; i < nElem; i++) {
+            aux += "1 - " + list[nElem] + "\n";
+        }
+        return aux;
+    }
+
+    private int getNElem(){
+        return nElem;
+    }
+
+    private Activities getActivity(int pos){
+        return list[pos];
+    }
+    
+    public Activities getActivity(String name){
+        Activities activity = null;
+        for (int i = 0; i < nElem; i++) {
+            if (list[i].getActivityName().equalsIgnoreCase(name)) {
+                activity = list[i];
+            }
+        }
+
+        return activity;
+    }
+
+    public ActivityList activitiesInscriptionOpen(LocalDate date){
+        ActivityList activitiesInsOpen = new ActivityList(nElem);
+        for (int i = 0; i < nElem; i++) {
+            if (list[i].getStartDateInscriptions().isBefore(date) && list[i].getFinishDateInscriptions().isAfter(date)) {
+                activitiesInsOpen.addActivity(list[i]);
+            }
+        }
+        return activitiesInsOpen;
+    }
+
+    public String[] activitiesAvaliablePlaces(){
+        String[] activitiesName;
+        ActivityList activitiesList = new ActivityList(nElem);
+        for (int i = 0; i < nElem; i++) {
+            if (list[i].getNumInscriptions() < list[i].getInscriptions().length) {
+                activitiesList.addActivity(list[i]);
+            }
+        }
+        activitiesName = new String[activitiesList.getNElem()];
+        for (int i = 0; i < activitiesName.length; i++) {
+            activitiesName[i] = activitiesList.getActivity(i).getActivityName();
+        }
+        return activitiesName;
+    }
+
+
+
+    
+
 }

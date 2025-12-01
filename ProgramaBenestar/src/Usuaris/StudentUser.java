@@ -25,8 +25,7 @@ public class StudentUser extends User{
         this.firstYear = firstYear;
     }
 
-    @Override
-    public User copy() {
+    public StudentUser copy() {
         return new StudentUser(this.getUserType(), this.getNickname(), this.getEmail(), this.degree, this.firstYear);
     }
     

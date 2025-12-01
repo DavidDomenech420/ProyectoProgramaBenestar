@@ -17,8 +17,7 @@ public class PDIUser extends PTGASUser{
         this.department = department;
     }
 
-    @Override
-    public User copy() {
+    public PDIUser copy() {
         return new PDIUser(this.getUserType(), this.getNickname(), this.getEmail(), this.getCampus(), this.department);
     }
     

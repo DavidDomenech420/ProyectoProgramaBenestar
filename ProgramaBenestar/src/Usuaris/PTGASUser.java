@@ -18,8 +18,7 @@ public class PTGASUser extends User{
         this.campus = campus;
     }
 
-    @Override
-    public User copy() {
+    public PTGASUser copy() {
         return new PTGASUser(this.getUserType(), this.getNickname(), this.getEmail(), this.campus);
     }
 

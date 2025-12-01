@@ -1,5 +1,5 @@
 package Usuaris;
-public class User {
+public abstract class User {
     private String userType;
     private String nickname;
     private String email;
@@ -32,9 +32,9 @@ public class User {
         this.email = email;
     }
 
-    public User copy() {
-        return new User(this.userType, this.nickname, this.email);
-    }
+    // public User copy() {
+    //     return new User(this.userType, this.nickname, this.email);
+    // }
 
     @Override
     public String toString() {
