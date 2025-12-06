@@ -167,6 +167,10 @@ public abstract class Activities {
             System.out.println("The member's user type is not allowed for this activity.");
             return;
         }
+        if (finishDateInscriptions.isBefore(LocalDate.now())) {
+            System.out.println("The inscription period has ended. Cannot add inscription.");
+            return;
+        }
         if (numInscriptions < inscriptions.length){
             inscriptions[numInscriptions] = member;
             numInscriptions++;
