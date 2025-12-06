@@ -171,6 +171,10 @@ public abstract class Activities {
             System.out.println("The inscription period has ended. Cannot add inscription.");
             return;
         }
+        if (startDateInscriptions.isAfter(LocalDate.now())) {
+            System.out.println("The inscription period has not started yet. Cannot add inscription.");
+            return;
+        }
         if (numInscriptions < inscriptions.length){
             inscriptions[numInscriptions] = member;
             numInscriptions++;
