@@ -2,7 +2,7 @@ package validacions;
 
 import Usuaris.PTGASUser;
 
-public class TestPDGASUser {
+public class TestPTGASUser {
     public static void main(String[] args) {
         testConstructor();
         testGettersSetters();
