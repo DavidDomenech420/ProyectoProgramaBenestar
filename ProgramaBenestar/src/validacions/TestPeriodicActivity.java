@@ -2,7 +2,6 @@ package validacions;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import dades.OnlineActivity;
 import dades.PeriodicActivity;
 
 
