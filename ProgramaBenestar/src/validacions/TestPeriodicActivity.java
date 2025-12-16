@@ -14,10 +14,11 @@ public class TestPeriodicActivity {
     public static void testConstructor(){
         System.out.println("Testing Constructor:");
         String[] collective = {"PDI", "PTGAS"};
-        PeriodicActivity act1 = new PeriodicActivity("Curs de Costura", LocalDate.of(2025, 12, 1), LocalDate.of(2025, 12, 6), collective, 50, "Dimecres", LocalTime.of(10, 30), LocalTime.of(12, 30), LocalDate.of(2026, 1, 8), 6, 76.89, "Campus Catalunya", "Tarragona");
+        PeriodicActivity act1 = new PeriodicActivity("Periodic", "Curs de Costura", LocalDate.of(2025, 12, 1), LocalDate.of(2025, 12, 6), collective, 50, "Dimecres", LocalTime.of(10, 30), LocalTime.of(12, 30), LocalDate.of(2026, 1, 8), 6, 76.89, "Campus Catalunya", "Tarragona");
         System.out.println(act1);
     
         PeriodicActivity act2 = new PeriodicActivity(
+            "Periodic", 
             "Ioga per a principiants",
             LocalDate.of(2025, 11, 10),
             LocalDate.of(2025, 11, 20),
@@ -37,6 +38,7 @@ public class TestPeriodicActivity {
     public static void testGettersSetters(){
         String[] collective = {"PDI"};
         PeriodicActivity act2 = new PeriodicActivity(
+            "Periodic", 
             "Ioga per a principiants",
             LocalDate.of(2025, 11, 10),
             LocalDate.of(2025, 11, 20),

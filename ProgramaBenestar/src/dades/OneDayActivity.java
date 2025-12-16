@@ -10,9 +10,9 @@ public class OneDayActivity extends Activities{
     private double price;
     
 
-    public OneDayActivity(String activityName, LocalDate startDateInscriptions,
+    public OneDayActivity(String activityType, String activityName, LocalDate startDateInscriptions,
             LocalDate finishDateInscriptions,String[] collectives, int limitPlaces, String city, LocalDate day, LocalTime startTime, LocalTime finishTime, double price) {
-        super(activityName, startDateInscriptions, finishDateInscriptions, collectives, limitPlaces);
+        super(activityType, activityName, startDateInscriptions, finishDateInscriptions, collectives, limitPlaces);
         if (startTime.isAfter(finishTime)) {
             startTime = finishTime.minusMinutes(30);
         }
@@ -64,7 +64,7 @@ public class OneDayActivity extends Activities{
 
     @Override
     public Activities copia() {
-        Activities copia = new OneDayActivity(getActivityName(), getStartDateInscriptions(), getFinishDateInscriptions(), getCollective(), getNumInscriptions(), getCity(), getDay(), getStartTime(), getFinishTime(), getPrice());
+        Activities copia = new OneDayActivity(getActivityType(),getActivityName(), getStartDateInscriptions(), getFinishDateInscriptions(), getCollective(), getNumInscriptions(), getCity(), getDay(), getStartTime(), getFinishTime(), getPrice());
         return copia;
     }
 

@@ -7,9 +7,9 @@ public class OnlineActivity extends Activities {
     private String linkCourse;
     
     // Constructor
-    public OnlineActivity(String activityName, String[] collectives, LocalDate startDateInscriptions,
+    public OnlineActivity(String activityType, String activityName, String[] collectives, LocalDate startDateInscriptions,
         LocalDate finishDateInscriptions, LocalDate startDateActivity, LocalDate finishDateActivity, String linkCourse) {
-        super(activityName, startDateInscriptions, finishDateInscriptions, collectives, 300); // No hay maximo de instrucciones
+        super(activityType, activityName, startDateInscriptions, finishDateInscriptions, collectives, 300); // No hay maximo de instrucciones
         this.startDateActivity = startDateActivity;
         this.finishDateActivity = finishDateActivity;
         this.linkCourse = linkCourse;
@@ -42,7 +42,7 @@ public class OnlineActivity extends Activities {
 
     @Override
     public Activities copia() {
-        Activities copia = new OnlineActivity(getActivityName(), getCollective(), getStartDateInscriptions(), getFinishDateInscriptions(), getStartDateActivity(), getFinishDateActivity(), getLinkCourse());
+        Activities copia = new OnlineActivity(getActivityType(), getActivityName(), getCollective(), getStartDateInscriptions(), getFinishDateInscriptions(), getStartDateActivity(), getFinishDateActivity(), getLinkCourse());
         return copia;
     }
 

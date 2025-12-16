@@ -13,15 +13,15 @@ public class TestOnlineActivity {
     public static void testConstructor(){
         System.out.println("Testing Constructor:");
         String[] collectives = {"PDI", "PTGAS"};
-        OnlineActivity oda1 = new OnlineActivity("Hacking Course", collectives, LocalDate.of(2024, 10, 1), LocalDate.of(2024, 9, 15), LocalDate.of(2024, 9, 20), LocalDate.of(2024, 9, 30), "hackingcourse.com");
+        OnlineActivity oda1 = new OnlineActivity("Online", "Hacking Course", collectives, LocalDate.of(2024, 10, 1), LocalDate.of(2024, 9, 15), LocalDate.of(2024, 9, 20), LocalDate.of(2024, 9, 30), "hackingcourse.com");
         System.out.println(oda1);
-        OnlineActivity oda2 = new OnlineActivity("Java Course", collectives, LocalDate.of(2024, 8, 10), LocalDate.of(2024, 7, 20), LocalDate.of(2025, 10, 11), LocalDate.of(2026, 1, 11), "javaProject.es");
+        OnlineActivity oda2 = new OnlineActivity("Online", "Java Course", collectives, LocalDate.of(2024, 8, 10), LocalDate.of(2024, 7, 20), LocalDate.of(2025, 10, 11), LocalDate.of(2026, 1, 11), "javaProject.es");
         System.out.println(oda2);
     }
 
     public static void testGettersSetters(){
         String[] collectives = {"PDI", "PTGAS"};
-        OnlineActivity oda2 = new OnlineActivity("Hacking Course", collectives, LocalDate.of(2024, 10, 1), LocalDate.of(2024, 9, 15), LocalDate.of(2024, 9, 20), LocalDate.of(2024, 10, 20), "hackingcourseURV.cat");
+        OnlineActivity oda2 = new OnlineActivity("Online", "Hacking Course", collectives, LocalDate.of(2024, 10, 1), LocalDate.of(2024, 9, 15), LocalDate.of(2024, 9, 20), LocalDate.of(2024, 10, 20), "hackingcourseURV.cat");
         
         // Testing Getters
         System.out.println("Activity Name: " + oda2.getActivityName());

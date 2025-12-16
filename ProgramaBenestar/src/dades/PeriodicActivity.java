@@ -14,10 +14,10 @@ public class PeriodicActivity extends Activities{
    
 
     //---------- CONSTRUCTOR ----------
-    public PeriodicActivity(String activityName, LocalDate startDateInscriptions, LocalDate finishDateInscriptions, String[] collective, int maxInscriptions, String dayOfActivity, LocalTime inicialTime, LocalTime finalTime,
+    public PeriodicActivity(String activityType, String activityName, LocalDate startDateInscriptions, LocalDate finishDateInscriptions, String[] collective, int maxInscriptions, String dayOfActivity, LocalTime inicialTime, LocalTime finalTime,
             LocalDate inicialDate, int weeksOfActivity, double priceActivity, String centerName,
             String cityName) {
-        super(activityName, startDateInscriptions, finishDateInscriptions, collective, maxInscriptions); //constructor pare 
+        super(activityType, activityName, startDateInscriptions, finishDateInscriptions, collective, maxInscriptions); //constructor pare 
         this.dayOfActivity = dayOfActivity;
         this.inicialTime = inicialTime;
         this.finalTime = finalTime;
@@ -112,7 +112,7 @@ public class PeriodicActivity extends Activities{
 
     @Override
     public Activities copia() {
-        Activities copia = new PeriodicActivity(getActivityName(), getStartDateInscriptions(), getFinishDateInscriptions(), getCollective(), getNumInscriptions(), getDayOfActivity(), getInicialTime(), getFinalTime(), getInicialDate(), getWeeksOfActivity(), getPriceActivity(), getCenterName(), getCityName());
+        Activities copia = new PeriodicActivity(getActivityType(), getActivityName(), getStartDateInscriptions(), getFinishDateInscriptions(), getCollective(), getNumInscriptions(), getDayOfActivity(), getInicialTime(), getFinalTime(), getInicialDate(), getWeeksOfActivity(), getPriceActivity(), getCenterName(), getCityName());
         return copia;
     }
 

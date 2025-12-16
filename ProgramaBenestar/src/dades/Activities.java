@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import Usuaris.User;
 
 public abstract class Activities {
+    private String activityType;
     private String activityName;
     private String[] collective = new String[3]; //Max 3 col·lectius
     private int numElemsCollective;
@@ -15,10 +16,11 @@ public abstract class Activities {
     private int numInscriptions;
 
     // Constructor
-    public Activities(String activityName, LocalDate startDateInscriptions, LocalDate finishDateInscriptions, String[] collective, int maxInscriptions){
+    public Activities(String activityType, String activityName, LocalDate startDateInscriptions, LocalDate finishDateInscriptions, String[] collective, int maxInscriptions){
         if (startDateInscriptions.isAfter(finishDateInscriptions)) {
             startDateInscriptions = finishDateInscriptions;
         }
+        this.activityType = activityType;
         this.activityName = activityName;
         this.startDateInscriptions = startDateInscriptions;
         this.finishDateInscriptions = finishDateInscriptions;
@@ -30,6 +32,14 @@ public abstract class Activities {
     }
 
     // Getters / Setters
+    public String getActivityType() {
+        return activityType;
+    }
+
+    public void setActivityType(String activityType) {
+        this.activityType = activityType;
+    }
+
     public String getActivityName() {
         return activityName;
     }
