@@ -41,6 +41,12 @@ public class OnlineActivity extends Activities {
     }
 
     @Override
+    public Activities copia() {
+        Activities copia = new OnlineActivity(getActivityName(), getCollective(), getStartDateInscriptions(), getFinishDateInscriptions(), getStartDateActivity(), getFinishDateActivity(), getLinkCourse());
+        return copia;
+    }
+
+    @Override
     public String toString(){
         return "Online Activity [Activity Name: " + getActivityName() + ", Start Date Inscriptions: " + getStartDateInscriptions() +
         ", Finish Date Inscriptions: " + getFinishDateInscriptions() + " Collectives: (" + getCollectiveString() + "), Start Date Activity: " + getStartDateActivity() + ", Time to View Activity: " + getFinishDateActivity() + ", Link Course: " + getLinkCourse() + "]";

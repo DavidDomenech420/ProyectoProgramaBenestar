@@ -62,6 +62,11 @@ public class OneDayActivity extends Activities{
         this.price = price;
     }
 
+    @Override
+    public Activities copia() {
+        Activities copia = new OneDayActivity(getActivityName(), getStartDateInscriptions(), getFinishDateInscriptions(), getCollective(), getNumInscriptions(), getCity(), getDay(), getStartTime(), getFinishTime(), getPrice());
+        return copia;
+    }
 
     @Override
     public String toString(){

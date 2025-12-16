@@ -110,6 +110,11 @@ public class PeriodicActivity extends Activities{
         this.cityName = cityName;
     }
 
+    @Override
+    public Activities copia() {
+        Activities copia = new PeriodicActivity(getActivityName(), getStartDateInscriptions(), getFinishDateInscriptions(), getCollective(), getNumInscriptions(), getDayOfActivity(), getInicialTime(), getFinalTime(), getInicialDate(), getWeeksOfActivity(), getPriceActivity(), getCenterName(), getCityName());
+        return copia;
+    }
 
     //------------ TO STRING ------------
    @Override

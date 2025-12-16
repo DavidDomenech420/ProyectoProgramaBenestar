@@ -199,5 +199,8 @@ public abstract class Activities {
         System.out.println("Member not found in inscriptions.");
     }
 
+    // *** Clases Abstractas ***
+    public abstract Activities copia();
+
 
 }

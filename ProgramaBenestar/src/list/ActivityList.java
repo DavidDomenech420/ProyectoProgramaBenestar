@@ -76,8 +76,4 @@ public class ActivityList {
         return activitiesName;
     }
 
-
-
-    
-
 }
