@@ -11,6 +11,11 @@ import dades.OneDayActivity;
 import dades.OnlineActivity;
 import dades.PeriodicActivity;
 import list.ActivityList;
+import list.UserList;
+import Usuaris.PDIUser;
+import Usuaris.PTGASUser;
+import Usuaris.StudentUser;
+import Usuaris.User;
 
 public class AppProgramaBenestar {
     public static void main(String[] args) throws Exception {
@@ -66,6 +71,40 @@ public class AppProgramaBenestar {
         } catch (FileNotFoundException e) {
             System.out.println("No hi ha cap fitxer creat actualment");
         }
+        UserList Users = new UserList(300);
+
+        try{
+            BufferedReader fileUser = new BufferedReader(new FileReader("users.txt"));
+            String userstr = "";
+            userstr = fileUser.readLine();
+            User user = null;
+            while (userstr != null){
+                String[] userstrsliced = userstr.split(";");
+                String userType = userstrsliced[0];
+                String nickname = userstrsliced[1];
+                String email = userstrsliced[2];
+                if (userType == "PDI"){
+                    String campus = userstrsliced[3];
+                    String department = userstrsliced[4];
+                    user = new PDIUser(userType, nickname, email, campus, department);
+                }
+                else if (userType == "PTGAS"){
+                    String campus = userstrsliced[3];
+                    user = new PTGASUser(userType, nickname, email, campus);
+                }
+                else if (userType == "Student"){
+                    String degree = userstrsliced[3];
+                    int firstYear = Integer.parseInt(userstrsliced[4]);
+                    user = new StudentUser(userType, nickname, email, degree, firstYear);
+                }
+                Users.addUser(user);
+                userstr = fileUser.readLine();
+            }
+            fileUser.close();
+        } catch (FileNotFoundException e){
+            System.out.println("No hi ha cap fitxer d'usuaris creat actualment");
+        }
+
         
 
         // Mostrem el menu
