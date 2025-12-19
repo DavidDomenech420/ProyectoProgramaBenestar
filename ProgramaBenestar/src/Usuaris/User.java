@@ -1,5 +1,9 @@
 package Usuaris;
-public abstract class User {
+import java.io.Serializable;
+
+public abstract class User implements Serializable {
+    // Si la classe pare user és serialitzable, les classes filles també ho seran.
+    private static final long serialVersionUID = 1L; // Controla la compatibilitat de les classes 
     private String userType;
     private String nickname;
     private String email;

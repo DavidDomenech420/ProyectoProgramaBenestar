@@ -1,10 +1,10 @@
 package aplicació;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import dades.Activities;
 import dades.OneDayActivity;
@@ -71,47 +71,67 @@ public class AppProgramaBenestar {
         } catch (FileNotFoundException e) {
             System.out.println("No hi ha cap fitxer creat actualment");
         }
-        UserList Users = new UserList(300);
+ 
+
+
+        // ------ Fitxer .ser - usuaris -----
+        UserList usersList = new UserList(300);
 
         try{
-            BufferedReader fileUser = new BufferedReader(new FileReader("users.txt"));
-            String userstr = "";
-            userstr = fileUser.readLine();
-            User user = null;
-            while (userstr != null){
-                String[] userstrsliced = userstr.split(";");
-                String userType = userstrsliced[0];
-                String nickname = userstrsliced[1];
-                String email = userstrsliced[2];
-                if (userType == "PDI"){
-                    String campus = userstrsliced[3];
-                    String department = userstrsliced[4];
-                    user = new PDIUser(userType, nickname, email, campus, department);
-                }
-                else if (userType == "PTGAS"){
-                    String campus = userstrsliced[3];
-                    user = new PTGASUser(userType, nickname, email, campus);
-                }
-                else if (userType == "Student"){
-                    String degree = userstrsliced[3];
-                    int firstYear = Integer.parseInt(userstrsliced[4]);
-                    user = new StudentUser(userType, nickname, email, degree, firstYear);
-                }
-                Users.addUser(user);
-                userstr = fileUser.readLine();
+            ObjectInputStream fileUser = new ObjectInputStream(new FileInputStream("users.ser")); // Fitxer serialitzat
+            System.out.println("LLEGINT ...");
+            while(true){ //Quan arribi a final de fitxer sortirà l'excepció EOF Exception
+                User user = (User) fileUser.readObject();
+                usersList.addUser(user);
             }
-            fileUser.close();
+        } catch(EOFException e){ //Final de fitxer
+            System.out.println("Usuaris guardats correctament");
         } catch (FileNotFoundException e){
-            System.out.println("No hi ha cap fitxer d'usuaris creat actualment");
+            System.out.println("Fitxer no existent.");
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
+        //1- IOException: Error de lectura del disc. El ObjectInpuStream falla. El fitxer no és vàlid.
+        //2- ClassNotFoundException: Error de classe.
+
+        try{
+            ObjectOutputStream fileUser = new ObjectOutputStream(new FileOutputStream("users.ser")); //Crearia un fitxer nou amb ek nom users, però com ja hi ha un de creat, el sobreescriu
+            System.out.println("ESCRIVINT ...");
+            for(int i=0; i<usersList.getNumElems(); i++){
+                fileUser.writeObject(usersList.getUser(i));
+            }   
+        } catch (IOException e){
+            System.out.println("Error en l'arxiu de sortida");
+        }
+        
+        // Mostrem el menu
+        mostraMenu();
 
         
-
-        // Mostrem el menu
-    }
+        // ------ Fitxer .txt ------
+        try{
+            BufferedWriter file = new BufferedWriter(new FileWriter("data.txt"));
+            String frase= "Activities: activityType;activityName;startInscriptionDate;finishInscriptionDate;collectives;maxInscriptions. OneDatActivity: city;day;startTime;finishTime;price. PeriodicActivity: day;startTime;finishTime;inicialDay;weeksOfActivity;price;centerName;cityName. Online: startDayActivity;finishDayActivity;linkCourse.";
+            file.write(frase);
+            file.newLine();
+            for(int i=0; i<activities.getNumElems(); i++){
+                frase = "" + activities.getActivity(i);
+                file.write(frase);
+                file.newLine();
+            }
+            file.close();
+        } catch (FileNotFoundException e){
+            System.out.println("Fitxer no existent");
+		} catch(IOException e) {
+			System.out.println("S'ha produit un error en els arxius");
+        }
+    
 
     public static void mostraMenu(){
         System.out.println("\n\nOPCIONS DEL MENU: ");
+        
     }
 
+
+    
 }

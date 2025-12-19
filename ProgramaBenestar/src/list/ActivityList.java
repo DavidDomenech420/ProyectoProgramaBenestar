@@ -32,11 +32,11 @@ public class ActivityList {
         return aux;
     }
 
-    private int getNElem(){
+    public int getNumElems(){
         return nElem;
     }
 
-    private Activities getActivity(int pos){
+    public Activities getActivity(int pos){
         return list[pos];
     }
     

@@ -30,9 +30,9 @@ public class UserList {
         return aux;
     }
 
-    // private int getNElem(){
-    //     return nElem;
-    // }
+    public int getNumElems(){
+        return nElem;
+    }
 
     public User getUser(int pos){
         return list[pos];
