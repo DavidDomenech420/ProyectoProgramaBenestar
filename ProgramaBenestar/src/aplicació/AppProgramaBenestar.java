@@ -5,6 +5,7 @@ import java.time.LocalTime;
 import java.io.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Scanner;
 
 import dades.Activities;
 import dades.OneDayActivity;
@@ -18,6 +19,8 @@ import Usuaris.StudentUser;
 import Usuaris.User;
 
 public class AppProgramaBenestar {
+    static Scanner teclat = new Scanner(System.in);
+
     public static void main(String[] args) throws Exception {
         // Inicialitzem les variables per la llista d'activitats
         ActivityList activities = new ActivityList(300);
@@ -106,6 +109,62 @@ public class AppProgramaBenestar {
         
         // Mostrem el menu
         mostraMenu();
+        int opcio = Integer.parseInt(teclat.nextLine());
+        String tipusOp2 = teclat.nextLine();
+        while (opcio != 22){ //Mostrarem el menu fins que l'usuari vulgui sortir de l'aplicació
+            switch (opcio){
+                case 1:
+                    break;
+                case 2:
+                    //*Supongo que habrá que hacer lo mismo que con el menu grande pero en pequeño */
+                    if(tipusOp2.equalsIgnoreCase("usuaris")){
+                        opcio2("usuaris");
+                    } else if(tipusOp2.equalsIgnoreCase("activitats")){
+                        opcio2("activitats");
+                    }
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+                case 5:
+                    break;
+                case 6:
+                    break;
+                case 7:
+                    break;
+                case 8:
+                    break;
+                case 9:
+                    break;
+                case 10:
+                    break;
+                case 11:
+                    break;
+                case 12:
+                    break;
+                case 13:
+                    break;
+                case 14:
+                    break;
+                case 15:
+                    break;
+                case 16:
+                    break;
+                case 17:
+                    break;
+                case 18:
+                    break;
+                case 19:
+                    break;
+                case 20:
+                    break;
+                case 21:
+                    break;
+            }
+            mostraMenu();
+            opcio = Integer.parseInt(teclat.nextLine());
+        }
 
         
         // ------ Fitxer .txt ------
@@ -125,13 +184,128 @@ public class AppProgramaBenestar {
 		} catch(IOException e) {
 			System.out.println("S'ha produit un error en els arxius");
         }
-    
+    }
 
     public static void mostraMenu(){
         System.out.println("\n\nOPCIONS DEL MENU: ");
-        
+        System.out.println("1- Informació sobre la data actual"); //Hem de posar en diferents dates per acceptar inscripcions o no. Indicar data actual per poder-la modificar o fer operacions.
+        System.out.println("2- Informació de les dades d'una llista");  //Demanem la llista desitjada. Si són de diferents tipus, es demanarà el tipus i si es vol mostrar tots els tipus o només aquest.
+        System.out.println("3- Informació de les activitats en període d'inscripció"); //Indicar si encara hi han places disponibles.
+        System.out.println("4- Informació d'activitats en la data actual"); //Data del punt 1. Tota la informació de cada activitat; places omplertes? Hi ha llista d'espera?
+        System.out.println("5- Activitats actives en la data actual"); //Nom de les activitats. No cal classe avui, però la data actual ha d'estar entre data inicial i final.
+        System.out.println("6- Activitats amb places disponibles"); //Nom de les activitats. Tant si estan encara en termini d'inscripció o no.
+        System.out.println("7- Informació d'una activitat"); //Informació detallada d'una activitat a partir del seu nom.
+        System.out.println("8- Informació d'un usuari"); //Informació detallada d'un usuari a partir del seu nom.
+        System.out.println("9- Activitats on estàs inscrit"); //Activitats a les que està apuntat un usuari.
+        System.out.println("10- Inscripció a una activitat"); //Inscripció disponible si es dona dins del termini i l'activitat s'ofereix pels col·lectius al que pertany l'usuari demandant.
+        //(Continua 10) Si l'usuari està a la llista, agafar alies. Si no, demanar informació per afegir-lo. Control de places disponibles o anirà a llista d'espera. Si llista d'espera plena, cap inscripcio més.
+        System.out.println("11- Usuaris inscrits en activitats i usuaris en llista d'espera"); //Mostrarem (nom o info completa?) dels usuaris inscrits en alguna activitat i els que estan en llista d'espera.
+        System.out.println("12- Eliminació d'usuari d'una activitat"); //Hi ha llista d'espera --> el primer passa a formar part dels usuaris que poden accedir a l'activitat.
+        System.out.println("13- Afegir una nova activitat d'un dia");
+        System.out.println("14- Afegir una nova activitat periòdica");
+        System.out.println("15- Afegir una nova activitat en línia");
+        System.out.println("16- Valoració d'una activitat"); //Per poder valorar l'activitat: 1-l'activitat ha d'haver acabat; 2-l'usuari ha d'haver assistit a l'activitat.
+        System.out.println("17- Resum de valoracions de les activitats");
+        System.out.println("18- Resum de valoracions d'un usuari"); //Valoracions que ha fet un usuari.
+        System.out.println("19- Mitjanes de valoracions dels col·lectius"); //Volem comparar si els usuaris dels diferents col·lectius valoren igual.
+        System.out.println("20- Usuari més actiu d'un col·lectiu"); //S'haurà d'indicar el col·lectiu. Més actiu = s'ha apuntat a més activitats. Empat? S'escull qualsevol usuari que compleix els requisits.
+        System.out.println("21- Baixa d'activitats"); //Donar de baixa les activitats que ja han acabat el període d'inscripció i no han omplert el 10% de les places. En activitats en línia, si el inscrits < 20 persones.
+        System.out.println("22- Sortir de l'aplicació");
     }
 
 
+    public static void opcio1(){
+        //1. Mostrar informació sobre la data actual: pels jocs de proves farem diferents dates (per poder acceptar inscripcions o no).
+        // Es mostrarà la data per poder modificar-la i fer o no operacions.
+    }
     
+    public static void opcio2(String tipus){
+        //2. Mostrar dades d'una llista: demanem de quina es vol mostrar (usuaris o activitats).
+        
+    }
+
+    public static void opcio3(){
+        //3. Mostrar informació activitats en període d'inscripció: places disponibles o en llista d'espera.
+    }
+
+    public static void opcio4(){
+        //4. Mostrar informació d'activitats en data actual: tota la informació (places, llista d'espera, etc).
+    }
+
+    public static void opcio5(){
+        //5. Mostrar activitats actives en la data actual: nom de les activitats; no cal classe, però la data actual entre la inicial i la final.
+    }
+
+    public static void opcio6(){
+        //6. Mostrar activitats amb places disponibles: nom d'aquestes. Tant si estan en termini d'inscripció o no.
+    }
+
+    public static void opcio7(){
+        //7. Mostrar informació d'una activitat: informació detallada a partir del nom d'aquesta.
+    }
+
+    public static void opcio8(){
+        //8. Mostrar informació d'usuari: informació detallada a partir del nom d'aquest.
+    }
+
+    public static void opcio9(){
+        //9. Mostrar activitats on estàs inscrit: totes a les que l'usuari s'ha apuntat.
+    }
+
+    public static void opcio10(){
+        //10. Inscripció a una activitat: disponible si es dona dins el termini i si aquesta es s'ofereix al col·lectiu que pertanyem.
+        //L'usuari pot estar a la llista (usar alies) o no, en aquest cas s'haurà de demanar la resta d'informació.
+        //Control de places disponibles o llista d'espera. Si la llista d'espera està plena, prohibit cap tipus d'inscripció.
+    }
+
+    public static void opcio11(){
+        //11. Mostrar els usuaris inscrits en activitats i els usuaris en llista d'espera: nom d'aquests.
+    }
+
+    public static void opcio12(){
+        //12. Eliminicació d'usuari d'una activitat:
+        //Quan s'elimini un usuari que podia accedir a l'activitat, el primer de la llista d'espera passarà a ocupar el seu lloc.
+    }
+
+    public static void opcio13(){
+        //13. Afegir una nova activitat d'un dia.
+    }
+
+    public static void opcio14(){
+        //14. Afegir una nova activitat periòdica.
+    }
+
+    public static void opcio15(){
+        //15. Afegir una nova activitat en línia.
+    }
+
+    public static void opcio16(){
+        //16. Valoració d'una activitat: 
+        //requisits per a que l'usuari la pugui valorar: 
+            //1- l'activitat ha d'haver acabat.
+            //2- l'usuari ha d'haver assistit a l'activitat.
+    }
+
+    public static void opcio17(){
+        //17. Mostrar resum de valoracions de les activitats: han d'estar acabades.
+    }
+
+    public static void opcio18(){
+        //18. Mostrar resum de valoracions d'un usuari: total de valoracions fetes per l'usuari indicat.
+    }
+
+    public static void opcio19(){
+        //19. Mostrar mitjanes de valoracions dels col·lectius:
+        // Objectiu -> comparar si els usuaris dels diferents col·lectius valoren igual o no.
+    }
+
+    public static void opcio20(){
+        //20. Mostrar l'usuari més actiu del col·lectiu indicat: l'usuari més actiu serà el que s'ha apuntat a més activitats.
+        // En cas d'empat entre usuaris, s'escollirà a qualsevol usuari que cpmpleixi els requisits.
+    }
+
+    public static void opcio21(){
+        //21. Baixa d'activitats: donar de baixa les activitats que ja han acabat el període d'inscripció sense omplir el 10% de les places.
+        // En activitats en línia es donarà si el número d'inscrits es inferior a 20 persones.
+    }
 }
