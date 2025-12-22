@@ -27,7 +27,7 @@ public class ActivityList {
     public String toString() {
         String aux = "Activity List: \n";
         for (int i = 0; i < nElem; i++) {
-            aux += "1 - " + list[nElem] + "\n";
+            aux += "1 - " + list[i] + "\n";
         }
         return aux;
     }
@@ -69,7 +69,7 @@ public class ActivityList {
                 activitiesList.addActivity(list[i]);
             }
         }
-        activitiesName = new String[activitiesList.getNElem()];
+        activitiesName = new String[activitiesList.getNumElems()];
         for (int i = 0; i < activitiesName.length; i++) {
             activitiesName[i] = activitiesList.getActivity(i).getActivityName();
         }

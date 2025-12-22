@@ -29,6 +29,8 @@ public class AppProgramaBenestar {
             BufferedReader fileRead=new BufferedReader(new FileReader("data.txt"));
             String frase="";
             frase=fileRead.readLine();
+            // Ens saltem la primera frase i anem a la següent
+            frase=fileRead.readLine();
             Activities activity = null;
             while (frase != null) {
                 // Separem la frase per els ; i mirem el primer element
@@ -110,12 +112,12 @@ public class AppProgramaBenestar {
         // Mostrem el menu
         mostraMenu();
         int opcio = Integer.parseInt(teclat.nextLine());
-        String tipusOp2 = teclat.nextLine();
         while (opcio != 22){ //Mostrarem el menu fins que l'usuari vulgui sortir de l'aplicació
             switch (opcio){
                 case 1:
                     break;
                 case 2:
+                    String tipusOp2 = teclat.nextLine();
                     //*Supongo que habrá que hacer lo mismo que con el menu grande pero en pequeño */
                     if(tipusOp2.equalsIgnoreCase("usuaris")){
                         opcio2("usuaris");
@@ -124,6 +126,9 @@ public class AppProgramaBenestar {
                     }
                     break;
                 case 3:
+                    // Llamamos la funcion de pillar la informacion de las actividades con inscripciones abiertas
+                    opcio3(activities);
+                    
                     break;
                 case 4:
                     break;
@@ -148,6 +153,7 @@ public class AppProgramaBenestar {
                 case 14:
                     break;
                 case 15:
+                    opcio15(activities);
                     break;
                 case 16:
                     break;
@@ -224,8 +230,15 @@ public class AppProgramaBenestar {
         
     }
 
-    public static void opcio3(){
+    public static void opcio3(ActivityList activities){
         //3. Mostrar informació activitats en període d'inscripció: places disponibles o en llista d'espera.
+        LocalDate today = LocalDate.now();
+        ActivityList openInscriptionActivities = activities.activitiesInscriptionOpen(today);
+        for (int i = 0; i < openInscriptionActivities.getNumElems(); i++) {
+            int numPlazasDisp = openInscriptionActivities.getActivity(i).getInscriptions().length - openInscriptionActivities.getActivity(i).getNumInscriptions();
+            System.out.println((i+1) + "- " + openInscriptionActivities.getActivity(i).getActivityName() + ", te " + numPlazasDisp + " places disponibles");
+        }
+
     }
 
     public static void opcio4(){
@@ -275,8 +288,58 @@ public class AppProgramaBenestar {
         //14. Afegir una nova activitat periòdica.
     }
 
-    public static void opcio15(){
-        //15. Afegir una nova activitat en línia.
+    public static void opcio15(ActivityList activities){
+        //15. Afegir una nova activitat online.
+        // Demanem al usuari que ens digui la informació que vol afegir a l'activitat
+        System.out.print("Nom de l'activitat: ");
+        String activityName = teclat.nextLine();
+        
+
+        // Colectius 
+        String collectives[] = new String[3];
+        System.out.println("Quins colectius vols afegir? (fica d'un en un i -1 per acabar");
+        int contador = 0;
+        String collective = "";
+        while (contador < 3 && !collective.contains("-1")) {
+            collective = teclat.nextLine();
+            if (!collective.contains("-1")) {
+                collectives[contador] = collective;
+                contador++;
+            }
+        }
+
+        System.out.print("Indica la data d'inici d'inscripcions (aaaa mm dd): ");
+        int any = teclat.nextInt();
+        int mes = teclat.nextInt();
+        int dia = teclat.nextInt();
+        LocalDate startDateInsc = LocalDate.of(any, mes, dia);
+
+        System.out.print("Indica la data de fi d'inscripcions (aaaa mm dd): ");
+        any = teclat.nextInt();
+        mes = teclat.nextInt();
+        dia = teclat.nextInt();
+        LocalDate finishDateInsc = LocalDate.of(any, mes, dia);
+
+        System.out.print("Indica la data de d'inici de l'activitat (aaaa mm dd): ");
+        any = teclat.nextInt();
+        mes = teclat.nextInt();
+        dia = teclat.nextInt();
+        LocalDate startDateActivity = LocalDate.of(any, mes, dia);
+
+        System.out.print("Indica la data de fi de l'activitat (aaaa mm dd): ");
+        any = teclat.nextInt();
+        mes = teclat.nextInt();
+        dia = teclat.nextInt();
+        LocalDate finishDateActivity = LocalDate.of(any, mes, dia);
+        teclat.nextLine();
+
+        System.out.print("Indica el link del curs: ");
+        String linkCourse = teclat.nextLine();
+
+
+
+        Activities onlineActivity = new OnlineActivity("Online", activityName, collectives, startDateInsc, finishDateInsc, startDateActivity, finishDateActivity, linkCourse);
+        activities.addActivity(onlineActivity);
     }
 
     public static void opcio16(){
