@@ -2,6 +2,7 @@ package aplicació;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.io.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -19,7 +20,7 @@ import Usuaris.StudentUser;
 import Usuaris.User;
 
 public class AppProgramaBenestar {
-    static Scanner teclat = new Scanner(System.in);
+    static Scanner keyboard = new Scanner(System.in);
 
     public static void main(String[] args) throws Exception {
         // Inicialitzem les variables per la llista d'activitats
@@ -111,23 +112,23 @@ public class AppProgramaBenestar {
         
         // Mostrem el menu
         mostraMenu();
-        int opcio = Integer.parseInt(teclat.nextLine());
-        while (opcio != 22){ //Mostrarem el menu fins que l'usuari vulgui sortir de l'aplicació
-            switch (opcio){
+        int option = Integer.parseInt(keyboard.nextLine());
+        while (option != 22){ //Mostrarem el menu fins que l'usuari vulgui sortir de l'aplicació
+            switch (option){
                 case 1:
                     break;
                 case 2:
-                    String tipusOp2 = teclat.nextLine();
+                    String typeOp2 = keyboard.nextLine();
                     //*Supongo que habrá que hacer lo mismo que con el menu grande pero en pequeño */
-                    if(tipusOp2.equalsIgnoreCase("usuaris")){
-                        opcio2("usuaris");
-                    } else if(tipusOp2.equalsIgnoreCase("activitats")){
-                        opcio2("activitats");
+                    if(typeOp2.equalsIgnoreCase("usuaris")){
+                        option2("usuaris");
+                    } else if(typeOp2.equalsIgnoreCase("activitats")){
+                        option2("activitats");
                     }
                     break;
                 case 3:
                     // Llamamos la funcion de pillar la informacion de las actividades con inscripciones abiertas
-                    opcio3(activities);
+                    option3(activities);
                     
                     break;
                 case 4:
@@ -138,8 +139,8 @@ public class AppProgramaBenestar {
                     break;
                 case 7:
                     System.out.println("Indica el nom de l'activitat");
-                    String activityName7 = teclat.nextLine();
-                    opcio7(activities, activityName7);
+                    String activityName7 = keyboard.nextLine();
+                    option7(activities, activityName7);
                     break;
                 case 8:
                     break;
@@ -149,8 +150,8 @@ public class AppProgramaBenestar {
                     break;
                 case 11:
                     System.out.println("Indica el nom de l'activitat");
-                    String activityName11 = teclat.nextLine();
-                    opcio11(activities, activityName11);
+                    String activityName11 = keyboard.nextLine();
+                    option11(activities, activityName11);
                     break;
                 case 12:
                     break;
@@ -159,7 +160,7 @@ public class AppProgramaBenestar {
                 case 14:
                     break;
                 case 15:
-                    opcio15(activities);
+                    option15(activities);
                     break;
                 case 16:
                     break;
@@ -175,7 +176,7 @@ public class AppProgramaBenestar {
                     break;
             }
             mostraMenu();
-            opcio = Integer.parseInt(teclat.nextLine());
+            option = Integer.parseInt(keyboard.nextLine());
         }
 
         
@@ -224,18 +225,39 @@ public class AppProgramaBenestar {
         System.out.println("22- Sortir de l'aplicació");
     }
 
+    private static LocalDate usedDate = LocalDate.now();
 
-    public static void opcio1(){
+    // ------ 1º OPCIÓ DEL MENU ------
+    public static void option1(){
         //1. Mostrar informació sobre la data actual: pels jocs de proves farem diferents dates (per poder acceptar inscripcions o no).
         // Es mostrarà la data per poder modificar-la i fer o no operacions.
+        System.out.println("Data actual al programa: " +usedDate);
+        System.out.println("Vol consultar una altra data? Si/no");
+        String answer = keyboard.nextLine();
+        if(answer.equalsIgnoreCase("si")){
+            try{
+                System.out.println("Introdueix una data (AAAA-MM-DD): ");
+                String newDate = keyboard.nextLine();
+                usedDate = LocalDate.parse(newDate);    //Actualització de la data
+                System.out.println("Data actualitzada: " +usedDate);
+            } catch (DateTimeParseException e){
+                System.out.println("Error en el format de la data");
+            }
+        }
     }
+    //--------------------------------
     
-    public static void opcio2(String tipus){
+
+    // ------ 2º OPCIÓ DEL MENU ------
+    public static void option2(String tipus){
         //2. Mostrar dades d'una llista: demanem de quina es vol mostrar (usuaris o activitats).
         
     }
+    //--------------------------------
 
-    public static void opcio3(ActivityList activities){
+
+    // ------ 3º OPCIÓ DEL MENU ------
+    public static void option3(ActivityList activities){
         //3. Mostrar informació activitats en període d'inscripció: places disponibles o en llista d'espera.
         LocalDate today = LocalDate.now();
         ActivityList openInscriptionActivities = activities.activitiesInscriptionOpen(today);
@@ -245,39 +267,70 @@ public class AppProgramaBenestar {
         }
 
     }
+    //--------------------------------
 
-    public static void opcio4(){
+
+    // ------ 4º OPCIÓ DEL MENU ------
+    public static void option4(LocalDate usedDate){
         //4. Mostrar informació d'activitats en data actual: tota la informació (places, llista d'espera, etc).
     }
+    //--------------------------------
 
-    public static void opcio5(){
+
+    // ------ 5º OPCIÓ DEL MENU ------
+    public static void option5(ActivityList activities, LocalDate usedDate){
         //5. Mostrar activitats actives en la data actual: nom de les activitats; no cal classe, però la data actual entre la inicial i la final.
+        for(int i=0; i<activities.getNumElems(); i++){
+            Activities activity = activities.getActivity(i);
+            String type = activity.getActivityType();
+            if(type.equalsIgnoreCase("Un dia")){
+                
+            }
+        }
     }
+    //--------------------------------
 
-    public static void opcio6(){
+
+    // ------ 6º OPCIÓ DEL MENU ------
+    public static void option6(){
         //6. Mostrar activitats amb places disponibles: nom d'aquestes. Tant si estan en termini d'inscripció o no.
     }
+    //--------------------------------
 
-    public static void opcio7(ActivityList activities, String nameActivity){
+
+    // ------ 7º OPCIÓ DEL MENU ------
+    public static void option7(ActivityList activities, String nameActivity){
         //7. Mostrar informació d'una activitat: informació detallada a partir del nom d'aquesta.
         System.out.println(activities.getActivity(nameActivity));
     }
+    //--------------------------------
 
-    public static void opcio8(){
+
+    // ------ 8º OPCIÓ DEL MENU ------
+    public static void option8(){
         //8. Mostrar informació d'usuari: informació detallada a partir del nom d'aquest.
     }
+    //--------------------------------
 
-    public static void opcio9(){
+
+    // ------ 9º OPCIÓ DEL MENU ------
+    public static void option9(){
         //9. Mostrar activitats on estàs inscrit: totes a les que l'usuari s'ha apuntat.
     }
+    //--------------------------------
 
-    public static void opcio10(){
+
+    // ------ 10º OPCIÓ DEL MENU ------
+    public static void option10(){
         //10. Inscripció a una activitat: disponible si es dona dins el termini i si aquesta es s'ofereix al col·lectiu que pertanyem.
         //L'usuari pot estar a la llista (usar alies) o no, en aquest cas s'haurà de demanar la resta d'informació.
         //Control de places disponibles o llista d'espera. Si la llista d'espera està plena, prohibit cap tipus d'inscripció.
     }
+    //--------------------------------
 
-    public static void opcio11(ActivityList activities, String activityName){
+
+    // ------ 11º OPCIÓ DEL MENU ------
+    public static void option11(ActivityList activities, String activityName){
         //11. Mostrar els usuaris inscrits en activitats i els usuaris en llista d'espera: nom d'aquests.
         Activities activity = activities.getActivity(activityName);
         System.out.println("Usuaris Inscrits a l'activitat");
@@ -285,25 +338,37 @@ public class AppProgramaBenestar {
         System.out.println("Usuaris a la llista d'espera de l'activitat");
         activity.printWaitingList();
     }
+    //--------------------------------
 
-    public static void opcio12(){
+
+    // ------ 12º OPCIÓ DEL MENU ------
+    public static void option12(){
         //12. Eliminicació d'usuari d'una activitat:
         //Quan s'elimini un usuari que podia accedir a l'activitat, el primer de la llista d'espera passarà a ocupar el seu lloc.
     }
+    //--------------------------------
 
-    public static void opcio13(){
+
+    // ------ 13º OPCIÓ DEL MENU ------
+    public static void option13(){
         //13. Afegir una nova activitat d'un dia.
     }
+    //--------------------------------
 
-    public static void opcio14(){
+
+    // ------ 14º OPCIÓ DEL MENU ------
+    public static void option14(){
         //14. Afegir una nova activitat periòdica.
     }
+    //--------------------------------
 
-    public static void opcio15(ActivityList activities){
+
+    // ------ 15º OPCIÓ DEL MENU ------
+    public static void option15(ActivityList activities){
         //15. Afegir una nova activitat online.
         // Demanem al usuari que ens digui la informació que vol afegir a l'activitat
         System.out.print("Nom de l'activitat: ");
-        String activityName = teclat.nextLine();
+        String activityName = keyboard.nextLine();
         
 
         // Colectius 
@@ -312,7 +377,7 @@ public class AppProgramaBenestar {
         int contador = 0;
         String collective = "";
         while (contador < 3 && !collective.contains("-1")) {
-            collective = teclat.nextLine();
+            collective = keyboard.nextLine();
             if (!collective.contains("-1")) {
                 collectives[contador] = collective;
                 contador++;
@@ -320,66 +385,83 @@ public class AppProgramaBenestar {
         }
 
         System.out.print("Indica la data d'inici d'inscripcions (aaaa mm dd): ");
-        int any = teclat.nextInt();
-        int mes = teclat.nextInt();
-        int dia = teclat.nextInt();
+        int any = keyboard.nextInt();
+        int mes = keyboard.nextInt();
+        int dia = keyboard.nextInt();
         LocalDate startDateInsc = LocalDate.of(any, mes, dia);
 
         System.out.print("Indica la data de fi d'inscripcions (aaaa mm dd): ");
-        any = teclat.nextInt();
-        mes = teclat.nextInt();
-        dia = teclat.nextInt();
+        any = keyboard.nextInt();
+        mes = keyboard.nextInt();
+        dia = keyboard.nextInt();
         LocalDate finishDateInsc = LocalDate.of(any, mes, dia);
 
         System.out.print("Indica la data de d'inici de l'activitat (aaaa mm dd): ");
-        any = teclat.nextInt();
-        mes = teclat.nextInt();
-        dia = teclat.nextInt();
+        any = keyboard.nextInt();
+        mes = keyboard.nextInt();
+        dia = keyboard.nextInt();
         LocalDate startDateActivity = LocalDate.of(any, mes, dia);
 
         System.out.print("Indica la data de fi de l'activitat (aaaa mm dd): ");
-        any = teclat.nextInt();
-        mes = teclat.nextInt();
-        dia = teclat.nextInt();
+        any = keyboard.nextInt();
+        mes = keyboard.nextInt();
+        dia = keyboard.nextInt();
         LocalDate finishDateActivity = LocalDate.of(any, mes, dia);
-        teclat.nextLine();
+        keyboard.nextLine();
 
         System.out.print("Indica el link del curs: ");
-        String linkCourse = teclat.nextLine();
-
-
+        String linkCourse = keyboard.nextLine();
 
         Activities onlineActivity = new OnlineActivity("Online", activityName, collectives, startDateInsc, finishDateInsc, startDateActivity, finishDateActivity, linkCourse);
         activities.addActivity(onlineActivity);
     }
+    //--------------------------------
 
-    public static void opcio16(){
+
+    // ------ 16º OPCIÓ DEL MENU ------
+    public static void option16(){
         //16. Valoració d'una activitat: 
         //requisits per a que l'usuari la pugui valorar: 
             //1- l'activitat ha d'haver acabat.
             //2- l'usuari ha d'haver assistit a l'activitat.
     }
+    //--------------------------------
 
-    public static void opcio17(){
+
+    // ------ 17º OPCIÓ DEL MENU ------
+    public static void option17(){
         //17. Mostrar resum de valoracions de les activitats: han d'estar acabades.
     }
+    //--------------------------------
 
-    public static void opcio18(){
+
+    // ------ 18º OPCIÓ DEL MENU ------
+    public static void option18(){
         //18. Mostrar resum de valoracions d'un usuari: total de valoracions fetes per l'usuari indicat.
     }
+    //--------------------------------
 
-    public static void opcio19(){
+
+    // ------ 19º OPCIÓ DEL MENU ------
+    public static void option19(){
         //19. Mostrar mitjanes de valoracions dels col·lectius:
         // Objectiu -> comparar si els usuaris dels diferents col·lectius valoren igual o no.
     }
+    //--------------------------------
 
-    public static void opcio20(){
+
+    // ------ 20º OPCIÓ DEL MENU ------
+    public static void option20(){
         //20. Mostrar l'usuari més actiu del col·lectiu indicat: l'usuari més actiu serà el que s'ha apuntat a més activitats.
         // En cas d'empat entre usuaris, s'escollirà a qualsevol usuari que cpmpleixi els requisits.
     }
+    //--------------------------------
 
-    public static void opcio21(){
+
+    // ------ 21º OPCIÓ DEL MENU ------
+    public static void option21(){
         //21. Baixa d'activitats: donar de baixa les activitats que ja han acabat el període d'inscripció sense omplir el 10% de les places.
         // En activitats en línia es donarà si el número d'inscrits es inferior a 20 persones.
     }
+    //--------------------------------
 }
