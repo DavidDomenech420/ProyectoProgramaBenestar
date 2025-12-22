@@ -137,6 +137,9 @@ public class AppProgramaBenestar {
                 case 6:
                     break;
                 case 7:
+                    System.out.println("Indica el nom de l'activitat");
+                    String activityName7 = teclat.nextLine();
+                    opcio7(activities, activityName7);
                     break;
                 case 8:
                     break;
@@ -145,6 +148,9 @@ public class AppProgramaBenestar {
                 case 10:
                     break;
                 case 11:
+                    System.out.println("Indica el nom de l'activitat");
+                    String activityName11 = teclat.nextLine();
+                    opcio11(activities, activityName11);
                     break;
                 case 12:
                     break;
@@ -178,11 +184,10 @@ public class AppProgramaBenestar {
             BufferedWriter file = new BufferedWriter(new FileWriter("data.txt"));
             String frase= "Activities: activityType;activityName;startInscriptionDate;finishInscriptionDate;collectives;maxInscriptions. OneDatActivity: city;day;startTime;finishTime;price. PeriodicActivity: day;startTime;finishTime;inicialDay;weeksOfActivity;price;centerName;cityName. Online: startDayActivity;finishDayActivity;linkCourse.";
             file.write(frase);
-            file.newLine();
             for(int i=0; i<activities.getNumElems(); i++){
+                file.newLine();
                 frase = "" + activities.getActivity(i);
                 file.write(frase);
-                file.newLine();
             }
             file.close();
         } catch (FileNotFoundException e){
@@ -253,8 +258,9 @@ public class AppProgramaBenestar {
         //6. Mostrar activitats amb places disponibles: nom d'aquestes. Tant si estan en termini d'inscripció o no.
     }
 
-    public static void opcio7(){
+    public static void opcio7(ActivityList activities, String nameActivity){
         //7. Mostrar informació d'una activitat: informació detallada a partir del nom d'aquesta.
+        System.out.println(activities.getActivity(nameActivity));
     }
 
     public static void opcio8(){
@@ -271,8 +277,13 @@ public class AppProgramaBenestar {
         //Control de places disponibles o llista d'espera. Si la llista d'espera està plena, prohibit cap tipus d'inscripció.
     }
 
-    public static void opcio11(){
+    public static void opcio11(ActivityList activities, String activityName){
         //11. Mostrar els usuaris inscrits en activitats i els usuaris en llista d'espera: nom d'aquests.
+        Activities activity = activities.getActivity(activityName);
+        System.out.println("Usuaris Inscrits a l'activitat");
+        System.out.println((activity.getInscriptionsString()));
+        System.out.println("Usuaris a la llista d'espera de l'activitat");
+        activity.printWaitingList();
     }
 
     public static void opcio12(){
