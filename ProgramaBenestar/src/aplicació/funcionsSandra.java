@@ -234,20 +234,25 @@ public class funcionsSandra {
 
         for(int i=0; i<activities.getNumElems(); i++){
             Activities activity = activities.getActivity(i); //Accés a cada activitat
+            User[] maxPlaces = activity.getInscriptions(); //Màxim de places que té l'activitat
+            double places = (10/100)*(maxPlaces.length);
 
-            //Comprovem si és activitat online
-            if(activity instanceof OnlineActivity){ //Comprovació que el tipus dinàmic sigui la classe filla
-                OnlineActivity onlineActivity = (OnlineActivity) activity;
-                LocalDate finishDate = onlineActivity.getFinishDateInscriptions();
-                if(usedDate.isAfter(finishDate)){
-                    User[] maxPlaces = onlineActivity.getInscriptions();
-                    if(){
-                        //Inscriptions de user son el límite máximo de plazas
-                        //NumInscriptions es el número actual de plazas
+            int numPlaces = activity.getNumInscriptions(); //Número de places cobertes 
+
+            LocalDate finishDate = activity.getFinishDateInscriptions();
+            if(usedDate.isAfter(finishDate)){
+                //Comprovem si és activitat online
+                if(activity instanceof OnlineActivity){ //Comprovació que el tipus dinàmic sigui la classe filla
+                    if(numPlaces < 20){
+                        String name = activity.getActivityName();
+                        activities.deleteActivity(name);
+                    }
+                } else {
+                    if(numPlaces < places){
+                        String name = activity.getActivityName();
+                        activities.deleteActivity(name);
                     }
                 }
-            } else {
-                
             }
         }
     }

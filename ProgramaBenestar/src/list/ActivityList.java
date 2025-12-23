@@ -23,6 +23,21 @@ public class ActivityList {
         }
     }
 
+    public void deleteActivity(String activityName){
+        boolean found = false;
+        int i = 0;
+        while(i<nElem && !found){
+            String name = list[i].getActivityName();
+            if(activityName.equalsIgnoreCase(name)){
+                list[i] = list[nElem-1];
+                list[nElem-1] = null;
+                nElem--;
+                found = true;
+            }
+            i++;
+        }
+    }
+
     @Override
     public String toString() {
         String aux = "Activity List: \n";
