@@ -25,7 +25,13 @@ public class AppProgramaBenestar {
         try {
             BufferedReader fileRead=new BufferedReader(new FileReader("data.txt"));
             String frase="";
+            frase=fileRead.readLine(); //Llegim capçalera 1
+            frase=fileRead.readLine(); //Llegim capçalera 2
+            frase=fileRead.readLine(); //Llegim capçalera 3
+
+            //Ara llegim primera línia amb informació:
             frase=fileRead.readLine();
+            
             Activities activity = null;
             while (frase != null) {
                 // Separem la frase per els ; i mirem el primer element
@@ -111,9 +117,16 @@ public class AppProgramaBenestar {
         // ------ Fitxer .txt ------
         try{
             BufferedWriter file = new BufferedWriter(new FileWriter("data.txt"));
-            String frase= "Activities: activityType;activityName;startInscriptionDate;finishInscriptionDate;collectives;maxInscriptions. OneDatActivity: city;day;startTime;finishTime;price. PeriodicActivity: day;startTime;finishTime;inicialDay;weeksOfActivity;price;centerName;cityName. Online: startDayActivity;finishDayActivity;linkCourse.";
+            String frase= "OneDay;nameActivity;dd-mm-yyyy;dd-mm-yyyy;collective;29;city;dd-mm-yyyy;hh:mm;hh:mm;12.3";
             file.write(frase);
             file.newLine();
+            frase="Periodic;nameActivity;dd-mm-yyyy;dd-mm-yyyy;collective;29;dd-mm-yyyy;hh:mm;dd-mm-yyyy;21;14.5;centerName;cityName";
+            file.write(frase);
+            file.newLine();
+            frase = "Online;nameActivity;dd-mm-yyyy;dd-mm-yyyy;collective;29;dd-mm-yyyy;dd-mm-yyyy;linkCurso";
+            file.write(frase);
+            file.newLine();
+            // Es fa tres cops perquè hi ha 3 línies que contenen  la informació de les classes d'activitats.
             for(int i=0; i<activities.getNumElems(); i++){
                 frase = "" + activities.getActivity(i);
                 file.write(frase);
@@ -125,7 +138,7 @@ public class AppProgramaBenestar {
 		} catch(IOException e) {
 			System.out.println("S'ha produit un error en els arxius");
         }
-    
+    }
 
     public static void mostraMenu(){
         System.out.println("\n\nOPCIONS DEL MENU: ");
