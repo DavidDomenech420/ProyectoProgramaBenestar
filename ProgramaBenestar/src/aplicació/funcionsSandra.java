@@ -245,12 +245,12 @@ public class funcionsSandra {
                 if(activity instanceof OnlineActivity){ //Comprovació que el tipus dinàmic sigui la classe filla
                     if(numPlaces < 20){
                         String name = activity.getActivityName();
-                        activities.deleteActivity(name);
+                        activities.removeActivity(name);
                     }
                 } else {
                     if(numPlaces < places){
                         String name = activity.getActivityName();
-                        activities.deleteActivity(name);
+                        activities.removeActivity(name);
                     }
                 }
             }

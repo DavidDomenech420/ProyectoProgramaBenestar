@@ -23,7 +23,7 @@ public class ActivityList {
         }
     }
 
-    public void deleteActivity(String activityName){
+    public void removeActivity(String activityName){
         boolean found = false;
         int i = 0;
         while(i<nElem && !found){

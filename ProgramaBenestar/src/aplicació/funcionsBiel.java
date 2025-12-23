@@ -20,7 +20,10 @@ import Usuaris.PTGASUser;
 import Usuaris.StudentUser;
 import Usuaris.User;
 
+
 public class funcionsBiel {
+    private static LocalDate usedDate = LocalDate.now();
+    
     public static void option4(ActivityList activities){
         //4. Mostrar informació d'activitats en data actual: tota la informació (places, llista d'espera, etc).
         for (int i = 0; i < activities.getNumElems(); i++){

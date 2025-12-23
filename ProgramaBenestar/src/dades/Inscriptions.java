@@ -1,5 +1,7 @@
 package dades;
 
+import Usuaris.User;
+
 public class Inscriptions {
     private String nickName;
     private int assessment;
@@ -25,5 +27,9 @@ public class Inscriptions {
         this.assessment = assessment;
     }
 
+    @Override
+    public String toString() {
+        return "Inscriptions [nickName=" + nickName + ", assessment=" + assessment + "]";
+    }
 
 }
