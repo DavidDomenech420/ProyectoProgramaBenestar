@@ -32,7 +32,7 @@ public class TestOneDayActivity {
         System.out.println("Collectives: " + oda2.getCollectiveString());
         System.out.println("Start Date Inscriptions: " + oda2.getStartDateInscriptions());
         System.out.println("Finish Date Inscriptions: " + oda2.getFinishDateInscriptions());
-        System.out.println("Inscriptions: " + oda2.getInscriptionsString());
+        System.out.println("Inscriptions: " + oda2.getInscriptions());
         System.out.println("City: " + oda2.getCity());
         System.out.println("Day: " + oda2.getDay());
         System.out.println("Start Time: " + oda2.getStartTime());
@@ -55,11 +55,11 @@ public class TestOneDayActivity {
     public static void testAddInscription(){
         String [] collectives = {"PDI", "Estudiant"};
         OneDayActivity oda3 = new OneDayActivity("One Day", "Beach Day", LocalDate.of(2024, 7, 1), LocalDate.of(2024, 7, 10), collectives, 15, "Valencia", LocalDate.of(2024, 7, 5), LocalTime.of(10, 0), LocalTime.of(18, 0), 20.0);
-        System.out.println("Before adding inscriptions: " + oda3.getInscriptionsString());
+        System.out.println("Before adding inscriptions: " + oda3.getInscriptions());
         // Add inscriptions and test behavior
         User user1 = new PDIUser("PDI", "john_doe", "john.doe", "Sescelades", "Informatica");
-        oda3.addInscription(user1);
-        System.out.println("After adding John Doe: " + oda3.getInscriptionsString());
+        oda3.addInscriptions(user1);
+        System.out.println("After adding John Doe: " + oda3.getInscriptions());
         
     }
 }

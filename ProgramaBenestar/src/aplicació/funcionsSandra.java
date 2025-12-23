@@ -5,9 +5,11 @@ import java.time.LocalTime;
 import java.util.Scanner;
 
 import dades.Activities;
+import dades.Inscriptions;
 import Usuaris.User;
 
 import list.ActivityList;
+import list.InscriptionList;
 import list.UserList;
 
 import dades.OneDayActivity;
@@ -82,11 +84,11 @@ public class funcionsSandra {
         String nomUsuari = keyboard.nextLine();
         for(int i=0; i<activities.getNumElems(); i++){
             Activities activity = activities.getActivity(i);
-            User[] inscriptedUsers = activity.getInscriptions();
+            InscriptionList inscriptedUsers = activity.getInscriptions();
 
             System.out.println("Activitats on estàs inscrit: ");
-            for(int j=0; j<inscriptedUsers.length; j++){
-                if((inscriptedUsers[j].getNickname()).equalsIgnoreCase(nomUsuari)){
+            for(int j=0; j<inscriptedUsers.getLenInscriptions(); j++){
+                if(((inscriptedUsers.getInscription(i)).getNickName()).equalsIgnoreCase(nomUsuari)){
                     System.out.println(activity.getActivityName());
                 }
             }
@@ -234,8 +236,8 @@ public class funcionsSandra {
 
         for(int i=0; i<activities.getNumElems(); i++){
             Activities activity = activities.getActivity(i); //Accés a cada activitat
-            User[] maxPlaces = activity.getInscriptions(); //Màxim de places que té l'activitat
-            double places = (10/100)*(maxPlaces.length);
+            InscriptionList maxPlaces = activity.getInscriptions(); //Màxim de places que té l'activitat
+            double places = (10/100)*(maxPlaces.getLenInscriptions());
 
             int numPlaces = activity.getNumInscriptions(); //Número de places cobertes 
 

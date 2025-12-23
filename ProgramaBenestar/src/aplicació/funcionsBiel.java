@@ -20,10 +20,12 @@ import Usuaris.PTGASUser;
 import Usuaris.StudentUser;
 import Usuaris.User;
 
-
 public class funcionsBiel {
+
     private static LocalDate usedDate = LocalDate.now();
-    
+
+    static Scanner keyboard = new Scanner(System.in);
+
     public static void option4(ActivityList activities){
         //4. Mostrar informació d'activitats en data actual: tota la informació (places, llista d'espera, etc).
         for (int i = 0; i < activities.getNumElems(); i++){
@@ -49,8 +51,9 @@ public class funcionsBiel {
     }
 
     // ------ 8º OPCIÓ DEL MENU ------
-    public static void option8(String Name, UserList List){
+    public static void option8(UserList List){
         //8. Mostrar informació d'usuari: informació detallada a partir del nom d'aquest.
+        String Name = keyboard.nextLine();
         User aux = List.getUser(Name);
         System.out.println(aux);
     }

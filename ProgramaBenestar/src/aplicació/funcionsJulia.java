@@ -341,7 +341,7 @@ public class funcionsJulia {
         LocalDate today = LocalDate.now();
         ActivityList openInscriptionActivities = activities.activitiesInscriptionOpen(today);
         for (int i = 0; i < openInscriptionActivities.getNumElems(); i++) {
-            int numPlazasDisp = openInscriptionActivities.getActivity(i).getInscriptions().length - openInscriptionActivities.getActivity(i).getNumInscriptions();
+            int numPlazasDisp = openInscriptionActivities.getActivity(i).getInscriptions().getLenInscriptions() - openInscriptionActivities.getActivity(i).getNumInscriptions();
             System.out.println((i+1) + "- " + openInscriptionActivities.getActivity(i).getActivityName() + ", te " + numPlazasDisp + " places disponibles");
         }
 
@@ -374,7 +374,7 @@ public class funcionsJulia {
     public static void option6(ActivityList activities){
         //6. Mostrar activitats amb places disponibles: nom d'aquestes. Tant si estan en termini d'inscripció o no.
         for(int i = 0; i < activities.getNumElems(); i++){
-            if(activities.getActivity(i).getNumInscriptions() < activities.getActivity(i).getInscriptions().length){
+            if(activities.getActivity(i).getNumInscriptions() < activities.getActivity(i).getInscriptions().getLenInscriptions()){
                 System.out.println(activities.getActivity(i));
             }
         }
@@ -418,7 +418,7 @@ public class funcionsJulia {
         //11. Mostrar els usuaris inscrits en activitats i els usuaris en llista d'espera: nom d'aquests.
         Activities activity = activities.getActivity(activityName);
         System.out.println("Usuaris Inscrits a l'activitat");
-        System.out.println((activity.getInscriptionsString()));
+        System.out.println((activity.getInscriptions()));
         System.out.println("Usuaris a la llista d'espera de l'activitat");
         activity.printWaitingList();
     }

@@ -104,6 +104,13 @@ public abstract class Activities {
         return waitingList;
     }
 
+    public InscriptionList getInscriptions(){
+        return inscriptions;
+    }
+
+    public int getNumInscriptions(){
+        return inscriptions.getNumElems();
+    }
 
     public void setWaitingList(User[] waitingList) {
         this.waitingList = waitingList;
@@ -164,6 +171,36 @@ public abstract class Activities {
         for (int i = 0; i < numElemsWaitingList; i++) {
             System.out.println((i + 1) + ". " + waitingList[i].toString());
         }
+    }
+
+    
+    public void addInscriptions(User member){
+        Inscriptions newInscription = new Inscriptions(member);
+        char contains = 'N';
+        for (int i = 0; i < collective.length; i++) {
+            if (member.getUserType().equals(collective[i])) {
+                contains = 'Y';
+            }
+        }
+        if (contains == 'N') {
+            System.out.println("The member's user type is not allowed for this activity.");
+            return;
+        }
+        if (finishDateInscriptions.isBefore(LocalDate.now())) {
+            System.out.println("The inscription period has ended. Cannot add inscription.");
+            return;
+        }
+        if (startDateInscriptions.isAfter(LocalDate.now())) {
+            System.out.println("The inscription period has not started yet. Cannot add inscription.");
+            return;
+        }
+        if (this.inscriptions.getNumElems() < inscriptions.getLenInscriptions()){
+            inscriptions.addNewInscription(newInscription);
+        }
+        else {
+            System.out.println("Inscriptions are full. Cannot add more members.");
+        }
+
     }
 
 

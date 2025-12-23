@@ -14,11 +14,20 @@ public class InscriptionList {
         numElems = 0;
     }
 
+    public int getNumElems() {
+        return numElems;
+    }
+
+    public int getLenInscriptions(){
+        return list.length;
+    }
+
+    public Inscriptions getInscription(int pos){
+        return list[pos];
+    }
     public void addNewInscription(Inscriptions newInscription){
-        if(numElems < list.length){
-            list[numElems] = newInscription;
-            numElems++;
-        }
+        list[numElems] = newInscription;
+        numElems++;
     }
 
     public void removeInscription(User newUser){
@@ -32,6 +41,21 @@ public class InscriptionList {
                 numElems--;
             }
         }
+    }
+
+    public Inscriptions[] getList() {
+        return list;
+    }
+
+
+    @Override
+    public String toString(){
+        String answer = "Usuaris: ";
+        for (int i = 0; i < numElems - 1; i++){
+            answer += list[i].getNickName() + ", ";
+        }
+        answer += list[numElems - 1].getNickName();
+        return answer;
     }
 
 

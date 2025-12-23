@@ -80,7 +80,7 @@ public class ActivityList {
         String[] activitiesName;
         ActivityList activitiesList = new ActivityList(nElem);
         for (int i = 0; i < nElem; i++) {
-            if (list[i].getNumInscriptions() < list[i].getInscriptions().length) {
+            if (list[i].getNumInscriptions() < list[i].getInscriptions().getLenInscriptions()) {
                 activitiesList.addActivity(list[i]);
             }
         }

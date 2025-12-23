@@ -3,20 +3,19 @@ package dades;
 import Usuaris.User;
 
 public class Inscriptions {
-    private String nickName;
-    private int assessment;
+    private User user;
+    private int assessment = 0;
     
-    public Inscriptions(String nickName, int assessment) {
-        this.nickName = nickName;
-        this.assessment = assessment;
+    public Inscriptions(User user) {
+        this.user = user;
     }
 
     public String getNickName() {
-        return nickName;
+        return user.getNickname();
     }
 
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
+    public void setNickName(User user) {
+        this.user = user;
     }
 
     public int getAssessment() {
@@ -29,7 +28,7 @@ public class Inscriptions {
 
     @Override
     public String toString() {
-        return "Inscriptions [nickName=" + nickName + ", assessment=" + assessment + "]";
+        return "Inscriptions [User=" + user + ", assessment=" + assessment + "]";
     }
 
 }
