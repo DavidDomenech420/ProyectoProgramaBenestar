@@ -17,7 +17,7 @@ import Usuaris.PTGASUser;
 import Usuaris.StudentUser;
 import Usuaris.User;
 
-public class FuncionsJulia {
+public class funcionsJulia {
     static Scanner keyboard = new Scanner(System.in);
 
     public static void main(String[] args) throws Exception {
