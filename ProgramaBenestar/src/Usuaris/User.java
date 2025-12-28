@@ -7,12 +7,14 @@ public abstract class User implements Serializable {
     private String userType;
     private String nickname;
     private String email;
+    private int numInscriptions;
 
     // Constructor
     public User(String userType, String nickname, String email) {
         this.userType = userType;
         this.nickname = nickname;
         this.email = email;
+        this.numInscriptions = 0;
     }
 
     // Getters and Setters
@@ -35,7 +37,21 @@ public abstract class User implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
+    public int getNumInscriptions() {
+        return numInscriptions;
+    }
+    public void setNumInscriptions(int numInscriptions){
+        this.numInscriptions = numInscriptions;
+    }
 
+
+    public void addInscription(){
+        this.numInscriptions ++;
+    }
+
+    public void subInscription(){
+        this.numInscriptions--;
+    }
     // public User copy() {
     //     return new User(this.userType, this.nickname, this.email);
     // }

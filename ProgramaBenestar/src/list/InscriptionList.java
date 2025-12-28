@@ -25,6 +25,8 @@ public class InscriptionList {
     public Inscriptions getInscription(int pos){
         return list[pos];
     }
+
+    
     public void addNewInscription(Inscriptions newInscription){
         list[numElems] = newInscription;
         numElems++;

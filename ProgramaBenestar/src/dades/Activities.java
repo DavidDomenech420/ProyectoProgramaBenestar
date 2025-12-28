@@ -152,7 +152,7 @@ public abstract class Activities {
 
     public void removeFromWaitingList(User member){
         for (int i = 0; i < numElemsWaitingList; i++) {
-            if (waitingList[i].getNickname().equals(member.getNickname())) {
+            if (waitingList[i].getNickname().equalsIgnoreCase(member.getNickname())) {
                 // Movem els elements cap a l'esquerra
                 for (int j = i; j < numElemsWaitingList - 1; j++) {
                     waitingList[j] = waitingList[j + 1];
@@ -196,9 +196,45 @@ public abstract class Activities {
         }
         if (this.inscriptions.getNumElems() < inscriptions.getLenInscriptions()){
             inscriptions.addNewInscription(newInscription);
+            member.addInscription();
         }
         else {
             System.out.println("Inscriptions are full. Cannot add more members.");
+        }
+
+    }
+
+    public void removeInscription(User member){
+        boolean found = false;
+        int i = 0;
+        while (i < inscriptions.getNumElems() && !found){
+            if (inscriptions.getInscription(i).getNickName().equalsIgnoreCase(member.getNickname())){
+                found = true;
+            }
+            i++;
+        }
+        if (!found){
+            System.out.println("That user is not in this activity");
+            return;
+        }
+        i--;
+        inscriptions.removeInscription(member);
+        member.subInscription();
+        if (waitingList[0] == null){
+            return;
+        }
+        inscriptions.addNewInscription(new Inscriptions(waitingList[0]));
+        int j = 0;
+        boolean end = false;
+        while (j < waitingList.length-1 && !end){
+            waitingList[j] = waitingList[j+1];
+            if (waitingList[j+1] == null){
+                end = true;
+            }
+            j++;
+        }
+        if (!end){
+            waitingList[j] = null;
         }
 
     }
