@@ -31,4 +31,8 @@ public class Inscriptions {
         return "Inscriptions [User=" + user + ", assessment=" + assessment + "]";
     }
 
+    public User getUser(){
+        return user;
+    }
+
 }

@@ -3,6 +3,9 @@ package list;
 import java.time.LocalDate;
 
 import dades.Activities;
+import dades.OneDayActivity;
+import dades.OnlineActivity;
+import dades.PeriodicActivity;
 
 public class ActivityList {
     Activities[] list;
@@ -89,6 +92,40 @@ public class ActivityList {
             activitiesName[i] = activitiesList.getActivity(i).getActivityName();
         }
         return activitiesName;
+    }
+
+    public ActivityList activitiesFinished(LocalDate usedDate){
+        ActivityList finishActivities = new ActivityList(nElem);
+        for(int i=0; i< getNumElems(); i++){
+            Activities activity = getActivity(i);
+
+            //Comprovem si és activitat d'un dia
+            if(activity instanceof OneDayActivity){ //Comprovació que el tipus dinàmic sigui la classe filla
+                OneDayActivity oneDayAct = (OneDayActivity) activity;
+                if(usedDate.isAfter(oneDayAct.getDay())){
+                    finishActivities.addActivity(activity);
+                }
+
+            //Comprovem si és activitat online
+            }else if(activity instanceof OnlineActivity){ //Comprovació que el tipus dinàmic sigui la classe filla
+                OnlineActivity onlineAct = (OnlineActivity) activity;
+                LocalDate finish = onlineAct.getFinishDateActivity();
+                if(usedDate.isAfter(finish)){  
+                    finishActivities.addActivity(activity);
+                }
+
+            //Comprovem si és activitat periòdica
+            }else if(activity instanceof PeriodicActivity){ //Comprovació que el tipus dinàmic sigui la classe filla
+                PeriodicActivity periodicAct = (PeriodicActivity) activity;
+                LocalDate start = periodicAct.getInicialDate();
+                int weeks = periodicAct.getWeeksOfActivity();
+                LocalDate finish = start.plusWeeks(weeks);
+                if(usedDate.isAfter(finish)){
+                    finishActivities.addActivity(activity);
+                }
+            }
+        }
+        return finishActivities;
     }
 
 }
