@@ -122,10 +122,14 @@ public class funcionsJulia {
                 case 2:
                     System.out.println("Escriu de què vols obtenir la informació (usuaris/activitats): ");
                     String typeOp2 = keyboard.nextLine();
-                    if(typeOp2.equalsIgnoreCase("usuaris") || typeOp2.equalsIgnoreCase("activitats")){
+                    if(typeOp2.equalsIgnoreCase("usuaris")){
                         option2("usuaris", usersList, activities);
                     }
+                    else if(typeOp2.equalsIgnoreCase("activitats")){
+                        option2("activitats", usersList, activities);
+                    
                     break;
+                    }
                 case 3:
                     // Llamamos la funcion de pillar la informacion de las actividades con inscripciones abiertas
                     option3(activities);
@@ -148,6 +152,7 @@ public class funcionsJulia {
                 case 9:
                     break;
                 case 10:
+                    option10(activities, usersList);
                     break;
                 case 11:
                     System.out.println("Indica el nom de l'activitat");
@@ -159,6 +164,7 @@ public class funcionsJulia {
                 case 13:
                     break;
                 case 14:
+                    option14(activities);
                     break;
                 case 15:
                     option15(activities);
@@ -168,6 +174,9 @@ public class funcionsJulia {
                 case 17:
                     break;
                 case 18:
+                    System.out.println("Indica l'usuari del qual vols veure les valoracions: ");
+                    String user = keyboard.nextLine();
+                    option18(user, usersList, activities);
                     break;
                 case 19:
                     break;
@@ -295,9 +304,9 @@ public class funcionsJulia {
             } catch(NumberFormatException e){
                 System.out.println("Error: Has d'introduir un número vàlid.");
             }
-        } else if(tipus.equalsIgnoreCase("estudiants")){
+        } else if(tipus.equalsIgnoreCase("activitats")){
             try{
-                System.out.println("Escriu quin tipus d'usuari vols que es mosti:\n1: TOTES les activitats\n2: Activitats d'un dia\n3: Activitats periòdiques\n4: Activitats Online\nEscriu la teva opció a continuació: ");
+                System.out.println("Escriu quin tipus d'activitat vols que es mosti:\n1: TOTES les activitats\n2: Activitats d'un dia\n3: Activitats periòdiques\n4: Activitats Online\nEscriu la teva opció a continuació: ");
                 int option = Integer.parseInt(keyboard.nextLine());
                 if(option == 1){
                     System.out.println("Has escollit que es mostri la informació de totes les activitats: ");
@@ -312,14 +321,14 @@ public class funcionsJulia {
                         }
                     }
                 } else if(option == 3){
-                    System.out.println("Has escollit que es mostri la informació del personal tècnic i de gestió (PTGAS): ");
+                    System.out.println("Has escollit que es mostri la informació de les activitats periòdiques: ");
                     for(int i = 0; i < usersList.getNumElems(); i++){
                         if(activities.getActivity(i).getActivityType().equalsIgnoreCase("Periodic")){
                             System.out.println(activities.getActivity(i));
                         }
                     }
                 } else if(option == 4){
-                    System.out.println("Has escollit que es mostri la informació dels estudiants: ");
+                    System.out.println("Has escollit que es mostri la informació de les activitats Online: ");
                     for(int i = 0; i < usersList.getNumElems(); i++){
                         if(activities.getActivity(i).getActivityType().equalsIgnoreCase("Online")){
                             System.out.println(activities.getActivity(i));
@@ -329,8 +338,8 @@ public class funcionsJulia {
             } catch(NumberFormatException e){
                 System.out.println("Error: Has d'introduir un número vàlid.");
             }
-            }
         }
+    }
 
     //--------------------------------
 
@@ -346,6 +355,7 @@ public class funcionsJulia {
         }
 
     }
+
     //--------------------------------
 
 
@@ -405,10 +415,143 @@ public class funcionsJulia {
 
 
     // ------ 10º OPCIÓ DEL MENU ------
-    public static void option10(){
+    public static void option10(ActivityList activities, UserList usersList){
         //10. Inscripció a una activitat: disponible si es dona dins el termini i si aquesta es s'ofereix al col·lectiu que pertanyem.
         //L'usuari pot estar a la llista (usar alies) o no, en aquest cas s'haurà de demanar la resta d'informació.
         //Control de places disponibles o llista d'espera. Si la llista d'espera està plena, prohibit cap tipus d'inscripció.
+
+        System.out.println("Ha triat inscriure's a una activitat. Aquestes son les activitats disponibles actualment: ");
+        option3(activities); // Cridem a la opció que ens mostra les activitats actives i amb places.
+        System.out.println("Perfecte! Ara, indica el nom de l'activitat a la qual et vols inscriure: ");
+        String activityChosen = keyboard.nextLine();
+        boolean trobat = false;
+        int i = 0;
+        Activities activity = null;
+        User newUser = null;
+        int posUser = 0;
+        while(!trobat && i < activities.getNumElems()){
+            if(activityChosen.equalsIgnoreCase(activities.getActivity(i).getActivityName())){
+                trobat = true;
+                activity = activities.getActivity(i);
+            }
+            i++;
+        }
+        if(!trobat){
+            System.out.println("Ho sentim. L'activitat que has triat, no existeix o està fora de termini.");
+            return;
+        }
+        else{ //Ara controlem si l'usuari ja està registrat
+            System.out.println("Perfecte! Quin és el teu nom?: ");
+            String nickname = keyboard.nextLine();
+            i = 0;
+            trobat = !false;
+            while(!trobat && i < usersList.getNumElems()){
+                if(nickname.equalsIgnoreCase(usersList.getUser(i).getNickname())){
+                    trobat = true;
+                    posUser = i;
+                    if(!usersList.getUser(i).getUserType().equalsIgnoreCase(activity.getActivityType())){ //Mirem si pertany al grup correcte per a fer l'activitat
+                        System.out.println("Ho sentim. No pertanys al grup correcte per a inscriure't en aquesta activitat.");
+                        return;
+                    }
+                }
+                i++;
+            }
+            if(!trobat){ // AFEGIR NOU USUARI
+                System.out.println("No estàs registrat com a usuari. A continuació se't faran una sèrie de preguntes per a registrar-te.");
+                System.out.println("A quin grup pertanys? \n[1] PDI\n[2] PTGAS\n[3] Estudiant\nEscriu el número a continuació: ");
+
+                // Col·lectiu:
+                int numCollective = keyboard.nextInt();
+                while(numCollective != 1 && numCollective != 2 && numCollective != 3){
+                    System.out.println("No has introduit un número correcte. Torna a intentar-ho: ");
+                    numCollective = keyboard.nextInt();
+                }
+                String collective = null;
+                if(numCollective == 1){
+                    collective = "PDI";
+                }
+                else if(numCollective == 2){
+                    collective = "PTGAS";
+                }
+                else{
+                    collective = "Student";
+                }
+
+                //Mirem si està permès que el tipus d'usuari faci l'activitat:
+                boolean isPermited = !false;
+                i = 0;
+                while(!isPermited && i < activity.getLenCollective()){
+                    if(collective.equalsIgnoreCase(activity.getCollective()[i])){
+                        isPermited = true;
+                    }
+                }
+                if(!isPermited){
+                    System.out.println("Ho sentim. El teu grup d'usuaris no pot realitzar aquesta activitat.");
+                    return;
+                }
+
+                //E-Mail:
+                System.out.println("Quin és el teu e-mail? Escriu-lo a continuació: ");
+                String email = keyboard.nextLine();
+
+                //Si és usuari PDI:
+                if(collective.equalsIgnoreCase("PDI")){
+                    System.out.println("En quin campus estàs?: ");
+                    String campus = keyboard.nextLine();
+                    System.out.println("Quin és el teu departament?: ");
+                    String department = keyboard.nextLine();
+                    newUser = new PDIUser(collective, nickname, email, campus, department);
+                    usersList.addUser(newUser);
+                }
+                else if(collective.equalsIgnoreCase("PTGAS")){
+                    System.out.println("En quin campus estàs?: ");
+                    String campus = keyboard.nextLine();
+                    newUser = new PTGASUser(collective, nickname, email, campus);
+                    usersList.addUser(newUser);
+                }
+                else{
+                    System.out.println("En quin grau estàs?: ");
+                    String degree = keyboard.nextLine();
+                    System.out.println("Quin va ser l'any en el qual vas començar el grau?: ");
+                    int year = keyboard.nextInt();
+                    newUser = new StudentUser(collective, nickname, email, degree, year);
+                    usersList.addUser(newUser);
+                }
+            } 
+            else{
+                newUser = usersList.getUser(posUser); //L'usuari ja estava registrat.
+
+                // Mirem si l'usuari pot fer l'activitat segons el seu tipus:
+                boolean isPermited = !false;
+                i = 0;
+                while(!isPermited && i < activity.getLenCollective()){
+                    if(newUser.getUserType().equalsIgnoreCase(activity.getCollective()[i])){
+                        isPermited = true;
+                    }
+                }
+                if(!isPermited){
+                    System.out.println("Ho sentim. El teu grup d'usuaris no pot realitzar aquesta activitat.");
+                    return;
+                }
+                
+            }
+
+            //Afegir l'usuari a la inscripció de l'activitat corresponent:
+            if(activity.getNumElemsWaitingList() >= activity.getWaitingList().length && activity.getNumInscriptions() == activity.getInscriptions().getLenInscriptions()){
+                System.out.println("Ho sentim. Les inscripcions estan plenes.");
+                return;
+            }
+            else if((activity.getNumInscriptions() == activity.getInscriptions().getLenInscriptions()) && activity.getNumElemsWaitingList() < activity.getWaitingList().length){ //Afegim a la waiting list
+                activity.addToWaitingList(newUser);
+                System.out.println("Felicitats! Ja t'has inscrit a la llista d'espera de l'activitat.");
+            }
+            else if(activity.getNumInscriptions() < activity.getInscriptions().getLenInscriptions()){
+                activity.addInscriptions(newUser);
+                System.out.println("Felicitats! Ja t'has inscrit a l'activitat.");
+            }
+        }
+
+
     }
     //--------------------------------
 
@@ -441,8 +584,89 @@ public class funcionsJulia {
 
 
     // ------ 14º OPCIÓ DEL MENU ------
-    public static void option14(){
+    public static void option14(ActivityList activities){
         //14. Afegir una nova activitat periòdica.
+        System.out.println("has triat afegir una nova activitat periòdica.");
+        System.out.println("Quin és el nom de l'activitat? :");
+        String activityName = keyboard.nextLine();
+        
+        //Col·lectius:
+        String collectives[] = new String[3];
+        System.out.println("Quins colectius vols afegir? (fica d'un en un i -1 per acabar");
+        int contador = 0;
+        String collective = "";
+        while (contador < 3 && !collective.contains("-1")) {
+            collective = keyboard.nextLine();
+            if (!collective.contains("-1")) {
+                collectives[contador] = collective;
+                contador++;
+            }
+        }
+        // StartDateInscriptions:
+        System.out.print("Indica la data d'inici d'inscripcions (aaaa mm dd): ");
+        int any = keyboard.nextInt();
+        int mes = keyboard.nextInt();
+        int dia = keyboard.nextInt();
+        LocalDate startDateInscriptions = LocalDate.of(any, mes, dia);
+
+        // FinishDateInscriptions:
+        System.out.print("Indica la data de fi d'inscripcions (aaaa mm dd): ");
+        any = keyboard.nextInt();
+        mes = keyboard.nextInt();
+        dia = keyboard.nextInt();
+        LocalDate finishDateInscriptions = LocalDate.of(any, mes, dia);
+
+        // MaxInscriptions:
+        System.out.print("Indica el màxim d'inscripcions de l'activitat: ");
+        int maxInscriptions = keyboard.nextInt();
+        keyboard.nextLine(); // Netejem \n
+
+        // dayOfActivity:
+        System.out.print("Indica el dia de la semana en el qual es farà l'activitat: ");
+        String dayOfActivity = keyboard.nextLine();
+
+        // inicialTime:
+        System.out.print("Indica a quina hora comença l'activitat:. Hora: ");
+        int inicialHour = keyboard.nextInt();
+        System.out.print("Minut: ");
+        int inicialMinute = keyboard.nextInt();
+        LocalTime inicialTime = LocalTime.of(inicialHour, inicialMinute, 0, 0);
+
+        // finalTime:
+        System.out.print("Indica a quina hora acaba l'activitat:. Hora: ");
+        int finalHour = keyboard.nextInt();
+        System.out.print("Minut: ");
+        int finalMinute = keyboard.nextInt();
+        LocalTime finalTime = LocalTime.of(finalHour, finalMinute, 0, 0);
+
+        // inicialDate::
+        System.out.print("Indica la data en la qual comença l'activitat (aaaa mm dd): ");
+        any = keyboard.nextInt();
+        mes = keyboard.nextInt();
+        dia = keyboard.nextInt();
+        LocalDate inicialDate = LocalDate.of(any, mes, dia);
+
+        // weeksOfActivity:
+        System.out.print("Indica el número de setmanes que perdurarà l'activitat: ");
+        int weeksOfActivity = keyboard.nextInt();
+
+        // priceOfActivity:
+        System.out.print("Indica el preu de l'activitat: ");
+        int priceActivity = keyboard.nextInt();
+        keyboard.nextLine(); // Netejem \n
+
+        // centerName:
+        System.out.print("Indica el nom del centre: ");
+        String centerName = keyboard.nextLine();
+
+        // cityName:
+        System.out.print("Indica el nom de la ciutat: ");
+        String cityName = keyboard.nextLine();
+
+        Activities periodicActivity = new PeriodicActivity("Peridoic", activityName, startDateInscriptions, finishDateInscriptions, collectives, maxInscriptions, dayOfActivity, inicialTime, finalTime, inicialDate, weeksOfActivity, priceActivity, centerName, cityName);
+        activities.addActivity(periodicActivity);
+
+
     }
     //--------------------------------
 
@@ -520,8 +744,30 @@ public class funcionsJulia {
 
 
     // ------ 18º OPCIÓ DEL MENU ------
-    public static void option18(){
+    public static void option18(String user, UserList usersList, ActivityList activities){
         //18. Mostrar resum de valoracions d'un usuari: total de valoracions fetes per l'usuari indicat.
+        boolean found = false;
+        int i = 0;
+        while(!found && i < usersList.getNumElems()){
+            if(usersList.getUser(i).getNickname().equalsIgnoreCase(user)){
+                found = true;
+            }
+            i++;
+        }
+        if(!found){
+            System.out.println("Ho sentim. Aquest usuari no està registrat.");
+            return;
+        }
+        else{
+            for(i = 0; i < activities.getNumElems(); i++){
+                for(int j = 0; j < activities.getActivity(i).getNumInscriptions(); j++){
+                    if(activities.getActivity(i).getInscriptions().getInscription(j).getNickName().equalsIgnoreCase(user)){
+                        System.out.println("Evaluació de l'activitat" + activities.getActivity(i).getActivityName() + "per part de " + activities.getActivity(i).getInscriptions().getInscription(j).getNickName() + ": ");
+                        System.out.println("Nota: " + activities.getActivity(i).getInscriptions().getInscription(j).getAssessment());
+                    }
+                }
+            }
+        }
     }
     //--------------------------------
 

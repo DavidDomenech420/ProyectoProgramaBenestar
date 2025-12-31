@@ -71,6 +71,10 @@ public abstract class Activities {
         return result;
     }
 
+    public int getLenCollective(){
+        return collective.length;
+    }
+
 
     public LocalDate getStartDateInscriptions() {
         return startDateInscriptions;
@@ -110,6 +114,10 @@ public abstract class Activities {
 
     public int getNumInscriptions(){
         return inscriptions.getNumElems();
+    }
+
+    public int getNumElemsWaitingList(){
+        return numElemsWaitingList;
     }
 
     public void setWaitingList(User[] waitingList) {
