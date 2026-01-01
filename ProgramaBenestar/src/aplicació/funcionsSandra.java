@@ -187,8 +187,6 @@ public class funcionsSandra {
         Activities oneDayActivity = new OneDayActivity("One Day", activityName, startInscription, finishInscription, collectives, limitPlaces, activityCity, activityDay, startTime, finishTime, activityPrice);
         activities.addActivity(oneDayActivity);
         //-----------------------------------------------------------------
-        
-        
     }
     //--------------------------------
 
@@ -196,34 +194,25 @@ public class funcionsSandra {
     // ------ 17º OPCIÓ DEL MENU ------
     public static void option17(ActivityList activities, LocalDate usedDate){
         //17. Mostrar resum de valoracions de les activitats: han d'estar acabades.
-        for(int i=0; i<activities.getNumElems(); i++){
-            Activities activity = activities.getActivity(i);
+        
+        System.out.println("VALORACIONS: ");
 
-            //Comprovem si és activitat d'un dia
-            if(activity instanceof OneDayActivity){ //Comprovació que el tipus dinàmic sigui la classe filla
-                OneDayActivity oneDayAct = (OneDayActivity) activity;
-                if((oneDayAct.getDay()).isAfter(usedDate)){ //Si la data ja ha passat, l'activitat es pot valorar
-                    //VALORACIÓ
-                }
+        //Agafarem les activitats acabades, ja que aquestes seran les que es poden valorar
+        ActivityList finishedActivities = activities.activitiesFinished(usedDate);
+        
+        //Analitzem activitat per activitat per mostrar les valoracions de cadascuna
+        for (int i=0; i<finishedActivities.getNumElems(); i++){
+            Activities activity = finishedActivities.getActivity(i);
+            System.out.println(activity.getActivityName()); //Nom de l'activitat a mostrar
+            
+            //Llista de les inscripcions d'aquesta activitat
+            InscriptionList inscriptions = activity.getInscriptions();
 
-            //Comprovem si és activitat online
-            }else if(activity instanceof OnlineActivity){ //Comprovació que el tipus dinàmic sigui la classe filla
-                OnlineActivity onlineAct = (OnlineActivity) activity;
-                LocalDate finish = onlineAct.getFinishDateActivity();
-                if(usedDate.isAfter(finish)){  //Si la data és posterior a  la final, vol dir que l'activitat ha acabat, llavors es pot valorar
-                    //VALORACIÓ
-                }
-
-            //Comprovem si és activitat periòdica
-            }else if(activity instanceof PeriodicActivity){ //Comprovació que el tipus dinàmic sigui la classe filla
-                PeriodicActivity periodicAct = (PeriodicActivity) activity;
-                LocalDate start = periodicAct.getInicialDate();
-                int weeks = periodicAct.getWeeksOfActivity();
-                LocalDate finish = start.plusWeeks(weeks);
-                if(usedDate.isAfter(finish)){
-                    //VALORACIÓ
-                }
+            for(int j=0; j<inscriptions.getNumElems(); j++){
+                Inscriptions inscription = inscriptions.getInscription(j);
+                System.out.println(inscription.getAssessment()); //Quantitat de la valoració
             }
+            System.out.println("\n");
         }
     }
     //--------------------------------
