@@ -127,9 +127,9 @@ public class funcionsJulia {
                     }
                     else if(typeOp2.equalsIgnoreCase("activitats")){
                         option2("activitats", usersList, activities);
-                    
-                    break;
                     }
+                    break;
+                    
                 case 3:
                     // Llamamos la funcion de pillar la informacion de las actividades con inscripciones abiertas
                     option3(activities);

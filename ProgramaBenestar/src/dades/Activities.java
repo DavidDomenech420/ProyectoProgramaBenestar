@@ -65,7 +65,7 @@ public abstract class Activities {
         String result = collective[i];
         i++;
         while (i < collective.length && collective[i] != null) {
-            result += ", " + collective[i];
+            result += "," + collective[i];
             i++;
         }
         return result;
@@ -181,6 +181,14 @@ public abstract class Activities {
         }
     }
 
+    public void addInscriptionFile(Inscriptions inscription){
+        if (this.inscriptions.getNumElems() < this.inscriptions.getLenInscriptions()){
+            this.inscriptions.addNewInscription(inscription);
+        }
+        else{
+            addToWaitingList(inscription.getUser());
+        }
+    }
     
     public void addInscriptions(User member){
         Inscriptions newInscription = new Inscriptions(member);
@@ -207,7 +215,8 @@ public abstract class Activities {
             member.addInscription();
         }
         else {
-            System.out.println("Inscriptions are full. Cannot add more members.");
+            System.out.println("Inscriptions are full. Adding to waiting list.");
+            addToWaitingList(member);
         }
 
     }

@@ -21,6 +21,7 @@ import Usuaris.User;
 
 public class AppProgramaBenestar {
     static Scanner keyboard = new Scanner(System.in);
+    private static LocalDate usedDate = LocalDate.now();
 
     public static void main(String[] args) throws Exception {
         // Inicialitzem les variables per la llista d'activitats
@@ -33,6 +34,7 @@ public class AppProgramaBenestar {
             frase=fileRead.readLine(); //Llegim capçalera 2
             frase=fileRead.readLine(); //Llegim capçalera 3
 
+            fileRead.readLine();
             //Ara llegim primera línia amb informació:
             frase=fileRead.readLine();
             
@@ -83,58 +85,79 @@ public class AppProgramaBenestar {
         }
  
 
-
-        // ------ Fitxer .ser - usuaris -----
+        // ------ Fitxer .txt - usuaris -----
         UserList usersList = new UserList(300);
 
         try{
-            ObjectInputStream fileUser = new ObjectInputStream(new FileInputStream("users.ser")); // Fitxer serialitzat
-            System.out.println("LLEGINT ...");
-            while(true){ //Quan arribi a final de fitxer sortirà l'excepció EOF Exception
-                User user = (User) fileUser.readObject();
-                usersList.addUser(user);
+            BufferedReader fileUser = new BufferedReader(new FileReader("users.txt"));
+            System.out.println("READING...");
+            String phrase = fileUser.readLine();
+            while (phrase != null){
+                String [] phrasesplits = phrase.split(";");
+                String userType = phrasesplits [0];
+                if (userType.equalsIgnoreCase("PDI")){
+                    usersList.addUser(new PDIUser(phrasesplits[0], phrasesplits[1], phrasesplits[2], phrasesplits[3], phrasesplits[4]));
+                }
+                else if(userType.equalsIgnoreCase("PTGAS")){
+                    usersList.addUser(new PTGASUser(phrasesplits[0], phrasesplits[1], phrasesplits[2], phrasesplits[3]));
+                }
+                else if (userType.equalsIgnoreCase("Student")){
+                    usersList.addUser(new StudentUser(phrasesplits[0], phrasesplits[1], phrasesplits[2], phrasesplits[3], Integer.parseInt(phrasesplits[4])));
+                }
+                phrase = fileUser.readLine();
             }
-        } catch(EOFException e){ //Final de fitxer
-            System.out.println("Usuaris guardats correctament");
+            fileUser.close();
         } catch (FileNotFoundException e){
             System.out.println("Fitxer no existent.");
-        } catch (IOException | ClassNotFoundException e) {
+        }
+        
+
+        // --- Fitxer .ser - inscripcions ---
+        try{
+            ObjectInputStream fileInscription = new ObjectInputStream(new FileInputStream("inscriptions.ser"));
+            System.out.println("READING...");
+            while(true){ //Quan arribi a final de fitxer sortirà l'excepció EOF Exception
+                Activities actName = (Activities) fileInscription.readObject();
+                Activities aux = null;
+                int num = (int) fileInscription.readInt();
+                for (int i = 0; i < num; i++){
+                    Inscriptions inscription = (Inscriptions) fileInscription.readObject();
+                    aux = activities.getActivity(actName.getActivityName());
+                    aux.addInscriptionFile(inscription);
+                }
+            }
+        } catch(EOFException e){ //Final del fitxer
+            System.out.println("Inscriptions added correctly");
+        } catch(FileNotFoundException e){
+            System.out.println("Fitxer no existent");
+        } catch(IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         //1- IOException: Error de lectura del disc. El ObjectInpuStream falla. El fitxer no és vàlid.
         //2- ClassNotFoundException: Error de classe.
 
-        try{
-            ObjectOutputStream fileUser = new ObjectOutputStream(new FileOutputStream("users.ser")); //Crearia un fitxer nou amb ek nom users, però com ja hi ha un de creat, el sobreescriu
-            System.out.println("ESCRIVINT ...");
-            for(int i=0; i<usersList.getNumElems(); i++){
-                fileUser.writeObject(usersList.getUser(i));
-            }   
-        } catch (IOException e){
-            System.out.println("Error en l'arxiu de sortida");
-        }
-        
         // Mostrem el menu
         mostraMenu();
-        int option = Integer.parseInt(keyboard.nextLine());
+        int option = keyboard.nextInt();
+        keyboard.nextLine();
         while (option != 22){ //Mostrarem el menu fins que l'usuari vulgui sortir de l'aplicació
             switch (option){
                 case 1:
                     option1();
                     break;
                 case 2:
+                    System.out.println("Escriu de què vols obtenir la informació (usuaris/activitats): ");
                     String typeOp2 = keyboard.nextLine();
-                    //*Supongo que habrá que hacer lo mismo que con el menu grande pero en pequeño */
                     if(typeOp2.equalsIgnoreCase("usuaris")){
                         option2("usuaris", usersList, activities);
-                    } else if(typeOp2.equalsIgnoreCase("activitats")){
+                    }
+                    else if(typeOp2.equalsIgnoreCase("activitats")){
                         option2("activitats", usersList, activities);
                     }
                     break;
                 case 3:
                     // Llamamos la funcion de pillar la informacion de las actividades con inscripciones abiertas
                     option3(activities);
-                    
                     break;
                 case 4:
                     option4(activities);
@@ -194,11 +217,21 @@ public class AppProgramaBenestar {
                     option20(usersList);
                     break;
                 case 21:
+                    for(int i=0; i<activities.getNumElems(); i++){
+                        Activities activity = activities.getActivity(i);
+                        System.out.println(activity.getActivityName());
+                    }
                     option21(activities, usedDate);
+                    System.out.println("Llista actualitzada: ");
+                    for(int i=0; i<activities.getNumElems(); i++){
+                        Activities activity = activities.getActivity(i);
+                        System.out.println(activity.getActivityName());
+                    }
                     break;
             }
             mostraMenu();
-            option = Integer.parseInt(keyboard.nextLine());
+            option = keyboard.nextInt();
+            keyboard.nextLine();
         }
 
         
@@ -217,14 +250,68 @@ public class AppProgramaBenestar {
             // Es fa tres cops perquè hi ha 3 línies que contenen  la informació de les classes d'activitats.
             for(int i=0; i<activities.getNumElems(); i++){
                 file.newLine();
-                frase = "" + activities.getActivity(i);
+                frase = activities.getActivity(i).getActivityType();
+                if (frase.equals("One Day")){
+                    frase = "OneDay";
+                }
+                if (frase.equals("OneDay")){
+                    OneDayActivity actOne = (OneDayActivity) activities.getActivity(i);
+                    frase += ";" + actOne.getActivityName() + ";" +  actOne.getStartDateInscriptions() + ";" + actOne.getFinishDateInscriptions() + ";" + actOne.getCollectiveString() + ";" + actOne.getInscriptions().getLenInscriptions() + ";" + actOne.getCity() + ";" + actOne.getDay() + ";" + actOne.getStartTime() + ";" + actOne.getFinishTime() + ";" + actOne.getPrice();
+                }
+                else if (frase.equals("Periodic")){
+                    PeriodicActivity actPer = (PeriodicActivity) activities.getActivity(i);
+                    frase += ";" + actPer.getActivityName() + ";" + actPer.getStartDateInscriptions() + ";" + actPer.getFinishDateInscriptions() + ";" + actPer.getCollectiveString() + ";" + actPer.getInscriptions().getLenInscriptions() + ";" + actPer.getDayOfActivity() + ";" + actPer.getInicialDate() + ";" + actPer.getFinalTime() + ";" + actPer.getInicialDate() + ";" + actPer.getWeeksOfActivity() + ";" + actPer.getPriceActivity() + ";" + actPer.getCenterName() + ";" + actPer.getCityName();
+                }
+                else if (frase.equals("Online")){
+                    OnlineActivity actOnl = (OnlineActivity) activities.getActivity(i);
+                    frase += ";" + actOnl.getActivityName() + ";" +actOnl.getStartDateInscriptions() + ";" +actOnl.getFinishDateInscriptions() + ";" + actOnl.getCollectiveString() + ";" + actOnl.getInscriptions().getLenInscriptions() + ";" + actOnl.getStartDateActivity() + ";" + actOnl.getFinishDateActivity() + ";" + actOnl.getLinkCourse();
+                }
                 file.write(frase);
             }
             file.close();
-        } catch (FileNotFoundException e){
-            System.out.println("Fitxer no existent");
 		} catch(IOException e) {
 			System.out.println("S'ha produit un error en els arxius");
+        }
+
+        try{
+            BufferedWriter file = new BufferedWriter(new FileWriter("users.txt"));
+            // Es fa tres cops perquè hi ha 3 línies que contenen  la informació de les classes d'activitats.
+            String frase;
+            for(int i=0; i<usersList.getNumElems(); i++){
+                file.newLine();
+                User user = usersList.getUser(i);
+                frase = user.getUserType() + ";" + user.getNickname() + ";" + user.getEmail();
+                if (user.getUserType().equalsIgnoreCase("Student")) {
+                    StudentUser studentUser = (StudentUser) user;
+                    frase += ";" + studentUser.getDegree() + ";" + studentUser.getFirstYear();
+                } else if (user.getUserType().equalsIgnoreCase("PDI")) {
+                    PDIUser pdiUser = (PDIUser) user;
+                    frase += ";" + pdiUser.getCampus() + ";" + pdiUser.getDepartment();
+                } else if (user.getUserType().equalsIgnoreCase("PTGAS")) {
+                    PTGASUser ptgasUser = (PTGASUser) user;
+                    frase += ";" + ptgasUser.getCampus();
+                }
+                file.write(frase);
+            }
+            file.close();
+		} catch(IOException e) {
+			System.out.println("S'ha produit un error en els arxius");
+        }
+
+        // ---- Fitxer   .ser ----
+        try{
+            ObjectOutputStream fileInscriptions = new ObjectOutputStream(new FileOutputStream("inscriptions.ser"));
+            System.out.println("WRITING...");
+            for (int i = 0; i < activities.getNumElems(); i++){
+                Activities act = activities.getActivity(i);
+                fileInscriptions.writeObject(act);
+                fileInscriptions.writeInt((act.getNumInscriptions()+act.getNumElemsWaitingList()));
+                for (int j = 0; j < (act.getNumInscriptions() + act.getNumElemsWaitingList()); j++){
+                    fileInscriptions.writeObject(act.getInscriptions().getInscription(j));
+                }
+            }
+        } catch (IOException e){
+            System.out.println("Error en l'arxiu de sortida");
         }
     }
 
@@ -255,7 +342,7 @@ public class AppProgramaBenestar {
         System.out.println("22- Sortir de l'aplicació");
     }
 
-    private static LocalDate usedDate = LocalDate.now();
+    
 
     // ------ 1º OPCIÓ DEL MENU ------
     public static void option1(){
@@ -326,21 +413,21 @@ public class AppProgramaBenestar {
                     }
                 } else if(option == 2){
                     System.out.println("Has escollit que es mostri la informació de les activitats d'un dia: ");
-                    for(int i = 0; i < usersList.getNumElems(); i++){
+                    for(int i = 0; i < activities.getNumElems(); i++){
                         if(activities.getActivity(i).getActivityType().equalsIgnoreCase("OneDay")){
                             System.out.println(activities.getActivity(i));
                         }
                     }
                 } else if(option == 3){
                     System.out.println("Has escollit que es mostri la informació de les activitats periòdiques: ");
-                    for(int i = 0; i < usersList.getNumElems(); i++){
+                    for(int i = 0; i < activities.getNumElems(); i++){
                         if(activities.getActivity(i).getActivityType().equalsIgnoreCase("Periodic")){
                             System.out.println(activities.getActivity(i));
                         }
                     }
                 } else if(option == 4){
                     System.out.println("Has escollit que es mostri la informació de les activitats Online: ");
-                    for(int i = 0; i < usersList.getNumElems(); i++){
+                    for(int i = 0; i < activities.getNumElems(); i++){
                         if(activities.getActivity(i).getActivityType().equalsIgnoreCase("Online")){
                             System.out.println(activities.getActivity(i));
                         }
@@ -686,7 +773,7 @@ public class AppProgramaBenestar {
 
 
         //----- Data on comencen les inscripcions -----
-        System.out.println("Introdueix la data de començament de les inscripcions (aaaa-mm-dd): ");
+        System.out.println("Introdueix la data de començament de les inscripcions (aaaa mm dd): ");
         int inscriptionYear = keyboard.nextInt();
         int inscriptionMonth = keyboard.nextInt();
         int inscriptionDay = keyboard.nextInt();
@@ -695,7 +782,7 @@ public class AppProgramaBenestar {
 
 
         //----- Data on acaben les inscripcions -----
-        System.out.println("Introdueix la data de finalització de les inscripcions (aaaa-mm-dd): ");
+        System.out.println("Introdueix la data de finalització de les inscripcions (aaaa mm dd): ");
         int insFinishYear = keyboard.nextInt();
         int insFinishMonth = keyboard.nextInt();
         int insFinishDay = keyboard.nextInt();
@@ -705,6 +792,7 @@ public class AppProgramaBenestar {
 
         //----- Col·lectius que poden participar en l'activitat -----
         String collectives[] = new String[3];
+        keyboard.nextLine();
         System.out.println("Introdueix quins col·lectius poden participar (posa -1 per acabar): ");
         int counter = 0;
         String collective = "";
@@ -726,12 +814,13 @@ public class AppProgramaBenestar {
 
         //----- Ciutat on es realitza l'activitat -----
         System.out.println("Introdueix la ciutat on es realitza l'activitat: ");
+        keyboard.nextLine();
         String activityCity = keyboard.nextLine();
         //---------------------------------------------
 
 
         //----- Dia en el que es realitza l'activitat -----
-        System.out.println("Introdueix el dia en el que es realitza l'activitat (aaaa-mm-dd): ");
+        System.out.println("Introdueix el dia en el que es realitza l'activitat (aaaa mm dd): ");
         int ActivityYear = keyboard.nextInt();
         int ActivityMonth = keyboard.nextInt();
         int ActivityDay = keyboard.nextInt();
@@ -740,7 +829,7 @@ public class AppProgramaBenestar {
 
 
         //----- Horari de començament de l'activitat -----
-        System.out.println("Introdueix l'horari en que comença l'activitat: ");
+        System.out.println("Introdueix l'horari en que comença l'activitat: (hora minuts)");
         int firstHour = keyboard.nextInt();
         int firstMinute = keyboard.nextInt();
         LocalTime startTime = LocalTime.of(firstHour, firstMinute);
@@ -748,7 +837,7 @@ public class AppProgramaBenestar {
 
 
         //----- Horari de tancament de l'activitat -----
-        System.out.println("Introdueix l'horari en que acaba l'activitat: ");
+        System.out.println("Introdueix l'horari en que acaba l'activitat: (hora minuts)");
         int finalHour = keyboard.nextInt();
         int finalMinute = keyboard.nextInt();
         LocalTime finishTime = LocalTime.of(finalHour, finalMinute);
@@ -756,13 +845,13 @@ public class AppProgramaBenestar {
 
 
         //----- Preu de l'activitat -----
-        System.out.println("Introdueix el preu de l'activitat: ");
+        System.out.println("Introdueix el preu de l'activitat: (amb decimals, ex. 10,0)");
         double activityPrice = keyboard.nextDouble();
         //-------------------------------
 
         
         //----- Creació de la nova activitat amb els atribut demanats -----
-        Activities oneDayActivity = new OneDayActivity("One Day", activityName, startInscription, finishInscription, collectives, limitPlaces, activityCity, activityDay, startTime, finishTime, activityPrice);
+        Activities oneDayActivity = new OneDayActivity("OneDay", activityName, startInscription, finishInscription, collectives, limitPlaces, activityCity, activityDay, startTime, finishTime, activityPrice);
         activities.addActivity(oneDayActivity);
         //-----------------------------------------------------------------
     }
