@@ -1,11 +1,12 @@
 package list;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 import Usuaris.User;
 import dades.Inscriptions;
 
-public class InscriptionList {
+public class InscriptionList implements Serializable{
     Inscriptions[] list;
     int numElems;
 
@@ -53,6 +54,9 @@ public class InscriptionList {
     @Override
     public String toString(){
         String answer = "Usuaris: ";
+        if (numElems == 0){
+            return "";
+        }
         for (int i = 0; i < numElems - 1; i++){
             answer += list[i].getNickName() + ", ";
         }

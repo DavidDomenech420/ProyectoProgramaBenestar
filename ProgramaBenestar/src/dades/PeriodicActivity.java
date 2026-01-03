@@ -119,7 +119,7 @@ public class PeriodicActivity extends Activities{
     //------------ TO STRING ------------
    @Override
     public String toString(){
-        return "Online Activity [Activity Name: " + getActivityName() + ", Start Date Inscriptions: " + getStartDateInscriptions() +
-        ", Finish Date Inscriptions: " + getFinishDateInscriptions() + " Collectives: (" + getCollectiveString() + ")\nDay of activity: "  + getDayOfActivity() + "\nInicial time: " + getInicialTime() + "\nFinal time: " + getFinalTime() + "\nInicial date: " + getInicialDate() + "\nWeeks of activity: " + getWeeksOfActivity() + "\nPrice of activity: " + getPriceActivity() + "\nCenter name: " + getCenterName() + "\nCity name: " + getCityName();
+        return "Periodic [Activity Name: " + getActivityName() + ", Start Date Inscriptions: " + getStartDateInscriptions() +
+        ", Finish Date Inscriptions: " + getFinishDateInscriptions() + " Collectives: (" + getCollectiveString() + ") Day of activity: "  + getDayOfActivity() + " Inicial time: " + getInicialTime() + " Final time: " + getFinalTime() + " Inicial date: " + getInicialDate() + " Weeks of activity: " + getWeeksOfActivity() + " Price of activity: " + getPriceActivity() + " Center name: " + getCenterName() + " City name: " + getCityName();
     }
 }

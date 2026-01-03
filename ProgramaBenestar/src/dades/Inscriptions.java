@@ -1,13 +1,16 @@
 package dades;
 
+import java.io.Serializable;
+
 import Usuaris.User;
 
-public class Inscriptions {
+public class Inscriptions implements Serializable{
     private User user;
-    private int assessment = 0;
+    private int assessment;
     
     public Inscriptions(User user) {
         this.user = user;
+        this.assessment = 0;
     }
 
     public String getNickName() {

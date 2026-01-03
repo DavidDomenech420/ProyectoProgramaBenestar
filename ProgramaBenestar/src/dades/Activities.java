@@ -1,10 +1,11 @@
 package dades;
+import java.io.Serializable;
 import java.time.LocalDate;
 
 import Usuaris.User;
 import list.InscriptionList;
 
-public abstract class Activities {
+public abstract class Activities implements Serializable{
     private String activityType;
     private String activityName;
     private String[] collective = new String[3]; //Max 3 col·lectius
@@ -151,6 +152,7 @@ public abstract class Activities {
         if (numElemsWaitingList < waitingList.length) {
             waitingList[numElemsWaitingList] = member;
             numElemsWaitingList++;
+            System.out.println("Felicitats! Ja t'has inscrit a la llista d'espera de l'activitat.");
         }
         else {
             System.out.println("Waiting list is full. Cannot add more members.");
@@ -184,6 +186,7 @@ public abstract class Activities {
     public void addInscriptionFile(Inscriptions inscription){
         if (this.inscriptions.getNumElems() < this.inscriptions.getLenInscriptions()){
             this.inscriptions.addNewInscription(inscription);
+            // this.inscriptions.getInscription(this.inscriptions.getNumElems()-1).setAssessment(inscription.getAssessment());
         }
         else{
             addToWaitingList(inscription.getUser());
@@ -213,6 +216,7 @@ public abstract class Activities {
         if (this.inscriptions.getNumElems() < inscriptions.getLenInscriptions()){
             inscriptions.addNewInscription(newInscription);
             member.addInscription();
+            System.out.println("Felicitats! Ja t'has inscrit a l'activitat.");
         }
         else {
             System.out.println("Inscriptions are full. Adding to waiting list.");

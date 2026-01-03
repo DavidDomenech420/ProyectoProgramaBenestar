@@ -313,6 +313,7 @@ public class AppProgramaBenestar {
             }
         } catch (IOException e){
             System.out.println("Error en l'arxiu de sortida");
+            System.out.println(e);
         }
     }
 
@@ -543,6 +544,7 @@ public class AppProgramaBenestar {
     // ------ 8º OPCIÓ DEL MENU ------
     public static void option8(UserList List){
         //8. Mostrar informació d'usuari: informació detallada a partir del nom d'aquest.
+        System.out.println("Escriu el teu nom: ");
         String Name = keyboard.nextLine();
         User aux = List.getUser(Name);
         System.out.println(aux);
@@ -555,13 +557,15 @@ public class AppProgramaBenestar {
         //9. Mostrar activitats on estàs inscrit: totes a les que l'usuari s'ha apuntat.
         System.out.println("Introdueix el teu nom d'usuari: ");
         String nomUsuari = keyboard.nextLine();
+        System.out.println("Activitats on estàs inscrit: ");
+
         for(int i=0; i<activities.getNumElems(); i++){
             Activities activity = activities.getActivity(i);
             InscriptionList inscriptedUsers = activity.getInscriptions();
 
-            System.out.println("Activitats on estàs inscrit: ");
-            for(int j=0; j<inscriptedUsers.getLenInscriptions(); j++){
-                if(((inscriptedUsers.getInscription(i)).getNickName()).equalsIgnoreCase(nomUsuari)){
+            
+            for(int j=0; j<inscriptedUsers.getNumElems(); j++){
+                if(((inscriptedUsers.getInscription(j)).getNickName()).equalsIgnoreCase(nomUsuari)){
                     System.out.println(activity.getActivityName());
                 }
             }
@@ -600,12 +604,12 @@ public class AppProgramaBenestar {
             System.out.println("Perfecte! Quin és el teu nom?: ");
             String nickname = keyboard.nextLine();
             i = 0;
-            trobat = !false;
+            trobat = false;
             while(!trobat && i < usersList.getNumElems()){
                 if(nickname.equalsIgnoreCase(usersList.getUser(i).getNickname())){
                     trobat = true;
                     posUser = i;
-                    if(!usersList.getUser(i).getUserType().equalsIgnoreCase(activity.getActivityType())){ //Mirem si pertany al grup correcte per a fer l'activitat
+                    if(!activity.getCollectiveString().contains(usersList.getUser(i).getUserType())){ //Mirem si pertany al grup correcte per a fer l'activitat
                         System.out.println("Ho sentim. No pertanys al grup correcte per a inscriure't en aquesta activitat.");
                         return;
                     }
@@ -621,6 +625,7 @@ public class AppProgramaBenestar {
                 while(numCollective != 1 && numCollective != 2 && numCollective != 3){
                     System.out.println("No has introduit un número correcte. Torna a intentar-ho: ");
                     numCollective = keyboard.nextInt();
+                    
                 }
                 String collective = null;
                 if(numCollective == 1){
@@ -648,6 +653,7 @@ public class AppProgramaBenestar {
 
                 //E-Mail:
                 System.out.println("Quin és el teu e-mail? Escriu-lo a continuació: ");
+                keyboard.nextLine();
                 String email = keyboard.nextLine();
 
                 //Si és usuari PDI:
@@ -678,7 +684,7 @@ public class AppProgramaBenestar {
                 newUser = usersList.getUser(posUser); //L'usuari ja estava registrat.
 
                 // Mirem si l'usuari pot fer l'activitat segons el seu tipus:
-                boolean isPermited = !false;
+                boolean isPermited = false;
                 i = 0;
                 while(!isPermited && i < activity.getLenCollective()){
                     if(newUser.getUserType().equalsIgnoreCase(activity.getCollective()[i])){
@@ -693,17 +699,21 @@ public class AppProgramaBenestar {
             }
 
             //Afegir l'usuari a la inscripció de l'activitat corresponent:
+            for (int k = 0; k < activity.getInscriptions().getNumElems(); k++){
+                if (activity.getInscriptions().getInscription(k).getNickName().equalsIgnoreCase(nickname)){
+                    System.out.println("Ja estàs inscrit");
+                    return;
+                }
+            }
             if(activity.getNumElemsWaitingList() >= activity.getWaitingList().length && activity.getNumInscriptions() == activity.getInscriptions().getLenInscriptions()){
                 System.out.println("Ho sentim. Les inscripcions estan plenes.");
                 return;
             }
             else if((activity.getNumInscriptions() == activity.getInscriptions().getLenInscriptions()) && activity.getNumElemsWaitingList() < activity.getWaitingList().length){ //Afegim a la waiting list
                 activity.addToWaitingList(newUser);
-                System.out.println("Felicitats! Ja t'has inscrit a la llista d'espera de l'activitat.");
             }
             else if(activity.getNumInscriptions() < activity.getInscriptions().getLenInscriptions()){
                 activity.addInscriptions(newUser);
-                System.out.println("Felicitats! Ja t'has inscrit a l'activitat.");
             }
         }
 
@@ -759,6 +769,7 @@ public class AppProgramaBenestar {
         i--;
         j--;
         listAct.getActivity(i).removeInscription(listUser.getUser(j));
+        System.out.println("S'ha eliminat correctament l'usuari " + listUser.getUser(j) + " de l'activitat " + listAct.getActivity(i));
     }
     //--------------------------------
 
@@ -1010,6 +1021,7 @@ public class AppProgramaBenestar {
         //requisits per a que l'usuari la pugui valorar: 
             //1- l'activitat ha d'haver acabat.
             //2- l'usuari ha d'haver assistit a l'activitat.
+        listAct = listAct.activitiesFinished(usedDate);
         System.out.println("Write your username: ");
         String user = keyboard.nextLine();
         int j = 0;
@@ -1036,7 +1048,7 @@ public class AppProgramaBenestar {
             i++;
         }
         if (!found){
-            System.out.println("Error, this activity does not exist");
+            System.out.println("Error, aquesta activitat no es pot valorar");
             return;
         }
 
@@ -1044,6 +1056,7 @@ public class AppProgramaBenestar {
         j--;
         found = false;
         int k = 0;
+        
         while (k < listAct.getActivity(i).getInscriptions().getNumElems() && !found){
             if (listAct.getActivity(i).getInscriptions().getInscription(k).getNickName().equalsIgnoreCase(listUser.getUser(j).getNickname())){
                 found = true;
@@ -1051,12 +1064,16 @@ public class AppProgramaBenestar {
                     System.out.println("Enter the grade you want to give to the activity: ");
                     int grade = Integer.parseInt(keyboard.nextLine());
                     listAct.getActivity(i).getInscriptions().getInscription(k).setAssessment(grade);
+                    System.out.println("Has evaluat l'activitat correctament");
                 } catch(NumberFormatException e){
                     System.out.println("Error, you have to enter a valid number");
                 }
                 
             }
             k++;
+        }
+        if (!found){
+            System.out.println("No estàs inscrit en aquesta activitat.");
         }
 
     }
@@ -1075,14 +1092,14 @@ public class AppProgramaBenestar {
         //Analitzem activitat per activitat per mostrar les valoracions de cadascuna
         for (int i=0; i<finishedActivities.getNumElems(); i++){
             Activities activity = finishedActivities.getActivity(i);
-            System.out.println(activity.getActivityName()); //Nom de l'activitat a mostrar
-            
+            System.out.print(activity.getActivityName() + ": "); //Nom de l'activitat a mostrar
+
             //Llista de les inscripcions d'aquesta activitat
             InscriptionList inscriptions = activity.getInscriptions();
 
             for(int j=0; j<inscriptions.getNumElems(); j++){
                 Inscriptions inscription = inscriptions.getInscription(j);
-                System.out.println(inscription.getAssessment()); //Quantitat de la valoració
+                System.out.print(inscription.getAssessment() + " "); //Quantitat de la valoració
             }
             System.out.println("\n");
         }
@@ -1109,7 +1126,7 @@ public class AppProgramaBenestar {
             for(i = 0; i < activities.getNumElems(); i++){
                 for(int j = 0; j < activities.getActivity(i).getNumInscriptions(); j++){
                     if(activities.getActivity(i).getInscriptions().getInscription(j).getNickName().equalsIgnoreCase(user)){
-                        System.out.println("Evaluació de l'activitat" + activities.getActivity(i).getActivityName() + "per part de " + activities.getActivity(i).getInscriptions().getInscription(j).getNickName() + ": ");
+                        System.out.println("Evaluació de l'activitat '" + activities.getActivity(i).getActivityName() + "' per part de " + activities.getActivity(i).getInscriptions().getInscription(j).getNickName() + ": ");
                         System.out.println("Nota: " + activities.getActivity(i).getInscriptions().getInscription(j).getAssessment());
                     }
                 }
@@ -1154,7 +1171,7 @@ public class AppProgramaBenestar {
             }
 
             // Fem les mitjanes i les mostrem
-            System.out.println("Activitat " + (i + 1) + " Valoracions - Student: " + (mitjanaStudent/contadorStudent) + ", PDI: " + (mitjanaPDI/contadorPDI) + ", PTGAS: " + (mitjanaPTGAS/contadorPTGAS));
+            System.out.println("Activitat " + finishActivities.getActivity(i) + " Valoracions - Student: " + (mitjanaStudent/contadorStudent) + ", PDI: " + (mitjanaPDI/contadorPDI) + ", PTGAS: " + (mitjanaPTGAS/contadorPTGAS));
         }
     }
     //--------------------------------
