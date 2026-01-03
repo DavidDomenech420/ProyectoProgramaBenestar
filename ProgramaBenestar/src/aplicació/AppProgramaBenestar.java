@@ -318,7 +318,8 @@ public class AppProgramaBenestar {
     }
 
     public static void mostraMenu(){
-        System.out.println("\n\nOPCIONS DEL MENU: ");
+        System.out.println("\n------ PROGRAMA BENESTAR URV ------");
+        System.out.println("\nOPCIONS DEL MENÚ: ");
         System.out.println("1- Informació sobre la data actual"); //Hem de posar en diferents dates per acceptar inscripcions o no. Indicar data actual per poder-la modificar o fer operacions.
         System.out.println("2- Informació de les dades d'una llista");  //Demanem la llista desitjada. Si són de diferents tipus, es demanarà el tipus i si es vol mostrar tots els tipus o només aquest.
         System.out.println("3- Informació de les activitats en període d'inscripció"); //Indicar si encara hi han places disponibles.
