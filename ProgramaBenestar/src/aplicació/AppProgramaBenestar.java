@@ -253,20 +253,21 @@ public class AppProgramaBenestar {
                 frase = activities.getActivity(i).getActivityType();
                 if (frase.equals("One Day")){
                     frase = "OneDay";
-                }
+                } //to do (quitar)
                 if (frase.equals("OneDay")){
                     OneDayActivity actOne = (OneDayActivity) activities.getActivity(i);
                     frase += ";" + actOne.getActivityName() + ";" +  actOne.getStartDateInscriptions() + ";" + actOne.getFinishDateInscriptions() + ";" + actOne.getCollectiveString() + ";" + actOne.getInscriptions().getLenInscriptions() + ";" + actOne.getCity() + ";" + actOne.getDay() + ";" + actOne.getStartTime() + ";" + actOne.getFinishTime() + ";" + actOne.getPrice();
                 }
                 else if (frase.equals("Periodic")){
                     PeriodicActivity actPer = (PeriodicActivity) activities.getActivity(i);
-                    frase += ";" + actPer.getActivityName() + ";" + actPer.getStartDateInscriptions() + ";" + actPer.getFinishDateInscriptions() + ";" + actPer.getCollectiveString() + ";" + actPer.getInscriptions().getLenInscriptions() + ";" + actPer.getDayOfActivity() + ";" + actPer.getInicialDate() + ";" + actPer.getFinalTime() + ";" + actPer.getInicialDate() + ";" + actPer.getWeeksOfActivity() + ";" + actPer.getPriceActivity() + ";" + actPer.getCenterName() + ";" + actPer.getCityName();
+                    frase += ";" + actPer.getActivityName() + ";" + actPer.getStartDateInscriptions() + ";" + actPer.getFinishDateInscriptions() + ";" + actPer.getCollectiveString() + ";" + actPer.getInscriptions().getLenInscriptions() + ";" + actPer.getDayOfActivity() + ";" + actPer.getInicialTime() + ";" + actPer.getFinalTime() + ";" + actPer.getInicialDate() + ";" + actPer.getWeeksOfActivity() + ";" + actPer.getPriceActivity() + ";" + actPer.getCenterName() + ";" + actPer.getCityName();
                 }
                 else if (frase.equals("Online")){
                     OnlineActivity actOnl = (OnlineActivity) activities.getActivity(i);
                     frase += ";" + actOnl.getActivityName() + ";" +actOnl.getStartDateInscriptions() + ";" +actOnl.getFinishDateInscriptions() + ";" + actOnl.getCollectiveString() + ";" + actOnl.getInscriptions().getLenInscriptions() + ";" + actOnl.getStartDateActivity() + ";" + actOnl.getFinishDateActivity() + ";" + actOnl.getLinkCourse();
                 }
                 file.write(frase);
+                
             }
             file.close();
 		} catch(IOException e) {
@@ -320,7 +321,7 @@ public class AppProgramaBenestar {
         System.out.println("1- Informació sobre la data actual"); //Hem de posar en diferents dates per acceptar inscripcions o no. Indicar data actual per poder-la modificar o fer operacions.
         System.out.println("2- Informació de les dades d'una llista");  //Demanem la llista desitjada. Si són de diferents tipus, es demanarà el tipus i si es vol mostrar tots els tipus o només aquest.
         System.out.println("3- Informació de les activitats en període d'inscripció"); //Indicar si encara hi han places disponibles.
-        System.out.println("4- Informació d'activitats en la data actual"); //Data del punt 1. Tota la informació de cada activitat; places omplertes? Hi ha llista d'espera?
+        System.out.println("4- Informació d'activitats amb classe en la data actual"); //Data del punt 1. Tota la informació de cada activitat; places omplertes? Hi ha llista d'espera?
         System.out.println("5- Activitats actives en la data actual"); //Nom de les activitats. No cal classe avui, però la data actual ha d'estar entre data inicial i final.
         System.out.println("6- Activitats amb places disponibles"); //Nom de les activitats. Tant si estan encara en termini d'inscripció o no.
         System.out.println("7- Informació d'una activitat"); //Informació detallada d'una activitat a partir del seu nom.
@@ -901,14 +902,16 @@ public class AppProgramaBenestar {
         String dayOfActivity = keyboard.nextLine();
 
         // inicialTime:
-        System.out.print("Indica a quina hora comença l'activitat:. Hora: ");
+        System.out.println("Indica a quina hora comença l'activitat:");
+        System.out.print("Hora: ");
         int inicialHour = keyboard.nextInt();
         System.out.print("Minut: ");
         int inicialMinute = keyboard.nextInt();
         LocalTime inicialTime = LocalTime.of(inicialHour, inicialMinute, 0, 0);
 
         // finalTime:
-        System.out.print("Indica a quina hora acaba l'activitat:. Hora: ");
+        System.out.println("Indica a quina hora acaba l'activitat:");
+        System.out.print("Hora: ");
         int finalHour = keyboard.nextInt();
         System.out.print("Minut: ");
         int finalMinute = keyboard.nextInt();
@@ -938,7 +941,7 @@ public class AppProgramaBenestar {
         System.out.print("Indica el nom de la ciutat: ");
         String cityName = keyboard.nextLine();
 
-        Activities periodicActivity = new PeriodicActivity("Peridoic", activityName, startDateInscriptions, finishDateInscriptions, collectives, maxInscriptions, dayOfActivity, inicialTime, finalTime, inicialDate, weeksOfActivity, priceActivity, centerName, cityName);
+        Activities periodicActivity = new PeriodicActivity("Periodic", activityName, startDateInscriptions, finishDateInscriptions, collectives, maxInscriptions, dayOfActivity, inicialTime, finalTime, inicialDate, weeksOfActivity, priceActivity, centerName, cityName);
         activities.addActivity(periodicActivity);
 
 
