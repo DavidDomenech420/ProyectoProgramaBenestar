@@ -1171,7 +1171,7 @@ public class AppProgramaBenestar {
             }
 
             // Fem les mitjanes i les mostrem
-            System.out.println("Activitat " + finishActivities.getActivity(i) + " Valoracions - Student: " + (mitjanaStudent/contadorStudent) + ", PDI: " + (mitjanaPDI/contadorPDI) + ", PTGAS: " + (mitjanaPTGAS/contadorPTGAS));
+            System.out.println("Activitat '" + finishActivities.getActivity(i).getActivityName() + "' Valoracions - Student: " + (mitjanaStudent/contadorStudent) + ", PDI: " + (mitjanaPDI/contadorPDI) + ", PTGAS: " + (mitjanaPTGAS/contadorPTGAS));
         }
     }
     //--------------------------------
@@ -1191,7 +1191,7 @@ public class AppProgramaBenestar {
         User mostActive = null;
         for (int i = 0; i < listUser.getNumElems(); i++){
             if (listUser.getUser(i).getUserType().equalsIgnoreCase(collective)){
-                if (mostActive.getNumInscriptions() < listUser.getUser(i).getNumInscriptions() || mostActive == null){
+                if (mostActive == null || mostActive.getNumInscriptions() < listUser.getUser(i).getNumInscriptions()){
                     mostActive = listUser.getUser(i);
                 }
             }
@@ -1215,7 +1215,7 @@ public class AppProgramaBenestar {
         for(int i=0; i<activities.getNumElems(); i++){
             Activities activity = activities.getActivity(i); //Accés a cada activitat
             InscriptionList maxPlaces = activity.getInscriptions(); //Màxim de places que té l'activitat
-            double places = (10/100)*(maxPlaces.getLenInscriptions());
+            double places = (10.0/100)*(maxPlaces.getLenInscriptions());
 
             int numPlaces = activity.getNumInscriptions(); //Número de places cobertes 
 

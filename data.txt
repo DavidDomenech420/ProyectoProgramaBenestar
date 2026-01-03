@@ -1,6 +1,3 @@
 OneDay;nameActivity;dd-mm-yyyy;dd-mm-yyyy;collective;29;city;dd-mm-yyyy;hh:mm;hh:mm;12.3
 Periodic;nameActivity;dd-mm-yyyy;dd-mm-yyyy;collective;29;dd-mm-yyyy;hh:mm;dd-mm-yyyy;21;14.5;centerName;cityName
 Online;nameActivity;dd-mm-yyyy;dd-mm-yyyy;collective;29;dd-mm-yyyy;dd-mm-yyyy;linkCurso
-
-OneDay;klfn;2026-01-01;2026-01-02;PDI;5;awiu;2026-01-04;16:30;17:30;10.0
-Periodic;perio;2026-01-01;2026-01-06;PDI;5;dilluns;16:30;17:30;2026-01-08;3;10.0;urv;reus
