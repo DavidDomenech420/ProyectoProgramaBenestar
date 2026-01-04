@@ -21,7 +21,7 @@ import Usuaris.User;
 
 public class AppProgramaBenestar {
     static Scanner keyboard = new Scanner(System.in);
-    private static LocalDate usedDate = LocalDate.now();
+    public static LocalDate usedDate = LocalDate.now(); //La variable haurà de ser 'public' per poder accedir des de la part d'interficies gràfiques
 
     public static void main(String[] args) throws Exception {
         // Inicialitzem les variables per la llista d'activitats
@@ -137,7 +137,7 @@ public class AppProgramaBenestar {
         //2- ClassNotFoundException: Error de classe.
 
         // Mostrem el menu
-        mostraMenu();
+        /*mostraMenu();
         int option = keyboard.nextInt();
         keyboard.nextLine();
         while (option != 22){ //Mostrarem el menu fins que l'usuari vulgui sortir de l'aplicació
@@ -156,7 +156,7 @@ public class AppProgramaBenestar {
                     }
                     break;
                 case 3:
-                    // Llamamos la funcion de pillar la informacion de las actividades con inscripciones abiertas
+                    // Llamamos la funcion que coge la informacion de las actividades con inscripciones abiertas
                     option3(activities);
                     break;
                 case 4:
@@ -217,15 +217,16 @@ public class AppProgramaBenestar {
                     option20(usersList);
                     break;
                 case 21:
+                    System.out.println("Llista d'activitats abans de la baixa: ");
                     for(int i=0; i<activities.getNumElems(); i++){
                         Activities activity = activities.getActivity(i);
-                        System.out.println(activity.getActivityName());
+                        System.out.println("- "+activity.getActivityName()); //(El guió és per estètica)
                     }
                     option21(activities, usedDate);
-                    System.out.println("Llista actualitzada: ");
+                    System.out.println("\nLlista d'activitats actualitzada: ");
                     for(int i=0; i<activities.getNumElems(); i++){
                         Activities activity = activities.getActivity(i);
-                        System.out.println(activity.getActivityName());
+                        System.out.println("- "+activity.getActivityName()); //(El guió és per estètica)
                     }
                     break;
             }
@@ -233,6 +234,8 @@ public class AppProgramaBenestar {
             option = keyboard.nextInt();
             keyboard.nextLine();
         }
+        */
+        new AppGrafica(activities, usersList);
 
         
         // ------ Fitxer .txt ------
@@ -390,7 +393,7 @@ public class AppProgramaBenestar {
                 } else if(option == 3){
                     System.out.println("Has escollit que es mostri la informació del personal tècnic i de gestió (PTGAS): ");
                     for(int i = 0; i < usersList.getNumElems(); i++){
-                        if(usersList.getUser(i).getUserType().equalsIgnoreCase("TGAS")){
+                        if(usersList.getUser(i).getUserType().equalsIgnoreCase("PTGAS")){
                             System.out.println(usersList.getUser(i));
                         }
                     }
@@ -487,7 +490,15 @@ public class AppProgramaBenestar {
     // ------ 5º OPCIÓ DEL MENU ------
     public static void option5(ActivityList activities, LocalDate usedDate){
         //5. Mostrar activitats actives en la data actual: nom de les activitats; no cal classe, però la data actual entre la inicial i la final.
-        System.out.println("Activitats actives en la data actual ("+usedDate+")");
+        boolean thereAre = false; 
+        boolean activeOneDay = false;
+        boolean activePeriodic = false;
+        boolean activeOnline = false;
+        String message = "Activitats actives en la data actual ("+usedDate+")";
+        String oneDayMessage = "Activitats d'un dia: ";
+        String onlineMessage = "Activitats online: ";
+        String periodicMessage = "Activitats periòdiques: ";
+
         for(int i=0; i<activities.getNumElems(); i++){
             Activities activity = activities.getActivity(i);
 
@@ -495,28 +506,49 @@ public class AppProgramaBenestar {
             if(activity instanceof OneDayActivity){ //Comprovació que el tipus dinàmic sigui la classe filla
                 OneDayActivity oneDayAct = (OneDayActivity) activity;
                 if(oneDayAct.getDay().isEqual(usedDate)){
-                    System.out.println("Activitat d'un dia: " +oneDayAct.getActivityName()); //Mostrem el nom
+                    thereAre = true;
+                    activeOneDay = true;
+                    oneDayMessage = oneDayMessage + oneDayAct.getActivityName();
                 }
 
             //Comprovació per activitats online
-            }else if(activity instanceof OnlineActivity){ //Comprovació que el tipus dinàmic sigui la classe filla
+            } else if(activity instanceof OnlineActivity){ //Comprovació que el tipus dinàmic sigui la classe filla
                 OnlineActivity onlineAct = (OnlineActivity) activity;
                 LocalDate start = onlineAct.getStartDateActivity();
                 LocalDate finish = onlineAct.getFinishDateActivity();
                 if(!usedDate.isBefore(start) && !usedDate.isAfter(finish)){ //Si posem 'usedDate.isAfter(start) && usedDate.isBefore(finish)', exclou els extrems
-                    System.out.println("Activitat online: " +onlineAct.getActivityName()); //Mostrem el nom
+                    thereAre = true;
+                    activeOnline = true;
+                    onlineMessage = onlineMessage + onlineAct.getActivityName();
                 }
 
             //Comprovació per activitats periòdiques
-            }else if(activity instanceof PeriodicActivity){ //Comprovació que el tipus dinàmic sigui la classe filla
+            } else if(activity instanceof PeriodicActivity){ //Comprovació que el tipus dinàmic sigui la classe filla
                 PeriodicActivity periodicAct = (PeriodicActivity) activity;
                 LocalDate start = periodicAct.getInicialDate();
                 int weeks = periodicAct.getWeeksOfActivity();
                 LocalDate finish = start.plusWeeks(weeks);
                 if(!usedDate.isBefore(start) && !usedDate.isAfter(finish)){
-                    System.out.println("Activitat periòdica: " +periodicAct.getActivityName()); //Mostrem el nom
+                    thereAre = true;
+                    activePeriodic = true;
+                    periodicMessage = periodicMessage + periodicAct.getActivityName();
+                    
                 }
             }
+        }
+        if(thereAre == true){
+            System.out.println(message);
+            if(activeOneDay = true){
+                System.out.println(oneDayMessage);
+            }
+            if(activeOnline = true){
+                System.out.println(onlineMessage);
+            }
+            if(activePeriodic = true){
+                System.out.println(periodicMessage);
+            }
+        } else {
+            System.out.println("No hi ha activitats actives en la data actual");
         }
     }   
     //--------------------------------
