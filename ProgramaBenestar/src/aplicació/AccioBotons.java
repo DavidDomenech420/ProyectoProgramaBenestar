@@ -10,6 +10,7 @@ import dades.OneDayActivity;
 import dades.OnlineActivity;
 import dades.PeriodicActivity;
 import list.ActivityList;
+import list.InscriptionList;
 import list.UserList;
 
 //Aquesta classe és la responsable de tractar els esdeveniments dels botons.
@@ -28,18 +29,18 @@ public class AccioBotons implements ActionListener {
 
         //----- OPCIÓ 1 -----
         if(option.equalsIgnoreCase("Informació sobre la data actual")){
-            JOptionPane.showMessageDialog(null, "Data actual al programa: " +AppProgramaBenestar.usedDate);
-            String answer = JOptionPane.showInputDialog("Vol consultar una altra data? Si/no");
+            JOptionPane.showMessageDialog(null, "Data actual al programa: " +AppProgramaBenestar.usedDate, "DATA DEL SISTEMA", JOptionPane.INFORMATION_MESSAGE);
 
-            if(answer != null && answer.equalsIgnoreCase("si")){
-                String newDateString = JOptionPane.showInputDialog(null, "Introdueix una data (AAAA-MM-DD): ");
+            int confirmation = JOptionPane.showConfirmDialog(null, "Vol consultar una altra data?", "CONFIRMACIÓ", JOptionPane.YES_NO_OPTION);
+            if(confirmation == JOptionPane.YES_OPTION){
+                String newDateString = JOptionPane.showInputDialog(null, "Introdueix una data (AAAA-MM-DD): ", "DATA DEL SISTEMA", JOptionPane.INFORMATION_MESSAGE);
                 //Comprovem que no hagi cancel·lat
                 if(newDateString != null){
                     try{
                         AppProgramaBenestar.usedDate = LocalDate.parse(newDateString);
-                        JOptionPane.showMessageDialog(null, "Data actualitzada: " +AppProgramaBenestar.usedDate);
+                        JOptionPane.showMessageDialog(null, "Data actualitzada: " +AppProgramaBenestar.usedDate, "DATA DEL SISTEMA", JOptionPane.INFORMATION_MESSAGE);
                     } catch (Exception e){
-                        JOptionPane.showMessageDialog(null, "Error en el format de la data");
+                        JOptionPane.showMessageDialog(null, "Error en el format de la data", "ERROR!", JOptionPane.WARNING_MESSAGE);
                     }
                 }
             }
@@ -51,105 +52,135 @@ public class AccioBotons implements ActionListener {
         else if (option.equalsIgnoreCase("Informació de les dades d'una llista")){
             //Demanem l'opció a mostrar per pantalla
             String answer = JOptionPane.showInputDialog("Escriu de què vols obtenir la informació (usuaris/activitats): ");
+            String phrase = "";
+            String information = "";
 
             //Si l'usuari ha cancelat l'acció, la resposta serà null
             if(answer != null){
                 
-                //SI L'OPCIÓ HA SIGIT USUARIS
+                //----- SI L'OPCIÓ HA SIGIT USUARIS -----
                 if(answer.equalsIgnoreCase("usuaris")){
-                    try{
-                        String answer2 = JOptionPane.showInputDialog("Escriu quin tipus d'usuari vols que es mosti:\n1: TOTS els usuaris\n2: professorat (PDI)\n3: personal tècnic i de gestió (PTGAS)\n4: estudiants\nEscriu la teva opció a continuació: ");
-                        
-                        //Si l'usuari ha cancelat l'acció, la resposta serà null
-                        if(answer2 != null){
-                            int userType = Integer.parseInt(answer2); //conversió a enter
+                    if(users.getNumElems() == 0){
+                        JOptionPane.showMessageDialog(null, "No hi ha informació d'usuaris", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
+                    
+                    } else if (users.getNumElems() > 0){
+                        try{
+                            String answer2 = JOptionPane.showInputDialog("Escriu quin tipus d'usuari vols que es mosti:\n1: TOTS els usuaris\n2: professorat (PDI)\n3: personal tècnic i de gestió (PTGAS)\n4: estudiants\nEscriu la teva opció a continuació: ");
+                            
+                            //Si l'usuari ha cancelat l'acció, la resposta serà null
+                            if(answer2 != null){
+                                int userType = Integer.parseInt(answer2); //conversió a enter
 
-                            //Opció 1 - Mostrar informació de tots els usuaris
-                            if(userType == 1){
-                                String phrase = "Has escollit que es mostri la informació de tots els usuaris: ";
-                                for(int i=0; i<users.getNumElems(); i++){
-                                    phrase = phrase + users.getUser(i).toString()+"\n";
+                                if(users.getNumElems() == 0){
+                                    JOptionPane.showMessageDialog(null, "No hi ha informació d'usuaris", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
+
+                                } else if (users.getNumElems() > 0){
+                                    //Opció 1 - Mostrar informació de tots els usuaris
+                                    if(userType == 1){
+                                        information = "TOTS ELS USUARIS";
+                                        phrase = "Has escollit que es mostri la informació de tots els usuaris: ";
+                                        for(int i=0; i<users.getNumElems(); i++){
+                                            phrase = phrase + users.getUser(i).toString()+"\n";
+                                        }
+                                    }
+                                    //Opció 2 - Mostrar informació del professorat (PDI)
+                                    if(userType == 2){
+                                        information = "TOTS ELS PROFESSORS";
+                                        phrase = "Has escollit que es mostri la informació del professorat (PDI): ";
+                                        for(int i=0; i<users.getNumElems(); i++){
+                                            if(users.getUser(i).getUserType().equalsIgnoreCase("PDI")){
+                                                phrase = phrase + users.getUser(i).toString()+"\n";
+                                            }
+                                        }
+                                    }
+                                    //Opció 3 - Mostrar informació del personal tècnic i de gestió (PTGAS)
+                                    if(userType == 3){
+                                        information = "TOTS EL PERSONAL TÈCNIC I DE GESTIÓ";
+                                        phrase = "Has escollit que es mostri la informació del personal tècnic i de gestió (PTGAS): ";
+                                        for(int i=0; i<users.getNumElems(); i++){
+                                            if(users.getUser(i).getUserType().equalsIgnoreCase("PTGAS")){
+                                                phrase = phrase + users.getUser(i).toString()+"\n";
+                                            }
+                                        }
+                                    }
+                                    //Opció 4 - Mostrar informació dels estudiants
+                                    if(userType == 4){
+                                        information = "TOTS ELS ESTUDIANTS";
+                                        phrase = "Has escollit que es mostri la informació dels estudiants: ";
+                                        for(int i=0; i<users.getNumElems(); i++){
+                                            if(users.getUser(i).getUserType().equalsIgnoreCase("Student")){
+                                                phrase = phrase + users.getUser(i).toString()+"\n";
+                                            }
+                                        }
+                                    }
+                                    JOptionPane.showMessageDialog(null, phrase, information, JOptionPane.INFORMATION_MESSAGE);
                                 }
                             }
-                            //Opció 2 - Mostrar informació del professorat (PDI)
-                            if(userType == 2){
-                                String phrase = "Has escollit que es mostri la informació del professorat (PDI): ";
-                                for(int i=0; i<users.getNumElems(); i++){
-                                    if(users.getUser(i).getUserType().equalsIgnoreCase("PDI")){
-                                        phrase = phrase + users.getUser(i).toString()+"\n";
-                                    }
-                                }
-                            }
-                            //Opció 3 - Mostrar informació del personal tècnic i de gestió (PTGAS)
-                            if(userType == 3){
-                                String phrase = "Has escollit que es mostri la informació del personal tècnic i de gestió (PTGAS): ";
-                                for(int i=0; i<users.getNumElems(); i++){
-                                    if(users.getUser(i).getUserType().equalsIgnoreCase("PTGAS")){
-                                        phrase = phrase + users.getUser(i).toString()+"\n";
-                                    }
-                                }
-                            }
-                            //Opció 4 - Mostrar informació dels estudiants
-                            if(userType == 4){
-                                String phrase = "Has escollit que es mostri la informació dels estudiants: ";
-                                for(int i=0; i<users.getNumElems(); i++){
-                                    if(users.getUser(i).getUserType().equalsIgnoreCase("Student")){
-                                        phrase = phrase + users.getUser(i).toString()+"\n";
-                                    }
-                                }
-                            } 
+                        } catch (NumberFormatException e){
+                            JOptionPane.showMessageDialog(null, "Error: Has d'introduir un número vàlid", "ERROR!", JOptionPane.WARNING_MESSAGE);
                         }
-                    } catch (NumberFormatException e){
-                        JOptionPane.showMessageDialog(null, "Error: Has d'introduir un número vàlid.");
                     }
+                    
 
-                //Si L'OPCIÓ HA SIGUT ACTIVITATS
+
+                //----- Si L'OPCIÓ HA SIGUT ACTIVITATS -----
                 } else if (answer.equalsIgnoreCase("activitats")){
-                    try{
-                        String answer3 = JOptionPane.showInputDialog("Escriu quin tipus d'activitat vols que es mosti:\n1: TOTES les activitats\n2: Activitats d'un dia\n3: Activitats periòdiques\n4: Activitats Online\nEscriu la teva opció a continuació: ");
+                    if(activities.getNumElems() == 0){
+                        JOptionPane.showMessageDialog(null, "No hi ha informació d'activitats", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
+                    
+                    } else if (activities.getNumElems() > 0){
+                        try{
+                            String answer3 = JOptionPane.showInputDialog("Escriu quin tipus d'activitat vols que es mosti:\n1: TOTES les activitats\n2: Activitats d'un dia\n3: Activitats periòdiques\n4: Activitats Online\nEscriu la teva opció a continuació: ");
+                            String phrase2 = "";
 
-                        //Si l'usuari ha cancelat l'acció, la resposta serà null
-                        if(answer3 != null){
-                            int activityType = Integer.parseInt(answer3); //conversió a enter
+                            //Si l'usuari ha cancelat l'acció, la resposta serà null
+                            if(answer3 != null){
+                                int activityType = Integer.parseInt(answer3); //conversió a enter
 
-                            //Opció 1 - Mostrar la informació de totes les activitats
-                            if(activityType == 1){
-                                String phrase2 = "Has escollit que es mostri la informació de totes les activitats: ";
-                                for(int i=0; i<activities.getNumElems(); i++){
-                                    phrase2 = phrase2 + activities.getActivity(i);
-                                }
-                            }
-                            //Opció 2 - Mostrar la informació de les activitats d'un dia
-                            if(activityType == 2){
-                                String phrase2 = "Has escollit que es mostri la informació de les activitats d'un dia: ";
-                                for(int i=0; i<activities.getNumElems(); i++){
-                                    if(activities.getActivity(i).getActivityType().equalsIgnoreCase("OneDay")){
+                                //Opció 1 - Mostrar la informació de totes les activitats
+                                if(activityType == 1){
+                                    information = "TOTS LES ACTIVITATS";
+                                    phrase2 = "Has escollit que es mostri la informació de totes les activitats: ";
+                                    for(int i=0; i<activities.getNumElems(); i++){
                                         phrase2 = phrase2 + activities.getActivity(i);
                                     }
                                 }
-                            }
-                            //Opció 3 - Mostrar la informació de les activitats periòdiques
-                            if(activityType == 3){
-                                String phrase2 = "Has escollit que es mostri la informació de les activitats periòdiques: ";
-                                for(int i=0; i<activities.getNumElems(); i++){
-                                    if(activities.getActivity(i).getActivityType().equalsIgnoreCase("Periodic")){
-                                        phrase2 = phrase2 + activities.getActivity(i);
+                                //Opció 2 - Mostrar la informació de les activitats d'un dia
+                                if(activityType == 2){
+                                    information = "ACTIVITATS D'UN DIA";
+                                    phrase2 = "Has escollit que es mostri la informació de les activitats d'un dia: ";
+                                    for(int i=0; i<activities.getNumElems(); i++){
+                                        if(activities.getActivity(i).getActivityType().equalsIgnoreCase("OneDay")){
+                                            phrase2 = phrase2 + activities.getActivity(i);
+                                        }
                                     }
                                 }
-                            }
-                            //Opció 4 - Mostrar la informació de les activitats en línia
-                            if(activityType == 4){
-                                String phrase2 = "Has escollit que es mostri la informació de les activitats Online: ";
-                                for(int i=0; i<activities.getNumElems(); i++){
-                                    if(activities.getActivity(i).getActivityType().equalsIgnoreCase("Online")){
-                                        phrase2 = phrase2 + activities.getActivity(i);
+                                //Opció 3 - Mostrar la informació de les activitats periòdiques
+                                if(activityType == 3){
+                                    information = "ACTIVITATS PERIÒDIQUES";
+                                    phrase2 = "Has escollit que es mostri la informació de les activitats periòdiques: ";
+                                    for(int i=0; i<activities.getNumElems(); i++){
+                                        if(activities.getActivity(i).getActivityType().equalsIgnoreCase("Periodic")){
+                                            phrase2 = phrase2 + activities.getActivity(i);
+                                        }
                                     }
                                 }
+                                //Opció 4 - Mostrar la informació de les activitats en línia
+                                if(activityType == 4){
+                                    information = "ACTIVITATS ONLINE";
+                                    phrase2 = "Has escollit que es mostri la informació de les activitats Online: ";
+                                    for(int i=0; i<activities.getNumElems(); i++){
+                                        if(activities.getActivity(i).getActivityType().equalsIgnoreCase("Online")){
+                                            phrase2 = phrase2 + activities.getActivity(i);
+                                        }
+                                    }
+                                }
+                                JOptionPane.showMessageDialog(null, phrase, information, JOptionPane.INFORMATION_MESSAGE);
                             }
+                        } catch (NumberFormatException e){
+                        JOptionPane.showMessageDialog(null, "Error: Has d'introduir un número vàlid", "ERROR!", JOptionPane.WARNING_MESSAGE);
                         }
-                    } catch (NumberFormatException e){
-                        JOptionPane.showMessageDialog(null, "Error: Has d'introduir un número vàlid.");
-                    }
+                    }                    
                 }
             }
         }
@@ -162,7 +193,7 @@ public class AccioBotons implements ActionListener {
             ActivityList openInscriptionActivities = activities.activitiesInscriptionOpen(today);
 
             if(openInscriptionActivities.getNumElems() == 0){
-                JOptionPane.showMessageDialog(null, "No hi ha activitats en període d'inscripció");
+                JOptionPane.showMessageDialog(null, "No hi ha activitats en període d'inscripció", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
 
             } else if (openInscriptionActivities.getNumElems() > 0){
                 String phrase = "Activitats en període d'inscripció: \n";
@@ -171,7 +202,7 @@ public class AccioBotons implements ActionListener {
                     int numPlazasDisp = openInscriptionActivities.getActivity(i).getInscriptions().getLenInscriptions() - openInscriptionActivities.getActivity(i).getNumInscriptions();
                     phrase = phrase + (i+1) + "- " + openInscriptionActivities.getActivity(i).getActivityName() + ", te " + numPlazasDisp + " places disponibles";
                 }
-                JOptionPane.showMessageDialog(null, phrase);
+                JOptionPane.showMessageDialog(null, phrase, "En període d'inscripció", JOptionPane.INFORMATION_MESSAGE);
             }
         }
         //-------------------
@@ -180,7 +211,7 @@ public class AccioBotons implements ActionListener {
         //----- OPCIÓ 4 -----
         else if (option.equalsIgnoreCase("Informació d'activitats amb classe en la data actual")){
             if(activities.getNumElems() == 0){
-                JOptionPane.showMessageDialog(null, "No hi ha activitats amb classe en la data actual");
+                JOptionPane.showMessageDialog(null, "No hi ha activitats amb classe en la data actual", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
 
             } else if (activities.getNumElems() > 0){
                 String phrase = "Activitats amb classe en la data actual: \n";
@@ -206,7 +237,7 @@ public class AccioBotons implements ActionListener {
                         }
                     }
                 }
-                JOptionPane.showMessageDialog(null, phrase);
+                JOptionPane.showMessageDialog(null, phrase, "Amb classe en la data actual", JOptionPane.INFORMATION_MESSAGE);
             }
         }
         //-------------------
@@ -214,49 +245,44 @@ public class AccioBotons implements ActionListener {
 
         //----- OPCIÓ 5 -----
         else if (option.equalsIgnoreCase("Activitats actives en la data actual")){
-            boolean thereAre = false;
             String message = "Activitats actives en la data actual ("+AppProgramaBenestar.usedDate+"): \n";
 
-            for(int i=0; i<activities.getNumElems(); i++){
-                Activities activity = activities.getActivity(i);
+            if(activities.getNumElems() == 0){
+                JOptionPane.showMessageDialog(null, "No hi ha activitats actives en la data actual", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
+            
+            } else if (activities.getNumElems() > 0){
+                for(int i=0; i<activities.getNumElems(); i++){
+                    Activities activity = activities.getActivity(i);
 
-                //Comprovació per activitats d'un dia
-                if(activity instanceof OneDayActivity){ //Comprovació que el tipus dinàmic sigui la classe filla
-                    OneDayActivity oneDayAct = (OneDayActivity) activity;
-                    if(oneDayAct.getDay().isEqual(AppProgramaBenestar.usedDate)){
-                        thereAre = true;
-                        message = message + oneDayAct.getActivityName()+ "(D'un dia)\n";
-                    }
-                //Comprovació per activitats online
-                } else if(activity instanceof OnlineActivity){ //Comprovació que el tipus dinàmic sigui la classe filla
-                    OnlineActivity onlineAct = (OnlineActivity) activity;
-                    LocalDate start = onlineAct.getStartDateActivity();
-                    LocalDate finish = onlineAct.getFinishDateActivity();
-                    if(!AppProgramaBenestar.usedDate.isBefore(start) && !AppProgramaBenestar.usedDate.isAfter(finish)){ //Si posem 'usedDate.isAfter(start) && usedDate.isBefore(finish)', exclou els extrems
-                        thereAre = true;
-                        message = message + onlineAct.getActivityName();
-                    }
+                    //Comprovació per activitats d'un dia
+                    if(activity instanceof OneDayActivity){ //Comprovació que el tipus dinàmic sigui la classe filla
+                        OneDayActivity oneDayAct = (OneDayActivity) activity;
+                        if(oneDayAct.getDay().isEqual(AppProgramaBenestar.usedDate)){
+                            message = message + oneDayAct.getActivityName()+ "(D'un dia)\n";
+                        }
+                    //Comprovació per activitats online
+                    } else if(activity instanceof OnlineActivity){ //Comprovació que el tipus dinàmic sigui la classe filla
+                        OnlineActivity onlineAct = (OnlineActivity) activity;
+                        LocalDate start = onlineAct.getStartDateActivity();
+                        LocalDate finish = onlineAct.getFinishDateActivity();
+                        if(!AppProgramaBenestar.usedDate.isBefore(start) && !AppProgramaBenestar.usedDate.isAfter(finish)){ //Si posem 'usedDate.isAfter(start) && usedDate.isBefore(finish)', exclou els extrems
+                            message = message + onlineAct.getActivityName()+ "(Online)\n";
+                        }
 
-                //Comprovació per activitats periòdiques
-                } else if(activity instanceof PeriodicActivity){ //Comprovació que el tipus dinàmic sigui la classe filla
-                    PeriodicActivity periodicAct = (PeriodicActivity) activity;
-                    LocalDate start = periodicAct.getInicialDate();
-                    int weeks = periodicAct.getWeeksOfActivity();
-                    LocalDate finish = start.plusWeeks(weeks);
-                    if(!AppProgramaBenestar.usedDate.isBefore(start) && !AppProgramaBenestar.usedDate.isAfter(finish)){
-                        thereAre = true;
-                        message = message + periodicAct.getActivityName();
-                        
+                    //Comprovació per activitats periòdiques
+                    } else if(activity instanceof PeriodicActivity){ //Comprovació que el tipus dinàmic sigui la classe filla
+                        PeriodicActivity periodicAct = (PeriodicActivity) activity;
+                        LocalDate start = periodicAct.getInicialDate();
+                        int weeks = periodicAct.getWeeksOfActivity();
+                        LocalDate finish = start.plusWeeks(weeks);
+                        if(!AppProgramaBenestar.usedDate.isBefore(start) && !AppProgramaBenestar.usedDate.isAfter(finish)){
+                            message = message + periodicAct.getActivityName()+ "(Periòdica)";
+                            
+                        }
                     }
                 }
+                JOptionPane.showMessageDialog(null, message, "Activitats actives", JOptionPane.INFORMATION_MESSAGE);
             }
-            if(thereAre == true){
-                JOptionPane.showMessageDialog(null, message);
-            } else {
-                String messageNoActive = "No hi ha activitats actives en la data actual ("+AppProgramaBenestar.usedDate+")";
-                JOptionPane.showMessageDialog(null, messageNoActive);
-            }
-
         }
         //-------------------
 
@@ -264,7 +290,7 @@ public class AccioBotons implements ActionListener {
         //----- OPCIÓ 6 -----
         else if (option.equalsIgnoreCase("Activitats amb places disponibles")){
             if(activities.getNumElems() == 0){
-                JOptionPane.showMessageDialog(null, "No hi ha activitats amb places disponibles");
+                JOptionPane.showMessageDialog(null, "No hi ha activitats amb places disponibles", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
 
             } else if (activities.getNumElems() > 0){
                 String phrase = "Activitats amb places disponibles: \n";
@@ -275,7 +301,7 @@ public class AccioBotons implements ActionListener {
                         phrase = phrase + activities.getActivity(i)+ " --> Places disponibles: "+remaining;
                     }
                 }
-                JOptionPane.showMessageDialog(null, phrase);
+                JOptionPane.showMessageDialog(null, phrase, "Activitats amb places", JOptionPane.INFORMATION_MESSAGE);
             }
         }
         //-------------------
@@ -283,12 +309,19 @@ public class AccioBotons implements ActionListener {
 
         //----- OPCIÓ 7 -----
         else if (option.equalsIgnoreCase("Informació d'una activitat")){
-            //Demanem el nom de l'activitat a mostrar per pantalla
-            String activityName = JOptionPane.showInputDialog("Indica el nom de l'activitat");
-
-            //Si l'usuari ha cancelat l'acció, la resposta serà null
-            if(activityName != null){
-                AppProgramaBenestar.option7(activities, activityName);
+            if(activities.getNumElems() == 0){
+                JOptionPane.showMessageDialog(null, "No hi ha activitats registrades", "ATENCIÓ!", JOptionPane.INFORMATION_MESSAGE);
+            
+            } else if (activities.getNumElems() > 0){
+                //Demanem el nom de l'activitat a mostrar per pantalla
+                String activityName = JOptionPane.showInputDialog("Indica el nom de l'activitat");
+                if(activityName != null){
+                    if(activities.getActivity(activityName) != null){
+                        JOptionPane.showMessageDialog(null, activities.getActivity(activityName), "Activitat: "+activityName, JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No existeix cap activitat amb aquest nom!", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
             }
         }
         //-------------------
@@ -296,20 +329,60 @@ public class AccioBotons implements ActionListener {
 
         //----- OPCIÓ 8 -----
         else if (option.equalsIgnoreCase("Informació d'un usuari")){
-            AppProgramaBenestar.option8(users);
+            if(users.getNumElems() == 0){
+                JOptionPane.showMessageDialog(null, "No hi ha usuaris registrats!", "ATENCIÓ!", JOptionPane.INFORMATION_MESSAGE);
+            
+            } else if (users.getNumElems() > 0){
+                String userName = JOptionPane.showInputDialog("Escriu el nom de l'usuari: ");
+                if(userName != null){
+                    if(users.getUser(userName) != null){
+                        JOptionPane.showMessageDialog(null, users.getUser(userName), "Nom de l'usuari: "+userName, JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No existeix cap usuari amb aquest nom!", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+            }
         }
         //-------------------
 
 
         //----- OPCIÓ 9 -----
         else if (option.equalsIgnoreCase("Activitats on estàs inscrit")){
-            AppProgramaBenestar.option9(activities, users);
+            if(activities.getNumElems() == 0){
+                JOptionPane.showMessageDialog(null, "No hi han activitats registrades!", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
+            
+            } else if (activities.getNumElems() > 0){
+                String userName = JOptionPane.showInputDialog("Escriu el nom de l'usuari: ");
+                String phrase = "";
+                if(userName != null){
+                    if(users.getUser(userName) != null){
+                        phrase = "Activitats on estàs inscrit: \n";
+
+                        for(int i=0; i<activities.getNumElems(); i++){
+                            Activities activity = activities.getActivity(i);
+                            InscriptionList inscriptedUsers = activity.getInscriptions();
+                            
+                            for(int j=0; j<inscriptedUsers.getNumElems(); j++){
+                                if(((inscriptedUsers.getInscription(j)).getNickName()).equalsIgnoreCase(userName)){
+                                    phrase = phrase + "- " +activity.getActivityName();
+                                }
+                            }
+                        }
+                        JOptionPane.showMessageDialog(null, phrase, "Activitats on està inscrit",  JOptionPane.INFORMATION_MESSAGE);
+
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No existeix cap usuari amb aquest nom!", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
+                    }
+                }   
+            }
         }
         //-------------------
 
 
         //----- OPCIÓ 10 -----
         else if (option.equalsIgnoreCase("Inscripció a una activitat")){
+
+
             AppProgramaBenestar.option10(activities, users);
         }
         //-------------------
@@ -317,12 +390,19 @@ public class AccioBotons implements ActionListener {
 
         //----- OPCIÓ 11 -----
         else if (option.equalsIgnoreCase("Usuaris inscrits en activitats i usuaris inscrits en llista d'espera")){
-            //Demanem el nom de l'activitat a mostrar per pantalla
-            String activityName = JOptionPane.showInputDialog("Indica el nom de l'activitat");
+            if(users.getNumElems() == 0){
+                JOptionPane.showMessageDialog(null, "No hi han usuaris registrats!", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
+            } else if (users.getNumElems() > 0){
+                //Demanem el nom de l'activitat a mostrar per pantalla
+                String activityName = JOptionPane.showInputDialog("Indica el nom de l'activitat");
 
-            //Si l'usuari ha cancelat l'acció, la resposta serà null
-            if(activityName != null){
-                AppProgramaBenestar.option11(activities, activityName);
+                //Si l'usuari ha cancelat l'acció, la resposta serà null
+                if(activityName != null){
+                    Activities activity = activities.getActivity(activityName);
+                    String phrase = "Usuaris inscrits a l'activitat: \n" +activity.getInscriptions();
+                    phrase = phrase + "\nUsuaris a la llista d'espera de l'activitat: \n"; 
+                    activity.printWaitingList();
+                }
             }
         }
         //-------------------
@@ -365,6 +445,8 @@ public class AccioBotons implements ActionListener {
 
         //----- OPCIÓ 17 -----
         else if (option.equalsIgnoreCase("Resum de valoracions de les activitats")){
+
+
             AppProgramaBenestar.option17(activities, AppProgramaBenestar.usedDate);
         }
         //-------------------
