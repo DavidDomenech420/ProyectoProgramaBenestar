@@ -817,7 +817,7 @@ public class AccioBotonsJulia implements ActionListener {
 
         //----- OPCIÓ 19 -----
         else if (option.equalsIgnoreCase("MItjanes de valoracions dels col·lectius")){
-             // Pillem Totes les activitats que ja s'han acabat
+            // Agafem Totes les activitats que ja s'han acabat
             ActivityList finishActivities = activities.activitiesFinished(AppProgramaBenestar.usedDate);
             // Recorrem totes les activitats i hem de mirar les inscripcions de cada activitat, despres recorrem les inscripcions i segons el colectiu sumem una variable de mitjana i altre i el contador
             for (int i = 0; i < finishActivities.getNumElems(); i++) {
