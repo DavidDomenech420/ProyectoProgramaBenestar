@@ -460,35 +460,29 @@ public class AccioBotons implements ActionListener {
                             }
                         }
                         if(!isPermited){
-                            System.out.println("Ho sentim. El teu grup d'usuaris no pot realitzar aquesta activitat.");
+                            JOptionPane.showMessageDialog(null, "Ho sentim. El teu grup d'usuaris no pot realitzar aquesta activitat.", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
                             return;
                         }
 
                         //E-Mail:
-                        System.out.println("Quin és el teu e-mail? Escriu-lo a continuació: ");
-                        keyboard.nextLine();
-                        String email = keyboard.nextLine();
+                        String email = JOptionPane.showInputDialog("Quin és el teu e-mail (sense @)? Escriu-lo a continuació: ");
 
                         //Si és usuari PDI:
                         if(collective.equalsIgnoreCase("PDI")){
-                            System.out.println("En quin campus estàs?: ");
-                            String campus = keyboard.nextLine();
-                            System.out.println("Quin és el teu departament?: ");
-                            String department = keyboard.nextLine();
+                            String campus = JOptionPane.showInputDialog("En quin campus estàs?: ");
+                            String department = JOptionPane.showInputDialog("Quin és el teu departament?: ");
                             newUser = new PDIUser(collective, nickname, email, campus, department);
                             users.addUser(newUser);
                         }
                         else if(collective.equalsIgnoreCase("PTGAS")){
-                            System.out.println("En quin campus estàs?: ");
-                            String campus = keyboard.nextLine();
+                            String campus = JOptionPane.showInputDialog("En quin campus estàs?: ");
                             newUser = new PTGASUser(collective, nickname, email, campus);
                             users.addUser(newUser);
                         }
                         else{
-                            System.out.println("En quin grau estàs?: ");
-                            String degree = keyboard.nextLine();
-                            System.out.println("Quin va ser l'any en el qual vas començar el grau?: ");
-                            int year = keyboard.nextInt();
+                            String degree = JOptionPane.showInputDialog("En quin grau estàs?: ");
+                            String syear = JOptionPane.showInputDialog("Quin va ser l'any en el qual vas començar el grau?: ");
+                            int year = Integer.parseInt(syear);
                             newUser = new StudentUser(collective, nickname, email, degree, year);
                             users.addUser(newUser);
                         }
@@ -505,8 +499,7 @@ public class AccioBotons implements ActionListener {
                             }
                         }
                         if(!isPermited){
-                            System.out.println("Ho sentim. El teu grup d'usuaris no pot realitzar aquesta activitat.");
-                            return;
+                            JOptionPane.showMessageDialog(null, "Ho sentim. El teu grup d'usuaris no pot realitzar aquesta activitat.", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
                         }
                         
                     }
@@ -514,13 +507,11 @@ public class AccioBotons implements ActionListener {
                     //Afegir l'usuari a la inscripció de l'activitat corresponent:
                     for (int k = 0; k < activity.getInscriptions().getNumElems(); k++){
                         if (activity.getInscriptions().getInscription(k).getNickName().equalsIgnoreCase(nickname)){
-                            System.out.println("Ja estàs inscrit");
-                            return;
+                            JOptionPane.showMessageDialog(null, "Ja estàs inscrit!", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
                         }
                     }
                     if(activity.getNumElemsWaitingList() >= activity.getWaitingList().length && activity.getNumInscriptions() == activity.getInscriptions().getLenInscriptions()){
-                        System.out.println("Ho sentim. Les inscripcions estan plenes.");
-                        return;
+                        JOptionPane.showMessageDialog(null, "Ho sentim. Les inscripcions estan plenes.", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
                     }
                     else if((activity.getNumInscriptions() == activity.getInscriptions().getLenInscriptions()) && activity.getNumElemsWaitingList() < activity.getWaitingList().length){ //Afegim a la waiting list
                         activity.addToWaitingList(newUser);
@@ -567,7 +558,49 @@ public class AccioBotons implements ActionListener {
 
         //----- OPCIÓ 12 -----
         else if (option.equalsIgnoreCase("Eliminació d'usuari d'una activitat")){
-            AppProgramaBenestar.option12(activities, users);
+            if(users.getNumElems() == 0){
+                JOptionPane.showMessageDialog(null, "No hi han usuaris registrats!", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
+            
+            } else if (users.getNumElems() > 0){
+                if(activities.getNumElems() == 0){
+                    JOptionPane.showMessageDialog(null, "No hi han activitats registrades!", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
+                
+                } else if (activities.getNumElems() > 0){
+                    String activityName = JOptionPane.showInputDialog("Escriu el nom de l'activitat de la que vols eliminar l'usuari");
+                    
+                    //Si l'usuari ha cancelat l'acció, la resposta serà null
+                    if(activityName != null){
+                        int i = 0;
+                        boolean found = false;
+                        while (i < activities.getNumElems() && !found){
+                            if(activities.getActivity(i).getActivityName().equalsIgnoreCase(activityName)){
+                                found = true;
+                            }
+                            i++;
+                        }
+                        if(!found){
+                            JOptionPane.showMessageDialog(null, "No existeix cap activitat amb aquest nom!", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
+                        }
+
+                        String userName = JOptionPane.showInputDialog("Escriu el nom de l'usuari: ");
+                        int j = 0;
+                        found = false;
+                        while(j < users.getNumElems() && !found){
+                            if(users.getUser(j).getNickname().equalsIgnoreCase(userName)){
+                                found = true;
+                            }
+                            j++;
+                        }
+                        if(!found){
+                            JOptionPane.showMessageDialog(null, "No hi ha cap usuari amb aquest nom!", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
+                        }
+                        i--;
+                        j--;
+                        activities.getActivity(i).removeInscription(users.getUser(j));
+                        JOptionPane.showMessageDialog(null, "S'ha eliminat correctament l'usuari '"+users.getUser(j).getNickname()+"' de l'activitat" +activities.getActivity(i), "Eliminació d'usuari", JOptionPane.INFORMATION_MESSAGE);
+                    }  
+                }
+            }
         }
         //-------------------
 
