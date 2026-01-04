@@ -607,7 +607,47 @@ public class AccioBotons implements ActionListener {
 
         //----- OPCIÓ 13 -----
         else if (option.equalsIgnoreCase("Afegir una nova activitat d'un dia")){
-            AppProgramaBenestar.option13(activities);
+            String activityName = JOptionPane.showInputDialog(null, "Introdueix el nom de l'activitat: ", "Creació d'activitat", JOptionPane.INFORMATION_MESSAGE);
+            
+            String startInscriptionDateString = JOptionPane.showInputDialog(null, "Introdueix la data de començament de les inscripcions (aaaa mm dd): ", "Creació d'activitat", JOptionPane.INFORMATION_MESSAGE);
+            LocalDate startInscription = LocalDate.parse(startInscriptionDateString);
+            
+            String finishInscriptionDateString = JOptionPane.showInputDialog(null, "Introdueix la data de finalització de les inscripcions (aaaa mm dd): ", "Creació d'activitat", JOptionPane.INFORMATION_MESSAGE);
+            LocalDate finishInscription = LocalDate.parse(finishInscriptionDateString);
+
+            String[] collectives = new String[3];
+            int counter = 0;
+            while(counter < 3){
+                String collective = JOptionPane.showInputDialog(null, "Introdueix el col·lectiu" +counter+1+ " o -1 per acabar: ", "Afedir col·lectius", JOptionPane.QUESTION_MESSAGE);
+                if(collective == null || collective.equals("-1")){
+                    break;
+                }
+                //Si escriu una entrada vàlida
+                if(!collective.trim().isEmpty()){
+                    collectives[counter] = collective;
+                    counter++;
+                }
+            }
+
+            String limitPlacesString =JOptionPane.showInputDialog(null, "Introdueix el nombre límit de places per l'activitat: ", "Creació d'activitat", JOptionPane.INFORMATION_MESSAGE);
+            int limitPlaces = Integer.parseInt(limitPlacesString);
+
+            String city = JOptionPane.showInputDialog(null, "Introdueix la ciutat on es realitza l'activitat: ", "Creació d'activitat", JOptionPane.INFORMATION_MESSAGE);
+
+            String activityDateString = JOptionPane.showInputDialog(null, "Introdueix el dia en el que es realitza l'activitat (aaaa mm dd): ", "Creació d'activitat", JOptionPane.INFORMATION_MESSAGE);
+            LocalDate activityDay = LocalDate.parse(activityDateString);
+
+            String startTimeString = JOptionPane.showInputDialog(null, "Introdueix l'horari en que comença l'activitat: (hora minuts)", "Creació d'activitat", JOptionPane.INFORMATION_MESSAGE);
+            LocalTime startTime = LocalTime.parse(startTimeString);
+
+            String finishTimeString = JOptionPane.showInputDialog(null, "Introdueix l'horari en que acaba l'activitat: (hora minuts)", "Creació d'activitat", JOptionPane.INFORMATION_MESSAGE);
+            LocalTime finishTime = LocalTime.parse(finishTimeString);
+
+            String priceString = JOptionPane.showInputDialog(null, "Introdueix el preu de l'activitat: (en decimals i amb coma)", "Creació d'activitat", JOptionPane.INFORMATION_MESSAGE);
+            double price = Double.parseDouble(priceString);
+
+            Activities oneDayActivity = new OneDayActivity("OneDay", activityName, startInscription, finishInscription, collectives, limitPlaces, city, activityDay, startTime, finishTime, price);
+            activities.addActivity(oneDayActivity);
         }
         //-------------------
 
