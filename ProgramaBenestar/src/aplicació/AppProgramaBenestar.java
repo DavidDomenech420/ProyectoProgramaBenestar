@@ -83,11 +83,9 @@ public class AppProgramaBenestar {
         } catch (FileNotFoundException e) {
             System.out.println("No hi ha cap fitxer creat actualment");
         }
- 
 
         // ------ Fitxer .txt - usuaris -----
         UserList usersList = new UserList(300);
-
         try{
             BufferedReader fileUser = new BufferedReader(new FileReader("users.txt"));
             System.out.println("READING...");
@@ -110,7 +108,7 @@ public class AppProgramaBenestar {
         } catch (FileNotFoundException e){
             System.out.println("Fitxer no existent.");
         }
-        
+
 
         // --- Fitxer .ser - inscripcions ---
         try{
@@ -237,7 +235,7 @@ public class AppProgramaBenestar {
         */
         new AppGrafica(activities, usersList);
 
-        
+
         // ------ Fitxer .txt ------
         try{
             BufferedWriter file = new BufferedWriter(new FileWriter("data.txt"));
@@ -302,6 +300,7 @@ public class AppProgramaBenestar {
 			System.out.println("S'ha produit un error en els arxius");
         }
 
+
         // ---- Fitxer   .ser ----
         try{
             ObjectOutputStream fileInscriptions = new ObjectOutputStream(new FileOutputStream("inscriptions.ser"));
@@ -347,8 +346,6 @@ public class AppProgramaBenestar {
         System.out.println("21- Baixa d'activitats"); //Donar de baixa les activitats que ja han acabat el període d'inscripció i no han omplert el 10% de les places. En activitats en línia, si el inscrits < 20 persones.
         System.out.println("22- Sortir de l'aplicació");
     }
-
-    
 
     // ------ 1º OPCIÓ DEL MENU ------
     public static void option1(){
@@ -890,7 +887,7 @@ public class AppProgramaBenestar {
 
 
         //----- Preu de l'activitat -----
-        System.out.println("Introdueix el preu de l'activitat: (amb decimals, ex. 10,0)");
+        System.out.println("Introdueix el preu de l'activitat: (en decimals i amb coma)");
         double activityPrice = keyboard.nextDouble();
         //-------------------------------
 

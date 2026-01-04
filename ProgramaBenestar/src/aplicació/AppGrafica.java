@@ -6,6 +6,7 @@ import list.ActivityList;
 import list.UserList;
 
 public class AppGrafica extends JFrame {
+    private static final long serialVersionUID = 1L;
     ActivityList activities;
     UserList users;
     private JPanel menu;
