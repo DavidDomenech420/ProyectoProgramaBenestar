@@ -1171,7 +1171,7 @@ public class AppProgramaBenestar {
         //19. Mostrar mitjanes de valoracions dels col·lectius:
         // Objectiu -> comparar si els usuaris dels diferents col·lectius valoren igual o no.
 
-        // Pillem Totes les activitats que ja s'han acabat
+        // Agafem totes les activitats que ja s'han acabat
         ActivityList finishActivities = activities.activitiesFinished(usedDate);
         // Recorrem totes les activitats i hem de mirar les inscripcions de cada activitat, despres recorrem les inscripcions i segons el colectiu sumem una variable de mitjana i altre i el contador
         for (int i = 0; i < finishActivities.getNumElems(); i++) {

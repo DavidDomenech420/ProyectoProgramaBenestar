@@ -33,7 +33,9 @@ public class AccioBotons implements ActionListener {
     public void actionPerformed (ActionEvent event) {
         String option = event.getActionCommand(); //S'ha d'utilitzar getActionCommand per saber quina opció s'ha escollit
 
-        //----- OPCIÓ 1 -----
+        //---------------------------- OPCIÓ 1 ----------------------------
+        //1. Mostrar informació sobre la data actual: pels jocs de proves farem diferents dates (per poder acceptar inscripcions o no).
+        // Es mostrarà la data per poder modificar-la i fer o no operacions.
         if(option.equalsIgnoreCase("Informació sobre la data actual")){
             JOptionPane.showMessageDialog(null, "Data actual al programa: " +AppProgramaBenestar.usedDate, "DATA DEL SISTEMA", JOptionPane.INFORMATION_MESSAGE);
 
@@ -51,10 +53,11 @@ public class AccioBotons implements ActionListener {
                 }
             }
         }
-        //-------------------
+        //-----------------------------------------------------------------
 
 
-        //----- OPCIÓ 2 -----
+        //---------------------------- OPCIÓ 2 ----------------------------
+        //2. Mostrar dades d'una llista: demanem de quina es vol mostrar (usuaris o activitats).
         else if (option.equalsIgnoreCase("Informació de les dades d'una llista")){
             //Demanem l'opció a mostrar per pantalla
             String answer = JOptionPane.showInputDialog(null, "Escriu de què vols obtenir la informació (usuaris/activitats): ", "Informació de llista", JOptionPane.INFORMATION_MESSAGE);
@@ -190,10 +193,11 @@ public class AccioBotons implements ActionListener {
                 }
             }
         }
-        //-------------------
+        //-----------------------------------------------------------------
 
 
-        //----- OPCIÓ 3 -----
+        //---------------------------- OPCIÓ 3 ----------------------------
+        //3. Mostrar informació activitats en període d'inscripció: places disponibles o en llista d'espera.
         else if (option.equalsIgnoreCase("Informació de les activitats en període d'inscripció")){
             LocalDate today = LocalDate.now();
             ActivityList openInscriptionActivities = activities.activitiesInscriptionOpen(today);
@@ -211,10 +215,11 @@ public class AccioBotons implements ActionListener {
                 JOptionPane.showMessageDialog(null, phrase, "En període d'inscripció", JOptionPane.INFORMATION_MESSAGE);
             }
         }
-        //-------------------
+        //-----------------------------------------------------------------
 
 
-        //----- OPCIÓ 4 -----
+        //---------------------------- OPCIÓ 4 ----------------------------
+        //4. Mostrar informació d'activitats en data actual: tota la informació (places, llista d'espera, etc).
         else if (option.equalsIgnoreCase("Informació d'activitats amb classe en la data actual")){
             if(activities.getNumElems() == 0){
                 JOptionPane.showMessageDialog(null, "No hi ha activitats amb classe en la data actual", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
@@ -246,10 +251,11 @@ public class AccioBotons implements ActionListener {
                 JOptionPane.showMessageDialog(null, phrase, "Amb classe en la data actual", JOptionPane.INFORMATION_MESSAGE);
             }
         }
-        //-------------------
+        //-----------------------------------------------------------------
 
 
-        //----- OPCIÓ 5 -----
+        //---------------------------- OPCIÓ 5 ----------------------------
+        //5. Mostrar activitats actives en la data actual: nom de les activitats; no cal classe, però la data actual entre la inicial i la final.
         else if (option.equalsIgnoreCase("Activitats actives en la data actual")){
             String message = "Activitats actives en la data actual ("+AppProgramaBenestar.usedDate+"): \n";
 
@@ -290,10 +296,11 @@ public class AccioBotons implements ActionListener {
                 JOptionPane.showMessageDialog(null, message, "Activitats actives", JOptionPane.INFORMATION_MESSAGE);
             }
         }
-        //-------------------
+        //-----------------------------------------------------------------
 
 
-        //----- OPCIÓ 6 -----
+        //---------------------------- OPCIÓ 6 ----------------------------
+        //6. Mostrar activitats amb places disponibles: nom d'aquestes. Tant si estan en termini d'inscripció o no.
         else if (option.equalsIgnoreCase("Activitats amb places disponibles")){
             if(activities.getNumElems() == 0){
                 JOptionPane.showMessageDialog(null, "No hi ha activitats amb places disponibles", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
@@ -310,10 +317,11 @@ public class AccioBotons implements ActionListener {
                 JOptionPane.showMessageDialog(null, phrase, "Activitats amb places", JOptionPane.INFORMATION_MESSAGE);
             }
         }
-        //-------------------
+        //-----------------------------------------------------------------
 
 
-        //----- OPCIÓ 7 -----
+        //---------------------------- OPCIÓ 7 ----------------------------
+        //7. Mostrar informació d'una activitat: informació detallada a partir del nom d'aquesta.
         else if (option.equalsIgnoreCase("Informació d'una activitat")){
             if(activities.getNumElems() == 0){
                 JOptionPane.showMessageDialog(null, "No hi ha activitats registrades", "ATENCIÓ!", JOptionPane.INFORMATION_MESSAGE);
@@ -330,10 +338,11 @@ public class AccioBotons implements ActionListener {
                 }
             }
         }
-        //-------------------
+        //-----------------------------------------------------------------
 
 
-        //----- OPCIÓ 8 -----
+        //---------------------------- OPCIÓ 8 ----------------------------
+        //8. Mostrar informació d'usuari: informació detallada a partir del nom d'aquest.
         else if (option.equalsIgnoreCase("Informació d'un usuari")){
             if(users.getNumElems() == 0){
                 JOptionPane.showMessageDialog(null, "No hi ha usuaris registrats!", "ATENCIÓ!", JOptionPane.INFORMATION_MESSAGE);
@@ -349,10 +358,11 @@ public class AccioBotons implements ActionListener {
                 }
             }
         }
-        //-------------------
+        //-----------------------------------------------------------------
 
 
-        //----- OPCIÓ 9 -----
+        //---------------------------- OPCIÓ 9 ----------------------------
+        //9. Mostrar activitats on estàs inscrit: totes a les que l'usuari s'ha apuntat.
         else if (option.equalsIgnoreCase("Activitats on estàs inscrit")){
             if(activities.getNumElems() == 0){
                 JOptionPane.showMessageDialog(null, "No hi han activitats registrades!", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
@@ -382,10 +392,13 @@ public class AccioBotons implements ActionListener {
                 }   
             }
         }
-        //-------------------
+        //-----------------------------------------------------------------
 
 
-        //----- OPCIÓ 10 -----
+        //---------------------------- OPCIÓ 10 ----------------------------
+        //10. Inscripció a una activitat: disponible si es dona dins el termini i si aquesta es s'ofereix al col·lectiu que pertanyem.
+        //L'usuari pot estar a la llista (usar alies) o no, en aquest cas s'haurà de demanar la resta d'informació.
+        //Control de places disponibles o llista d'espera. Si la llista d'espera està plena, prohibit cap tipus d'inscripció.
         else if (option.equalsIgnoreCase("Inscripció a una activitat")){
             if(activities.getNumElems() == 0){
                 JOptionPane.showMessageDialog(null, "No hi han activitats registrades!", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
@@ -527,10 +540,11 @@ public class AccioBotons implements ActionListener {
 
 
         }
-        //-------------------
+        //-----------------------------------------------------------------
 
 
-        //----- OPCIÓ 11 -----
+        //---------------------------- OPCIÓ 11 ----------------------------
+        //11. Mostrar els usuaris inscrits en activitats i els usuaris en llista d'espera: nom d'aquests.
         else if (option.equalsIgnoreCase("Usuaris inscrits en activitats i usuaris inscrits en llista d'espera")){
             if(users.getNumElems() == 0){
                 JOptionPane.showMessageDialog(null, "No hi han usuaris registrats!", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
@@ -554,10 +568,12 @@ public class AccioBotons implements ActionListener {
                 }
             }
         }
-        //-------------------
+        //-----------------------------------------------------------------
 
 
-        //----- OPCIÓ 12 -----
+        //---------------------------- OPCIÓ 12 ----------------------------
+        //12. Eliminicació d'usuari d'una activitat:
+        //Quan s'elimini un usuari que podia accedir a l'activitat, el primer de la llista d'espera passarà a ocupar el seu lloc.
         else if (option.equalsIgnoreCase("Eliminació d'usuari d'una activitat")){
             if(users.getNumElems() == 0){
                 JOptionPane.showMessageDialog(null, "No hi han usuaris registrats!", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
@@ -603,10 +619,11 @@ public class AccioBotons implements ActionListener {
                 }
             }
         }
-        //-------------------
+        //-----------------------------------------------------------------
 
 
-        //----- OPCIÓ 13 -----
+        //---------------------------- OPCIÓ 13 ----------------------------
+        //13. Afegir una nova activitat d'un dia.
         else if (option.equalsIgnoreCase("Afegir una nova activitat d'un dia")){
             String activityName = JOptionPane.showInputDialog(null, "Introdueix el nom de l'activitat: ", "Creació d'activitat", JOptionPane.INFORMATION_MESSAGE);
             
@@ -651,10 +668,11 @@ public class AccioBotons implements ActionListener {
             activities.addActivity(oneDayActivity);
             JOptionPane.showMessageDialog(null, "Activitat d'un dia '"+oneDayActivity.getActivityName()+"' afegida");
         }
-        //-------------------
+        //-----------------------------------------------------------------
 
 
-        //----- OPCIÓ 14 -----
+        //---------------------------- OPCIÓ 14 ----------------------------
+        //14. Afegir una nova activitat periòdica.
         else if (option.equalsIgnoreCase("Afegir una nova activitat periòdica")){
             String activityName = JOptionPane.showInputDialog(null, "Introdueix el nom de l'activitat: ", "Creació d'activitat", JOptionPane.INFORMATION_MESSAGE);
             
@@ -696,10 +714,12 @@ public class AccioBotons implements ActionListener {
             activities.addActivity(periodicActivity);
             JOptionPane.showMessageDialog(null, "Activitat periòdica '"+periodicActivity.getActivityName()+"' afegida");
         }
-        //-------------------
+        //-----------------------------------------------------------------
 
 
-        //----- OPCIÓ 15 -----
+        //---------------------------- OPCIÓ 15 ----------------------------
+        //15. Afegir una nova activitat online.
+        // Demanem al usuari que ens digui la informació que vol afegir a l'activitat
         else if (option.equalsIgnoreCase("Afegir una nova activitat en línia")){
             String activityName = JOptionPane.showInputDialog(null, "Introdueix el nom de l'activitat", "Creació d'activitat", JOptionPane.INFORMATION_MESSAGE);
 
@@ -735,187 +755,236 @@ public class AccioBotons implements ActionListener {
             activities.addActivity(onlineActivity);
             JOptionPane.showMessageDialog(null, "Activitat en línia '"+onlineActivity.getActivityName()+"' afegida");
         }
-        //-------------------
+        //-----------------------------------------------------------------
 
 
-        //----- OPCIÓ 16 ----
+        //---------------------------- OPCIÓ 16 ----------------------------
+        //16. Valoració d'una activitat
+        //Requisits per a que l'usuari la pugui valorar: 
+            //1- l'activitat ha d'haver acabat.
+            //2- l'usuari ha d'haver assistit a l'activitat.
         else if (option.equalsIgnoreCase("Valoració d'una activitat")){
             activities = activities.activitiesFinished(AppProgramaBenestar.usedDate);
-            String user = JOptionPane.showInputDialog("Escriu el teu usuari: ");
-            int j = 0;
-            boolean found = false;
-            while (j < users.getNumElems() && !found){
-                if (users.getUser(j).getNickname().equalsIgnoreCase(user)){
-                    found = true;
-                }
-                j++;
-            }
-            if(!found){
-                JOptionPane.showMessageDialog(null, "Aquest usuari no existeix", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
-            }
 
-            String activity = JOptionPane.showInputDialog("Escriu el nom de l'activitat que vols crear: ");
-            found = false;
-            int i = 0;
-            while (i < activities.getNumElems() && !found){
-                if (activities.getActivity(i).getActivityName().equalsIgnoreCase(activity)){
-                    found = true;
-                }
-                i++;
-            }
-            if (!found){
-                JOptionPane.showMessageDialog(null, "Error, aquesta activitat no es pot evaluar.", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
-            }
-
-            i--;
-            j--;
-            found = false;
-            int k = 0;
+            if(users.getNumElems() == 0){
+                JOptionPane.showMessageDialog(null, "No hi ha cap usuari registrat!", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
             
-            while (k < activities.getActivity(i).getInscriptions().getNumElems() && !found){
-                if (activities.getActivity(i).getInscriptions().getInscription(k).getNickName().equalsIgnoreCase(users.getUser(j).getNickname())){
-                    found = true;
-                    try{
-                        String sgrade = JOptionPane.showInputDialog("Escriu la nota que li vols donar a l'activittat: ");
-                        int grade = Integer.parseInt(sgrade);
-                        activities.getActivity(i).getInscriptions().getInscription(k).setAssessment(grade);
-                    } catch(NumberFormatException e){
-                        JOptionPane.showMessageDialog(null, "Has d'introduir un número vàlid.", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
+            } else if (users.getNumElems() > 0){
+                String user = JOptionPane.showInputDialog("Escriu el teu nom d'usuari: ");
+                int j = 0;
+                boolean found = false;
+                while (j < users.getNumElems() && !found){
+                    if (users.getUser(j).getNickname().equalsIgnoreCase(user)){
+                        found = true;
                     }
-                    
+                    j++;
                 }
-                k++;
-            }
-            if (!found){
-                JOptionPane.showMessageDialog(null, "No estàs inscrit en l'activitat.", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
-            }
+                if(!found){
+                    JOptionPane.showMessageDialog(null, "Aquest usuari no existeix", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
+                }
 
+                if(activities.getNumElems() == 0){
+                    JOptionPane.showMessageDialog(null, "No hi ha cap usuari registrat!", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
+                
+                } else if (activities.getNumElems() > 0){
+                    String activity = JOptionPane.showInputDialog("Escriu el nom de l'activitat que vols crear: ");
+                    found = false;
+                    int i = 0;
+                    while (i < activities.getNumElems() && !found){
+                        if (activities.getActivity(i).getActivityName().equalsIgnoreCase(activity)){
+                            found = true;
+                        }
+                        i++;
+                    }
+                    if (!found){
+                        JOptionPane.showMessageDialog(null, "Error, aquesta activitat no es pot evaluar.", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
+                    }
+
+                    i--;
+                    j--;
+                    found = false;
+                    int k = 0;
+                    while (k < activities.getActivity(i).getInscriptions().getNumElems() && !found){
+                        if (activities.getActivity(i).getInscriptions().getInscription(k).getNickName().equalsIgnoreCase(users.getUser(j).getNickname())){
+                            found = true;
+                            try{
+                                String sgrade = JOptionPane.showInputDialog("Escriu la nota que li vols donar a l'activitat: ");
+                                int grade = Integer.parseInt(sgrade);
+                                activities.getActivity(i).getInscriptions().getInscription(k).setAssessment(grade);
+                                JOptionPane.showMessageDialog(null, "La teva valoració s'ha guardat correctament: "+grade, "Valoració", JOptionPane.INFORMATION_MESSAGE);
+
+                            } catch(NumberFormatException e){
+                                JOptionPane.showMessageDialog(null, "Has d'introduir un número vàlid.", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
+                            }
+                        }
+                        k++;
+                    }
+                    if (!found){
+                        JOptionPane.showMessageDialog(null, "No estàs inscrit en l'activitat.", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+            }
         }
-        //-------------------
+        //-----------------------------------------------------------------
 
 
-        //----- OPCIÓ 17 -----
+        //---------------------------- OPCIÓ 17 ----------------------------
+        //17. Mostrar resum de valoracions de les activitats: han d'estar acabades.
         else if (option.equalsIgnoreCase("Resum de valoracions de les activitats")){
             
             //Agafarem les activitats acabades, ja que aquestes seran les que es poden valorar
             ActivityList finishedActivities = activities.activitiesFinished(AppProgramaBenestar.usedDate);
             
             //Analitzem activitat per activitat per mostrar les valoracions de cadascuna
-            String phrase = "";
-            for (int i=0; i<finishedActivities.getNumElems(); i++){
-                Activities activity = finishedActivities.getActivity(i);
-                phrase = phrase + "\n" + activity.getActivityName() + ": "; //Nom de l'activitat a mostrar
-
-                //Llista de les inscripcions d'aquesta activitat
-                InscriptionList inscriptions = activity.getInscriptions();
-
-                for(int j=0; j<inscriptions.getNumElems(); j++){
-                    Inscriptions inscription = inscriptions.getInscription(j);
-                    phrase = phrase + inscription.getAssessment() + " "; //Quantitat de la valoració
-                }
-            }
-            JOptionPane.showMessageDialog(null, phrase, "Valoracions",  JOptionPane.INFORMATION_MESSAGE);
-        }
-        //-------------------
-
-
-        //----- OPCIÓ 18 -----
-        else if (option.equalsIgnoreCase("Resum de valoracions d'un usuari")){
-            //Demanem el nom de l'usuari per veure les seves valoracions
-            String user = JOptionPane.showInputDialog("Escriu el nom d'usuari del qual vols veure les valoracions: ");
-            boolean found = false;
-            int i = 0;
-            while(!found && i < users.getNumElems()){
-                if(users.getUser(i).getNickname().equalsIgnoreCase(user)){
-                    found = true;
-                }
-                i++;
-            }
-            if(!found){
-                JOptionPane.showMessageDialog(null, "Ho sentim. Aquest usuari no està registrat.", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
-            }
-            else{
+            if(finishedActivities.getNumElems() == 0){
+                JOptionPane.showMessageDialog(null, "Error! No hi ha activitats acabades", "ERROR!", JOptionPane.WARNING_MESSAGE);
+            
+            } else if (finishedActivities.getNumElems() > 0){
                 String phrase = "";
-                for(i = 0; i < activities.getNumElems(); i++){
-                    for(int j = 0; j < activities.getActivity(i).getNumInscriptions(); j++){
-                        if(activities.getActivity(i).getInscriptions().getInscription(j).getNickName().equalsIgnoreCase(user)){
-                            phrase = phrase + "Evaluació de l'activitat '" + activities.getActivity(i).getActivityName() + "' per part de " + activities.getActivity(i).getInscriptions().getInscription(j).getNickName() + ": ";
-                            phrase = phrase + "Nota: " + activities.getActivity(i).getInscriptions().getInscription(j).getAssessment();
+                for (int i=0; i<finishedActivities.getNumElems(); i++){
+                    Activities activity = finishedActivities.getActivity(i);
+                    phrase = phrase + activity.getActivityName(); //Nom de l'activitat a mostrar
+
+                    //Llista de les inscripcions d'aquesta activitat
+                    InscriptionList inscriptions = activity.getInscriptions();
+
+                    for(int j=0; j<inscriptions.getNumElems(); j++){
+                        Inscriptions inscription = inscriptions.getInscription(j);
+                        phrase = phrase + inscription.getAssessment() + " "; //Quantitat de la valoració
+                    }
+                }
+                JOptionPane.showMessageDialog(null, phrase, "VALORACIONS",  JOptionPane.INFORMATION_MESSAGE);
+
+            }
+        }
+        //-----------------------------------------------------------------
+
+
+        //---------------------------- OPCIÓ 18 ----------------------------
+        //18. Mostrar resum de valoracions d'un usuari: total de valoracions fetes per l'usuari indicat.
+        else if (option.equalsIgnoreCase("Resum de valoracions d'un usuari")){
+            if(users.getNumElems() == 0){
+                JOptionPane.showMessageDialog(null, "Error! No hi ha usuaris registrats", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
+            
+            } else if (users.getNumElems() > 0){
+                //Demanem el nom de l'usuari per veure les seves valoracions
+                String user = JOptionPane.showInputDialog("Escriu el nom d'usuari del qual vols veure les valoracions: ");
+                boolean found = false;
+                int i = 0;
+                while(!found && i < users.getNumElems()){
+                    if(users.getUser(i).getNickname().equalsIgnoreCase(user)){
+                        found = true;
+                    }
+                    i++;
+                }
+                if(!found){
+                    JOptionPane.showMessageDialog(null, "Ho sentim. Aquest usuari no està registrat.", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
+                }
+                else{
+                    String phrase = "";
+                    for(i = 0; i < activities.getNumElems(); i++){
+                        for(int j = 0; j < activities.getActivity(i).getNumInscriptions(); j++){
+                            if(activities.getActivity(i).getInscriptions().getInscription(j).getNickName().equalsIgnoreCase(user)){
+                                phrase = phrase + "Evaluació de l'activitat '" + activities.getActivity(i).getActivityName() + "' per part de " + activities.getActivity(i).getInscriptions().getInscription(j).getNickName() + ": ";
+                                phrase = phrase + "Nota: " + activities.getActivity(i).getInscriptions().getInscription(j).getAssessment();
+                            }
                         }
                     }
+                    JOptionPane.showMessageDialog(null, phrase, "Resum de valoracions",  JOptionPane.INFORMATION_MESSAGE);
                 }
-                JOptionPane.showMessageDialog(null, phrase, "Resum de valoracions",  JOptionPane.INFORMATION_MESSAGE);
             }
         }
-        //-------------------
+        //-----------------------------------------------------------------
 
 
-        //----- OPCIÓ 19 -----
+        //---------------------------- OPCIÓ 19 ----------------------------
+        //19. Mostrar mitjanes de valoracions dels col·lectius:
+        // Objectiu -> comparar si els usuaris dels diferents col·lectius valoren igual o no.
         else if (option.equalsIgnoreCase("MItjanes de valoracions dels col·lectius")){
-            // Agafem Totes les activitats que ja s'han acabat
-            ActivityList finishActivities = activities.activitiesFinished(AppProgramaBenestar.usedDate);
-            // Recorrem totes les activitats i hem de mirar les inscripcions de cada activitat, despres recorrem les inscripcions i segons el colectiu sumem una variable de mitjana i altre i el contador
-            for (int i = 0; i < finishActivities.getNumElems(); i++) {
-                float mitjanaStudent = 0;
-                float mitjanaPDI = 0;
-                float mitjanaPTGAS = 0;
-                int contadorStudent = 0;
-                int contadorPDI = 0;
-                int contadorPTGAS = 0;
-                Activities activity = finishActivities.getActivity(i);
-                InscriptionList inscriptions = activity.getInscriptions();
-                for (int j = 0; j < inscriptions.getNumElems(); j++) {
-                    Inscriptions inscription = inscriptions.getInscription(j);
-                    // Pillem el colectiu
-                    if (inscription.getUser().getUserType().equalsIgnoreCase("Student")) {
-                        mitjanaStudent += inscription.getAssessment();
-                        contadorStudent++;
-                    }
-                    else if (inscription.getUser().getUserType().equalsIgnoreCase("PDI")) {
-                        mitjanaPDI += inscription.getAssessment();
-                        contadorPDI++;
-                    }
-                    else if (inscription.getUser().getUserType().equalsIgnoreCase("PTGAS")) {
-                        mitjanaPTGAS += inscription.getAssessment();
-                        contadorPTGAS++;
-                    }
-                }
-
-                // Fem les mitjanes i les mostrem
-                String phrase = "Activitat '" + finishActivities.getActivity(i).getActivityName() + "' Valoracions - Student: " + (mitjanaStudent/contadorStudent) + ", PDI: " + (mitjanaPDI/contadorPDI) + ", PTGAS: " + (mitjanaPTGAS/contadorPTGAS);
-                JOptionPane.showMessageDialog(null, phrase, "Mitjanes de valoracions dels col·lectius",  JOptionPane.INFORMATION_MESSAGE);
-            }
-        }
-        //-------------------
-
-
-        //----- OPCIÓ 20 -----
-        else if (option.equalsIgnoreCase("Usuari més actiu d'un col·lectiu")){
-            String collective = JOptionPane.showInputDialog("Escriu el nom d'usuari del qual vols veure: ");
-            if (!collective.equalsIgnoreCase("PDI") && !collective.equalsIgnoreCase("PTGAS") && !collective.equalsIgnoreCase("student")){
-                JOptionPane.showMessageDialog(null, "Ho sentim. Aquest usuari no està registrat.", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
-            }
-            User mostActive = null;
-            for (int i = 0; i < users.getNumElems(); i++){
-                if (users.getUser(i).getUserType().equalsIgnoreCase(collective)){
-                    if (mostActive == null || mostActive.getNumInscriptions() < users.getUser(i).getNumInscriptions()){
-                        mostActive = users.getUser(i);
-                    }
-                }
+            if(users.getNumElems() == 0){
+                JOptionPane.showMessageDialog(null, "Error! No hi ha usuaris registrats", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
+            
+            } else if (users.getNumElems() > 0){
+                if(activities.getNumElems() == 0){
+                    JOptionPane.showMessageDialog(null, "Error! No hi ha activitats registrades", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
                 
-            }
-            if (mostActive == null){
-                JOptionPane.showMessageDialog(null, "Ho sentim. No hi ha cap usuari en aquest col·lectiu", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
-            }
-            else{
-                String phrase = "Most active user: " + mostActive;
-                JOptionPane.showMessageDialog(null, phrase, "Usuari més actiu",  JOptionPane.INFORMATION_MESSAGE);
+                } else if (activities.getNumElems() > 0){
+                    // Agafem Totes les activitats que ja s'han acabat
+                    ActivityList finishActivities = activities.activitiesFinished(AppProgramaBenestar.usedDate);
+                    // Recorrem totes les activitats i hem de mirar les inscripcions de cada activitat, despres recorrem les inscripcions i segons el colectiu sumem una variable de mitjana i altre i el contador
+                    for (int i = 0; i < finishActivities.getNumElems(); i++) {
+                        float mitjanaStudent = 0;
+                        float mitjanaPDI = 0;
+                        float mitjanaPTGAS = 0;
+                        int contadorStudent = 0;
+                        int contadorPDI = 0;
+                        int contadorPTGAS = 0;
+                        Activities activity = finishActivities.getActivity(i);
+                        InscriptionList inscriptions = activity.getInscriptions();
+                        for (int j = 0; j < inscriptions.getNumElems(); j++) {
+                            Inscriptions inscription = inscriptions.getInscription(j);
+                            // Pillem el colectiu
+                            if (inscription.getUser().getUserType().equalsIgnoreCase("Student")) {
+                                mitjanaStudent += inscription.getAssessment();
+                                contadorStudent++;
+                            }
+                            else if (inscription.getUser().getUserType().equalsIgnoreCase("PDI")) {
+                                mitjanaPDI += inscription.getAssessment();
+                                contadorPDI++;
+                            }
+                            else if (inscription.getUser().getUserType().equalsIgnoreCase("PTGAS")) {
+                                mitjanaPTGAS += inscription.getAssessment();
+                                contadorPTGAS++;
+                            }
+                        }
+
+                        // Fem les mitjanes i les mostrem
+                        String phrase = "Activitat '" + finishActivities.getActivity(i).getActivityName() + "' Valoracions - Student: " + (mitjanaStudent/contadorStudent) + ", PDI: " + (mitjanaPDI/contadorPDI) + ", PTGAS: " + (mitjanaPTGAS/contadorPTGAS);
+                        JOptionPane.showMessageDialog(null, phrase, "Mitjanes de valoracions dels col·lectius",  JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }
             }
         }
-        //-------------------
+        //-----------------------------------------------------------------
 
 
-        //----- OPCIÓ 21 -----
+        //---------------------------- OPCIÓ 20 ----------------------------
+        //20. Mostrar l'usuari més actiu del col·lectiu indicat: l'usuari més actiu serà el que s'ha apuntat a més activitats.
+        // En cas d'empat entre usuaris, s'escollirà a qualsevol usuari que compleixi els requisits.
+        else if (option.equalsIgnoreCase("Usuari més actiu d'un col·lectiu")){
+            if(users.getNumElems() == 0){
+                JOptionPane.showMessageDialog(null, "Error! No hi ha usuaris registrats", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
+            
+            } else if (users.getNumElems() > 0){
+                String collective = JOptionPane.showInputDialog("Escriu el nom d'usuari del qual vols veure: ");
+                if (!collective.equalsIgnoreCase("PDI") && !collective.equalsIgnoreCase("PTGAS") && !collective.equalsIgnoreCase("student")){
+                    JOptionPane.showMessageDialog(null, "Ho sentim. Aquest usuari no està registrat.", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
+                }
+                User mostActive = null;
+                for (int i = 0; i < users.getNumElems(); i++){
+                    if (users.getUser(i).getUserType().equalsIgnoreCase(collective)){
+                        if (mostActive == null || mostActive.getNumInscriptions() < users.getUser(i).getNumInscriptions()){
+                            mostActive = users.getUser(i);
+                        }
+                    }
+                    
+                }
+                if (mostActive == null){
+                    JOptionPane.showMessageDialog(null, "Ho sentim. No hi ha cap usuari en aquest col·lectiu", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
+                }
+                else{
+                    String phrase = "Most active user: " + mostActive;
+                    JOptionPane.showMessageDialog(null, phrase, "Usuari més actiu",  JOptionPane.INFORMATION_MESSAGE);
+                }
+
+            }
+        }
+        //-----------------------------------------------------------------
+
+
+        //---------------------------- OPCIÓ 21 ----------------------------
+        //21. Baixa d'activitats: donar de baixa les activitats que ja han acabat el període d'inscripció sense omplir el 10% de les places.
+        // En activitats en línia es donarà si el número d'inscrits es inferior a 20 persones.
         else if (option.equalsIgnoreCase("Baixa d'activitats")){
             String phrase = "";
             if(activities.getNumElems() == 0){
@@ -956,8 +1025,10 @@ public class AccioBotons implements ActionListener {
                     Activities activity = activities.getActivity(i);
                     phrase = phrase + "- "+activity.getActivityName();
                 }
+                JOptionPane.showMessageDialog(null, phrase, "Baixa d'activitats", JOptionPane.INFORMATION_MESSAGE);
             }
-            JOptionPane.showMessageDialog(null, phrase, "Baixa d'activitats", JOptionPane.INFORMATION_MESSAGE);
+            
         }
+        //-----------------------------------------------------------------
     }
 }
