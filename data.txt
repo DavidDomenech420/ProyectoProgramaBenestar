@@ -1,3 +1,4 @@
-OneDay;nameActivity;dd-mm-yyyy;dd-mm-yyyy;collective;29;city;dd-mm-yyyy;hh:mm;hh:mm;12.3
-Periodic;nameActivity;dd-mm-yyyy;dd-mm-yyyy;collective;29;dd-mm-yyyy;hh:mm;dd-mm-yyyy;21;14.5;centerName;cityName
-Online;nameActivity;dd-mm-yyyy;dd-mm-yyyy;collective;29;dd-mm-yyyy;dd-mm-yyyy;linkCurso
+OneDay;nameActivity;YYYY-MM-DD;YYYY-MM-DD;collective;int;city;YYYY-MM-DD;hh:mm;hh:mm;double
+Periodic;nameActivity;YYYY-MM-DD;YYYY-MM-DD;collective;int;YYYY-MM-DD;hh:mm;YYYY-MM-DD;int;double;centerName;cityName
+Online;nameActivity;YYYY-MM-DD;YYYY-MM-DD;collective;int;YYYY-MM-DD;YYYY-MM-DD;linkCurso
+OneDay;UnDia;2025-01-01;2026-01-10;PDI;10;Tarragona;2026-02-01;16:00;17:00;10.0

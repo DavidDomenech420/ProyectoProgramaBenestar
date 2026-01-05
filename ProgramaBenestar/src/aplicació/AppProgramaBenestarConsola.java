@@ -7,18 +7,21 @@ import java.io.*;
 import java.util.Scanner;
 
 import dades.Activities;
+import dades.Inscriptions;
 import dades.OneDayActivity;
 import dades.OnlineActivity;
 import dades.PeriodicActivity;
 import list.ActivityList;
+import list.InscriptionList;
 import list.UserList;
 import Usuaris.PDIUser;
 import Usuaris.PTGASUser;
 import Usuaris.StudentUser;
 import Usuaris.User;
 
-public class funcionsJulia {
+public class AppProgramaBenestarConsola {
     static Scanner keyboard = new Scanner(System.in);
+    public static LocalDate usedDate = LocalDate.now(); //La variable haurà de ser 'public' per poder accedir des de la part d'interficies gràfiques
 
     public static void main(String[] args) throws Exception {
         // Inicialitzem les variables per la llista d'activitats
@@ -31,6 +34,7 @@ public class funcionsJulia {
             frase=fileRead.readLine(); //Llegim capçalera 2
             frase=fileRead.readLine(); //Llegim capçalera 3
 
+            fileRead.readLine();
             //Ara llegim primera línia amb informació:
             frase=fileRead.readLine();
             
@@ -79,45 +83,65 @@ public class funcionsJulia {
         } catch (FileNotFoundException e) {
             System.out.println("No hi ha cap fitxer creat actualment");
         }
- 
 
-
-        // ------ Fitxer .ser - usuaris -----
+        // ------ Fitxer .txt - usuaris -----
         UserList usersList = new UserList(300);
-
         try{
-            ObjectInputStream fileUser = new ObjectInputStream(new FileInputStream("users.ser")); // Fitxer serialitzat
-            System.out.println("LLEGINT ...");
-            while(true){ //Quan arribi a final de fitxer sortirà l'excepció EOF Exception
-                User user = (User) fileUser.readObject();
-                usersList.addUser(user);
+            BufferedReader fileUser = new BufferedReader(new FileReader("users.txt"));
+            System.out.println("READING...");
+            String phrase = fileUser.readLine();
+            while (phrase != null){
+                String [] phrasesplits = phrase.split(";");
+                String userType = phrasesplits [0];
+                if (userType.equalsIgnoreCase("PDI")){
+                    usersList.addUser(new PDIUser(phrasesplits[0], phrasesplits[1], phrasesplits[2], phrasesplits[3], phrasesplits[4]));
+                }
+                else if(userType.equalsIgnoreCase("PTGAS")){
+                    usersList.addUser(new PTGASUser(phrasesplits[0], phrasesplits[1], phrasesplits[2], phrasesplits[3]));
+                }
+                else if (userType.equalsIgnoreCase("Student")){
+                    usersList.addUser(new StudentUser(phrasesplits[0], phrasesplits[1], phrasesplits[2], phrasesplits[3], Integer.parseInt(phrasesplits[4])));
+                }
+                phrase = fileUser.readLine();
             }
-        } catch(EOFException e){ //Final de fitxer
-            System.out.println("Usuaris guardats correctament");
+            fileUser.close();
         } catch (FileNotFoundException e){
             System.out.println("Fitxer no existent.");
-        } catch (IOException | ClassNotFoundException e) {
+        }
+
+
+        // --- Fitxer .ser - inscripcions ---
+        try{
+            ObjectInputStream fileInscription = new ObjectInputStream(new FileInputStream("inscriptions.ser"));
+            System.out.println("READING...");
+            while(true){ //Quan arribi a final de fitxer sortirà l'excepció EOF Exception
+                Activities actName = (Activities) fileInscription.readObject();
+                Activities aux = null;
+                int num = (int) fileInscription.readInt();
+                for (int i = 0; i < num; i++){
+                    Inscriptions inscription = (Inscriptions) fileInscription.readObject();
+                    aux = activities.getActivity(actName.getActivityName());
+                    aux.addInscriptionFile(inscription);
+                }
+            }
+        } catch(EOFException e){ //Final del fitxer
+            System.out.println("Inscriptions added correctly");
+        } catch(FileNotFoundException e){
+            System.out.println("Fitxer no existent");
+        } catch(IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         //1- IOException: Error de lectura del disc. El ObjectInpuStream falla. El fitxer no és vàlid.
         //2- ClassNotFoundException: Error de classe.
 
-        try{
-            ObjectOutputStream fileUser = new ObjectOutputStream(new FileOutputStream("users.ser")); //Crearia un fitxer nou amb ek nom users, però com ja hi ha un de creat, el sobreescriu
-            System.out.println("ESCRIVINT ...");
-            for(int i=0; i<usersList.getNumElems(); i++){
-                fileUser.writeObject(usersList.getUser(i));
-            }   
-        } catch (IOException e){
-            System.out.println("Error en l'arxiu de sortida");
-        }
-        
         // Mostrem el menu
         mostraMenu();
-        int option = Integer.parseInt(keyboard.nextLine());
+        int option = keyboard.nextInt();
+        keyboard.nextLine();
         while (option != 22){ //Mostrarem el menu fins que l'usuari vulgui sortir de l'aplicació
             switch (option){
                 case 1:
+                    option1();
                     break;
                 case 2:
                     System.out.println("Escriu de què vols obtenir la informació (usuaris/activitats): ");
@@ -129,15 +153,15 @@ public class funcionsJulia {
                         option2("activitats", usersList, activities);
                     }
                     break;
-                    
                 case 3:
-                    // Llamamos la funcion de pillar la informacion de las actividades con inscripciones abiertas
+                    // Llamamos la funcion que coge la informacion de las actividades con inscripciones abiertas
                     option3(activities);
-                    
                     break;
                 case 4:
+                    option4(activities);
                     break;
                 case 5:
+                    option5(activities, usedDate);
                     break;
                 case 6:
                     option6(activities);
@@ -148,8 +172,10 @@ public class funcionsJulia {
                     option7(activities, activityName7);
                     break;
                 case 8:
+                    option8(usersList);
                     break;
                 case 9:
+                    option9(activities, usersList);
                     break;
                 case 10:
                     option10(activities, usersList);
@@ -160,8 +186,10 @@ public class funcionsJulia {
                     option11(activities, activityName11);
                     break;
                 case 12:
+                    option12(activities, usersList);
                     break;
                 case 13:
+                    option13(activities);
                     break;
                 case 14:
                     option14(activities);
@@ -170,8 +198,10 @@ public class funcionsJulia {
                     option15(activities);
                     break;
                 case 16:
+                    option16(usersList, activities);
                     break;
                 case 17:
+                    option17(activities, usedDate);
                     break;
                 case 18:
                     System.out.println("Indica l'usuari del qual vols veure les valoracions: ");
@@ -179,17 +209,32 @@ public class funcionsJulia {
                     option18(user, usersList, activities);
                     break;
                 case 19:
+                    option19(activities);
                     break;
                 case 20:
+                    option20(usersList);
                     break;
                 case 21:
+                    System.out.println("Llista d'activitats abans de la baixa: ");
+                    for(int i=0; i<activities.getNumElems(); i++){
+                        Activities activity = activities.getActivity(i);
+                        System.out.println("- "+activity.getActivityName()); //(El guió és per estètica)
+                    }
+                    option21(activities, usedDate);
+                    System.out.println("\nLlista d'activitats actualitzada: ");
+                    for(int i=0; i<activities.getNumElems(); i++){
+                        Activities activity = activities.getActivity(i);
+                        System.out.println("- "+activity.getActivityName()); //(El guió és per estètica)
+                    }
                     break;
             }
             mostraMenu();
-            option = Integer.parseInt(keyboard.nextLine());
+            option = keyboard.nextInt();
+            keyboard.nextLine();
         }
-
         
+
+
         // ------ Fitxer .txt ------
         try{
             BufferedWriter file = new BufferedWriter(new FileWriter("data.txt"));
@@ -205,23 +250,81 @@ public class funcionsJulia {
             // Es fa tres cops perquè hi ha 3 línies que contenen  la informació de les classes d'activitats.
             for(int i=0; i<activities.getNumElems(); i++){
                 file.newLine();
-                frase = "" + activities.getActivity(i);
+                frase = activities.getActivity(i).getActivityType();
+                if (frase.equals("One Day")){
+                    frase = "OneDay";
+                } //to do (quitar)
+                if (frase.equals("OneDay")){
+                    OneDayActivity actOne = (OneDayActivity) activities.getActivity(i);
+                    frase += ";" + actOne.getActivityName() + ";" +  actOne.getStartDateInscriptions() + ";" + actOne.getFinishDateInscriptions() + ";" + actOne.getCollectiveString() + ";" + actOne.getInscriptions().getLenInscriptions() + ";" + actOne.getCity() + ";" + actOne.getDay() + ";" + actOne.getStartTime() + ";" + actOne.getFinishTime() + ";" + actOne.getPrice();
+                }
+                else if (frase.equals("Periodic")){
+                    PeriodicActivity actPer = (PeriodicActivity) activities.getActivity(i);
+                    frase += ";" + actPer.getActivityName() + ";" + actPer.getStartDateInscriptions() + ";" + actPer.getFinishDateInscriptions() + ";" + actPer.getCollectiveString() + ";" + actPer.getInscriptions().getLenInscriptions() + ";" + actPer.getDayOfActivity() + ";" + actPer.getInicialTime() + ";" + actPer.getFinalTime() + ";" + actPer.getInicialDate() + ";" + actPer.getWeeksOfActivity() + ";" + actPer.getPriceActivity() + ";" + actPer.getCenterName() + ";" + actPer.getCityName();
+                }
+                else if (frase.equals("Online")){
+                    OnlineActivity actOnl = (OnlineActivity) activities.getActivity(i);
+                    frase += ";" + actOnl.getActivityName() + ";" +actOnl.getStartDateInscriptions() + ";" +actOnl.getFinishDateInscriptions() + ";" + actOnl.getCollectiveString() + ";" + actOnl.getInscriptions().getLenInscriptions() + ";" + actOnl.getStartDateActivity() + ";" + actOnl.getFinishDateActivity() + ";" + actOnl.getLinkCourse();
+                }
+                file.write(frase);
+                
+            }
+            file.close();
+		} catch(IOException e) {
+			System.out.println("S'ha produit un error en els arxius");
+        }
+
+        try{
+            BufferedWriter file = new BufferedWriter(new FileWriter("users.txt"));
+            // Es fa tres cops perquè hi ha 3 línies que contenen  la informació de les classes d'activitats.
+            String frase;
+            for(int i=0; i<usersList.getNumElems(); i++){
+                file.newLine();
+                User user = usersList.getUser(i);
+                frase = user.getUserType() + ";" + user.getNickname() + ";" + user.getEmail();
+                if (user.getUserType().equalsIgnoreCase("Student")) {
+                    StudentUser studentUser = (StudentUser) user;
+                    frase += ";" + studentUser.getDegree() + ";" + studentUser.getFirstYear();
+                } else if (user.getUserType().equalsIgnoreCase("PDI")) {
+                    PDIUser pdiUser = (PDIUser) user;
+                    frase += ";" + pdiUser.getCampus() + ";" + pdiUser.getDepartment();
+                } else if (user.getUserType().equalsIgnoreCase("PTGAS")) {
+                    PTGASUser ptgasUser = (PTGASUser) user;
+                    frase += ";" + ptgasUser.getCampus();
+                }
                 file.write(frase);
             }
             file.close();
-        } catch (FileNotFoundException e){
-            System.out.println("Fitxer no existent");
 		} catch(IOException e) {
 			System.out.println("S'ha produit un error en els arxius");
+        }
+
+
+        // ---- Fitxer   .ser ----
+        try{
+            ObjectOutputStream fileInscriptions = new ObjectOutputStream(new FileOutputStream("inscriptions.ser"));
+            System.out.println("WRITING...");
+            for (int i = 0; i < activities.getNumElems(); i++){
+                Activities act = activities.getActivity(i);
+                fileInscriptions.writeObject(act);
+                fileInscriptions.writeInt((act.getNumInscriptions()+act.getNumElemsWaitingList()));
+                for (int j = 0; j < (act.getNumInscriptions() + act.getNumElemsWaitingList()); j++){
+                    fileInscriptions.writeObject(act.getInscriptions().getInscription(j));
+                }
+            }
+        } catch (IOException e){
+            System.out.println("Error en l'arxiu de sortida");
+            System.out.println(e);
         }
     }
 
     public static void mostraMenu(){
-        System.out.println("\n\nOPCIONS DEL MENU: ");
+        System.out.println("\n------ PROGRAMA BENESTAR URV ------");
+        System.out.println("\nOPCIONS DEL MENÚ: ");
         System.out.println("1- Informació sobre la data actual"); //Hem de posar en diferents dates per acceptar inscripcions o no. Indicar data actual per poder-la modificar o fer operacions.
         System.out.println("2- Informació de les dades d'una llista");  //Demanem la llista desitjada. Si són de diferents tipus, es demanarà el tipus i si es vol mostrar tots els tipus o només aquest.
         System.out.println("3- Informació de les activitats en període d'inscripció"); //Indicar si encara hi han places disponibles.
-        System.out.println("4- Informació d'activitats en la data actual"); //Data del punt 1. Tota la informació de cada activitat; places omplertes? Hi ha llista d'espera?
+        System.out.println("4- Informació d'activitats amb classe en la data actual"); //Data del punt 1. Tota la informació de cada activitat; places omplertes? Hi ha llista d'espera?
         System.out.println("5- Activitats actives en la data actual"); //Nom de les activitats. No cal classe avui, però la data actual ha d'estar entre data inicial i final.
         System.out.println("6- Activitats amb places disponibles"); //Nom de les activitats. Tant si estan encara en termini d'inscripció o no.
         System.out.println("7- Informació d'una activitat"); //Informació detallada d'una activitat a partir del seu nom.
@@ -241,10 +344,7 @@ public class funcionsJulia {
         System.out.println("20- Usuari més actiu d'un col·lectiu"); //S'haurà d'indicar el col·lectiu. Més actiu = s'ha apuntat a més activitats. Empat? S'escull qualsevol usuari que compleix els requisits.
         System.out.println("21- Baixa d'activitats"); //Donar de baixa les activitats que ja han acabat el període d'inscripció i no han omplert el 10% de les places. En activitats en línia, si el inscrits < 20 persones.
         System.out.println("22- Sortir de l'aplicació");
-        System.out.println("Escriu la opció a continuació: ");
     }
-
-    private static LocalDate usedDate = LocalDate.now();
 
     // ------ 1º OPCIÓ DEL MENU ------
     public static void option1(){
@@ -289,7 +389,7 @@ public class funcionsJulia {
                 } else if(option == 3){
                     System.out.println("Has escollit que es mostri la informació del personal tècnic i de gestió (PTGAS): ");
                     for(int i = 0; i < usersList.getNumElems(); i++){
-                        if(usersList.getUser(i).getUserType().equalsIgnoreCase("TGAS")){
+                        if(usersList.getUser(i).getUserType().equalsIgnoreCase("PTGAS")){
                             System.out.println(usersList.getUser(i));
                         }
                     }
@@ -315,21 +415,21 @@ public class funcionsJulia {
                     }
                 } else if(option == 2){
                     System.out.println("Has escollit que es mostri la informació de les activitats d'un dia: ");
-                    for(int i = 0; i < usersList.getNumElems(); i++){
+                    for(int i = 0; i < activities.getNumElems(); i++){
                         if(activities.getActivity(i).getActivityType().equalsIgnoreCase("OneDay")){
                             System.out.println(activities.getActivity(i));
                         }
                     }
                 } else if(option == 3){
                     System.out.println("Has escollit que es mostri la informació de les activitats periòdiques: ");
-                    for(int i = 0; i < usersList.getNumElems(); i++){
+                    for(int i = 0; i < activities.getNumElems(); i++){
                         if(activities.getActivity(i).getActivityType().equalsIgnoreCase("Periodic")){
                             System.out.println(activities.getActivity(i));
                         }
                     }
                 } else if(option == 4){
                     System.out.println("Has escollit que es mostri la informació de les activitats Online: ");
-                    for(int i = 0; i < usersList.getNumElems(); i++){
+                    for(int i = 0; i < activities.getNumElems(); i++){
                         if(activities.getActivity(i).getActivityType().equalsIgnoreCase("Online")){
                             System.out.println(activities.getActivity(i));
                         }
@@ -355,28 +455,98 @@ public class funcionsJulia {
         }
 
     }
-
     //--------------------------------
 
 
-    // ------ 4º OPCIÓ DEL MENU ------
-    public static void option4(LocalDate usedDate){
+    public static void option4(ActivityList activities){
         //4. Mostrar informació d'activitats en data actual: tota la informació (places, llista d'espera, etc).
+        for (int i = 0; i < activities.getNumElems(); i++){
+            if (activities.getActivity(i) instanceof OneDayActivity){
+                OneDayActivity OneDay = (OneDayActivity) activities.getActivity(i);
+                if (OneDay.getDay().isEqual(usedDate)){
+                    System.out.println(OneDay);
+                }
+            }
+            else if (activities.getActivity(i) instanceof OnlineActivity){
+                OnlineActivity Online = (OnlineActivity) activities.getActivity(i);
+                if (Online.getStartDateActivity().isBefore(usedDate) && Online.getFinishDateActivity().isAfter(usedDate)){
+                    System.out.println(Online);
+                }
+            }
+            else if(activities.getActivity(i) instanceof PeriodicActivity){
+                PeriodicActivity Periodic = (PeriodicActivity) activities.getActivity(i);
+                if (Periodic.getInicialDate().isBefore(usedDate) && Periodic.getInicialDate().plusDays((long) (Periodic.getWeeksOfActivity()*7)).isAfter(usedDate)){
+                    System.out.println(Periodic);
+                }
+            }
+        }
     }
-    //--------------------------------
 
 
     // ------ 5º OPCIÓ DEL MENU ------
     public static void option5(ActivityList activities, LocalDate usedDate){
         //5. Mostrar activitats actives en la data actual: nom de les activitats; no cal classe, però la data actual entre la inicial i la final.
+        boolean thereAre = false; 
+        boolean activeOneDay = false;
+        boolean activePeriodic = false;
+        boolean activeOnline = false;
+        String message = "Activitats actives en la data actual ("+usedDate+")";
+        String oneDayMessage = "Activitats d'un dia: ";
+        String onlineMessage = "Activitats online: ";
+        String periodicMessage = "Activitats periòdiques: ";
+
         for(int i=0; i<activities.getNumElems(); i++){
             Activities activity = activities.getActivity(i);
-            String type = activity.getActivityType();
-            if(type.equalsIgnoreCase("Un dia")){
-                
+
+            //Comprovació per activitats d'un dia
+            if(activity instanceof OneDayActivity){ //Comprovació que el tipus dinàmic sigui la classe filla
+                OneDayActivity oneDayAct = (OneDayActivity) activity;
+                if(oneDayAct.getDay().isEqual(usedDate)){
+                    thereAre = true;
+                    activeOneDay = true;
+                    oneDayMessage = oneDayMessage + oneDayAct.getActivityName();
+                }
+
+            //Comprovació per activitats online
+            } else if(activity instanceof OnlineActivity){ //Comprovació que el tipus dinàmic sigui la classe filla
+                OnlineActivity onlineAct = (OnlineActivity) activity;
+                LocalDate start = onlineAct.getStartDateActivity();
+                LocalDate finish = onlineAct.getFinishDateActivity();
+                if(!usedDate.isBefore(start) && !usedDate.isAfter(finish)){ //Si posem 'usedDate.isAfter(start) && usedDate.isBefore(finish)', exclou els extrems
+                    thereAre = true;
+                    activeOnline = true;
+                    onlineMessage = onlineMessage + onlineAct.getActivityName();
+                }
+
+            //Comprovació per activitats periòdiques
+            } else if(activity instanceof PeriodicActivity){ //Comprovació que el tipus dinàmic sigui la classe filla
+                PeriodicActivity periodicAct = (PeriodicActivity) activity;
+                LocalDate start = periodicAct.getInicialDate();
+                int weeks = periodicAct.getWeeksOfActivity();
+                LocalDate finish = start.plusWeeks(weeks);
+                if(!usedDate.isBefore(start) && !usedDate.isAfter(finish)){
+                    thereAre = true;
+                    activePeriodic = true;
+                    periodicMessage = periodicMessage + periodicAct.getActivityName();
+                    
+                }
             }
         }
-    }
+        if(thereAre == true){
+            System.out.println(message);
+            if(activeOneDay = true){
+                System.out.println(oneDayMessage);
+            }
+            if(activeOnline = true){
+                System.out.println(onlineMessage);
+            }
+            if(activePeriodic = true){
+                System.out.println(periodicMessage);
+            }
+        } else {
+            System.out.println("No hi ha activitats actives en la data actual");
+        }
+    }   
     //--------------------------------
 
 
@@ -401,15 +571,34 @@ public class funcionsJulia {
 
 
     // ------ 8º OPCIÓ DEL MENU ------
-    public static void option8(){
+    public static void option8(UserList List){
         //8. Mostrar informació d'usuari: informació detallada a partir del nom d'aquest.
+        System.out.println("Escriu el teu nom: ");
+        String Name = keyboard.nextLine();
+        User aux = List.getUser(Name);
+        System.out.println(aux);
     }
     //--------------------------------
 
 
     // ------ 9º OPCIÓ DEL MENU ------
-    public static void option9(){
+    public static void option9(ActivityList activities, UserList users){
         //9. Mostrar activitats on estàs inscrit: totes a les que l'usuari s'ha apuntat.
+        System.out.println("Introdueix el teu nom d'usuari: ");
+        String nomUsuari = keyboard.nextLine();
+        System.out.println("Activitats on estàs inscrit: ");
+
+        for(int i=0; i<activities.getNumElems(); i++){
+            Activities activity = activities.getActivity(i);
+            InscriptionList inscriptedUsers = activity.getInscriptions();
+
+            
+            for(int j=0; j<inscriptedUsers.getNumElems(); j++){
+                if(((inscriptedUsers.getInscription(j)).getNickName()).equalsIgnoreCase(nomUsuari)){
+                    System.out.println(activity.getActivityName());
+                }
+            }
+        }
     }
     //--------------------------------
 
@@ -436,7 +625,7 @@ public class funcionsJulia {
             }
             i++;
         }
-        if(!trobat){
+        if(!trobat || activities.getActivity(i-1).getFinishDateInscriptions().isBefore(usedDate) || activities.getActivity(i-1).getStartDateInscriptions().isAfter(usedDate)){
             System.out.println("Ho sentim. L'activitat que has triat, no existeix o està fora de termini.");
             return;
         }
@@ -444,12 +633,12 @@ public class funcionsJulia {
             System.out.println("Perfecte! Quin és el teu nom?: ");
             String nickname = keyboard.nextLine();
             i = 0;
-            trobat = !false;
+            trobat = false;
             while(!trobat && i < usersList.getNumElems()){
                 if(nickname.equalsIgnoreCase(usersList.getUser(i).getNickname())){
                     trobat = true;
                     posUser = i;
-                    if(!usersList.getUser(i).getUserType().equalsIgnoreCase(activity.getActivityType())){ //Mirem si pertany al grup correcte per a fer l'activitat
+                    if(!activity.getCollectiveString().contains(usersList.getUser(i).getUserType())){ //Mirem si pertany al grup correcte per a fer l'activitat
                         System.out.println("Ho sentim. No pertanys al grup correcte per a inscriure't en aquesta activitat.");
                         return;
                     }
@@ -465,6 +654,7 @@ public class funcionsJulia {
                 while(numCollective != 1 && numCollective != 2 && numCollective != 3){
                     System.out.println("No has introduit un número correcte. Torna a intentar-ho: ");
                     numCollective = keyboard.nextInt();
+                    
                 }
                 String collective = null;
                 if(numCollective == 1){
@@ -492,6 +682,7 @@ public class funcionsJulia {
 
                 //E-Mail:
                 System.out.println("Quin és el teu e-mail? Escriu-lo a continuació: ");
+                keyboard.nextLine();
                 String email = keyboard.nextLine();
 
                 //Si és usuari PDI:
@@ -522,7 +713,7 @@ public class funcionsJulia {
                 newUser = usersList.getUser(posUser); //L'usuari ja estava registrat.
 
                 // Mirem si l'usuari pot fer l'activitat segons el seu tipus:
-                boolean isPermited = !false;
+                boolean isPermited = false;
                 i = 0;
                 while(!isPermited && i < activity.getLenCollective()){
                     if(newUser.getUserType().equalsIgnoreCase(activity.getCollective()[i])){
@@ -537,17 +728,21 @@ public class funcionsJulia {
             }
 
             //Afegir l'usuari a la inscripció de l'activitat corresponent:
+            for (int k = 0; k < activity.getInscriptions().getNumElems(); k++){
+                if (activity.getInscriptions().getInscription(k).getNickName().equalsIgnoreCase(nickname)){
+                    System.out.println("Ja estàs inscrit");
+                    return;
+                }
+            }
             if(activity.getNumElemsWaitingList() >= activity.getWaitingList().length && activity.getNumInscriptions() == activity.getInscriptions().getLenInscriptions()){
                 System.out.println("Ho sentim. Les inscripcions estan plenes.");
                 return;
             }
             else if((activity.getNumInscriptions() == activity.getInscriptions().getLenInscriptions()) && activity.getNumElemsWaitingList() < activity.getWaitingList().length){ //Afegim a la waiting list
                 activity.addToWaitingList(newUser);
-                System.out.println("Felicitats! Ja t'has inscrit a la llista d'espera de l'activitat.");
             }
             else if(activity.getNumInscriptions() < activity.getInscriptions().getLenInscriptions()){
                 activity.addInscriptions(newUser);
-                System.out.println("Felicitats! Ja t'has inscrit a l'activitat.");
             }
         }
 
@@ -569,16 +764,137 @@ public class funcionsJulia {
 
 
     // ------ 12º OPCIÓ DEL MENU ------
-    public static void option12(){
+    public static void option12(ActivityList listAct, UserList listUser){
         //12. Eliminicació d'usuari d'una activitat:
         //Quan s'elimini un usuari que podia accedir a l'activitat, el primer de la llista d'espera passarà a ocupar el seu lloc.
+        System.out.println("Escriu l'activitat de la que vols eliminar l'usuari");
+        String activity = keyboard.nextLine();
+        boolean found = false;
+        int i = 0;
+        while (i < listAct.getNumElems() && !found){
+            if (listAct.getActivity(i).getActivityName().equalsIgnoreCase(activity)){
+                found = true;
+            }
+            i++;
+        }
+        if (!found){
+            System.out.println("Error, no hi ha una activitat amb aquest nom");
+            return;
+        }
+        System.out.println("Escriu el nom de l'usuari");
+        String user = keyboard.nextLine();
+        int j = 0;
+        found = false;
+        while (j < listUser.getNumElems() && !found){
+            if (listUser.getUser(j).getNickname().equalsIgnoreCase(user)){
+                found = true;
+            }
+            j++;
+        }
+        if (!found){
+            System.out.println("Error, no hi ha un usuari amb aquest nom");
+            return;
+        }
+        i--;
+        j--;
+        listAct.getActivity(i).removeInscription(listUser.getUser(j));
+        System.out.println("S'ha eliminat correctament l'usuari " + listUser.getUser(j) + " de l'activitat " + listAct.getActivity(i));
     }
     //--------------------------------
 
 
     // ------ 13º OPCIÓ DEL MENU ------
-    public static void option13(){
+    public static void option13(ActivityList activities){
         //13. Afegir una nova activitat d'un dia.
+
+        //----- Nom de l'activitat -----
+        System.out.print("Introdueix el nom de l'activitat: "); //Demanem el nom de la nova activitat
+        String activityName = keyboard.nextLine();
+        //------------------------------
+
+
+        //----- Data on comencen les inscripcions -----
+        System.out.println("Introdueix la data de començament de les inscripcions (aaaa mm dd): ");
+        int inscriptionYear = keyboard.nextInt();
+        int inscriptionMonth = keyboard.nextInt();
+        int inscriptionDay = keyboard.nextInt();
+        LocalDate startInscription = LocalDate.of(inscriptionYear, inscriptionMonth, inscriptionDay);
+        //---------------------------------------------
+
+
+        //----- Data on acaben les inscripcions -----
+        System.out.println("Introdueix la data de finalització de les inscripcions (aaaa mm dd): ");
+        int insFinishYear = keyboard.nextInt();
+        int insFinishMonth = keyboard.nextInt();
+        int insFinishDay = keyboard.nextInt();
+        LocalDate finishInscription = LocalDate.of(insFinishYear, insFinishMonth, insFinishDay);
+        //-------------------------------------------
+
+
+        //----- Col·lectius que poden participar en l'activitat -----
+        String collectives[] = new String[3];
+        keyboard.nextLine();
+        System.out.println("Introdueix quins col·lectius poden participar (posa -1 per acabar): ");
+        int counter = 0;
+        String collective = "";
+        while (counter < 3 && !collective.contains("-1")) {
+            collective = keyboard.nextLine();
+            if (!collective.contains("-1")) {
+                collectives[counter] = collective;
+                counter++;
+            }
+        }
+        //----------------------------------------------------------
+
+
+        //----- Límit de places per l'activitat -----
+        System.out.println("Introdueix el nombre límit de places per l'activitat: ");
+        int limitPlaces = keyboard.nextInt();
+        //-------------------------------------------
+
+
+        //----- Ciutat on es realitza l'activitat -----
+        System.out.println("Introdueix la ciutat on es realitza l'activitat: ");
+        keyboard.nextLine();
+        String activityCity = keyboard.nextLine();
+        //---------------------------------------------
+
+
+        //----- Dia en el que es realitza l'activitat -----
+        System.out.println("Introdueix el dia en el que es realitza l'activitat (aaaa mm dd): ");
+        int ActivityYear = keyboard.nextInt();
+        int ActivityMonth = keyboard.nextInt();
+        int ActivityDay = keyboard.nextInt();
+        LocalDate activityDay = LocalDate.of(ActivityYear, ActivityMonth, ActivityDay);
+        //------------------------------------------------
+
+
+        //----- Horari de començament de l'activitat -----
+        System.out.println("Introdueix l'horari en que comença l'activitat: (hora minuts)");
+        int firstHour = keyboard.nextInt();
+        int firstMinute = keyboard.nextInt();
+        LocalTime startTime = LocalTime.of(firstHour, firstMinute);
+        //-----------------------------------------------
+
+
+        //----- Horari de tancament de l'activitat -----
+        System.out.println("Introdueix l'horari en que acaba l'activitat: (hora minuts)");
+        int finalHour = keyboard.nextInt();
+        int finalMinute = keyboard.nextInt();
+        LocalTime finishTime = LocalTime.of(finalHour, finalMinute);
+        //---------------------------------------------
+
+
+        //----- Preu de l'activitat -----
+        System.out.println("Introdueix el preu de l'activitat: (en decimals i amb coma)");
+        double activityPrice = keyboard.nextDouble();
+        //-------------------------------
+
+        
+        //----- Creació de la nova activitat amb els atribut demanats -----
+        Activities oneDayActivity = new OneDayActivity("OneDay", activityName, startInscription, finishInscription, collectives, limitPlaces, activityCity, activityDay, startTime, finishTime, activityPrice);
+        activities.addActivity(oneDayActivity);
+        //-----------------------------------------------------------------
     }
     //--------------------------------
 
@@ -626,14 +942,16 @@ public class funcionsJulia {
         String dayOfActivity = keyboard.nextLine();
 
         // inicialTime:
-        System.out.print("Indica a quina hora comença l'activitat:. Hora: ");
+        System.out.println("Indica a quina hora comença l'activitat:");
+        System.out.print("Hora: ");
         int inicialHour = keyboard.nextInt();
         System.out.print("Minut: ");
         int inicialMinute = keyboard.nextInt();
         LocalTime inicialTime = LocalTime.of(inicialHour, inicialMinute, 0, 0);
 
         // finalTime:
-        System.out.print("Indica a quina hora acaba l'activitat:. Hora: ");
+        System.out.println("Indica a quina hora acaba l'activitat:");
+        System.out.print("Hora: ");
         int finalHour = keyboard.nextInt();
         System.out.print("Minut: ");
         int finalMinute = keyboard.nextInt();
@@ -663,7 +981,7 @@ public class funcionsJulia {
         System.out.print("Indica el nom de la ciutat: ");
         String cityName = keyboard.nextLine();
 
-        Activities periodicActivity = new PeriodicActivity("Peridoic", activityName, startDateInscriptions, finishDateInscriptions, collectives, maxInscriptions, dayOfActivity, inicialTime, finalTime, inicialDate, weeksOfActivity, priceActivity, centerName, cityName);
+        Activities periodicActivity = new PeriodicActivity("Periodic", activityName, startDateInscriptions, finishDateInscriptions, collectives, maxInscriptions, dayOfActivity, inicialTime, finalTime, inicialDate, weeksOfActivity, priceActivity, centerName, cityName);
         activities.addActivity(periodicActivity);
 
 
@@ -727,18 +1045,93 @@ public class funcionsJulia {
 
 
     // ------ 16º OPCIÓ DEL MENU ------
-    public static void option16(){
+    public static void option16(UserList listUser, ActivityList listAct){
         //16. Valoració d'una activitat: 
         //requisits per a que l'usuari la pugui valorar: 
             //1- l'activitat ha d'haver acabat.
             //2- l'usuari ha d'haver assistit a l'activitat.
+        listAct = listAct.activitiesFinished(usedDate);
+        System.out.println("Escriu el teu nom: ");
+        String user = keyboard.nextLine();
+        int j = 0;
+        boolean found = false;
+        while (j < listUser.getNumElems() && !found){
+            if (listUser.getUser(j).getNickname().equalsIgnoreCase(user)){
+                found = true;
+            }
+            j++;
+        }
+        if (!found){
+            System.out.println("Error, aquest usuari no existeix");
+            return;
+        }
+
+        System.out.println("Escriu el nom de l'activitat que vols avaluar");
+        String activity = keyboard.nextLine();
+        found = false;
+        int i = 0;
+        while (i < listAct.getNumElems() && !found){
+            if (listAct.getActivity(i).getActivityName().equalsIgnoreCase(activity)){
+                found = true;
+            }
+            i++;
+        }
+        if (!found){
+            System.out.println("Error, aquesta activitat no es pot valorar");
+            return;
+        }
+
+        i--;
+        j--;
+        found = false;
+        int k = 0;
+        
+        while (k < listAct.getActivity(i).getInscriptions().getNumElems() && !found){
+            if (listAct.getActivity(i).getInscriptions().getInscription(k).getNickName().equalsIgnoreCase(listUser.getUser(j).getNickname())){
+                found = true;
+                try{
+                    System.out.println("Escriu la nota que li vols donar a l'activitat: ");
+                    int grade = Integer.parseInt(keyboard.nextLine());
+                    listAct.getActivity(i).getInscriptions().getInscription(k).setAssessment(grade);
+                    System.out.println("Has evaluat l'activitat correctament");
+                } catch(NumberFormatException e){
+                    System.out.println("Error, has d'entrar un número vàlid");
+                }
+                
+            }
+            k++;
+        }
+        if (!found){
+            System.out.println("No estàs inscrit en aquesta activitat.");
+        }
+
     }
     //--------------------------------
 
 
     // ------ 17º OPCIÓ DEL MENU ------
-    public static void option17(){
+    public static void option17(ActivityList activities, LocalDate usedDate){
         //17. Mostrar resum de valoracions de les activitats: han d'estar acabades.
+        
+        System.out.println("VALORACIONS: ");
+
+        //Agafarem les activitats acabades, ja que aquestes seran les que es poden valorar
+        ActivityList finishedActivities = activities.activitiesFinished(usedDate);
+        
+        //Analitzem activitat per activitat per mostrar les valoracions de cadascuna
+        for (int i=0; i<finishedActivities.getNumElems(); i++){
+            Activities activity = finishedActivities.getActivity(i);
+            System.out.print(activity.getActivityName() + ": "); //Nom de l'activitat a mostrar
+
+            //Llista de les inscripcions d'aquesta activitat
+            InscriptionList inscriptions = activity.getInscriptions();
+
+            for(int j=0; j<inscriptions.getNumElems(); j++){
+                Inscriptions inscription = inscriptions.getInscription(j);
+                System.out.print(inscription.getAssessment() + " "); //Quantitat de la valoració
+            }
+            System.out.println("\n");
+        }
     }
     //--------------------------------
 
@@ -762,7 +1155,7 @@ public class funcionsJulia {
             for(i = 0; i < activities.getNumElems(); i++){
                 for(int j = 0; j < activities.getActivity(i).getNumInscriptions(); j++){
                     if(activities.getActivity(i).getInscriptions().getInscription(j).getNickName().equalsIgnoreCase(user)){
-                        System.out.println("Evaluació de l'activitat" + activities.getActivity(i).getActivityName() + "per part de " + activities.getActivity(i).getInscriptions().getInscription(j).getNickName() + ": ");
+                        System.out.println("Evaluació de l'activitat '" + activities.getActivity(i).getActivityName() + "' per part de " + activities.getActivity(i).getInscriptions().getInscription(j).getNickName() + ": ");
                         System.out.println("Nota: " + activities.getActivity(i).getInscriptions().getInscription(j).getAssessment());
                     }
                 }
@@ -773,25 +1166,104 @@ public class funcionsJulia {
 
 
     // ------ 19º OPCIÓ DEL MENU ------
-    public static void option19(){
+    public static void option19(ActivityList activities){
         //19. Mostrar mitjanes de valoracions dels col·lectius:
         // Objectiu -> comparar si els usuaris dels diferents col·lectius valoren igual o no.
+
+        // Agafem totes les activitats que ja s'han acabat
+        ActivityList finishActivities = activities.activitiesFinished(usedDate);
+        // Recorrem totes les activitats i hem de mirar les inscripcions de cada activitat, despres recorrem les inscripcions i segons el colectiu sumem una variable de mitjana i altre i el contador
+        for (int i = 0; i < finishActivities.getNumElems(); i++) {
+            float mitjanaStudent = 0;
+            float mitjanaPDI = 0;
+            float mitjanaPTGAS = 0;
+            int contadorStudent = 0;
+            int contadorPDI = 0;
+            int contadorPTGAS = 0;
+            Activities activity = finishActivities.getActivity(i);
+            InscriptionList inscriptions = activity.getInscriptions();
+            for (int j = 0; j < inscriptions.getNumElems(); j++) {
+                Inscriptions inscription = inscriptions.getInscription(j);
+                // Pillem el colectiu
+                if (inscription.getUser().getUserType().equalsIgnoreCase("Student")) {
+                    mitjanaStudent += inscription.getAssessment();
+                    contadorStudent++;
+                }
+                else if (inscription.getUser().getUserType().equalsIgnoreCase("PDI")) {
+                    mitjanaPDI += inscription.getAssessment();
+                    contadorPDI++;
+                }
+                else if (inscription.getUser().getUserType().equalsIgnoreCase("PTGAS")) {
+                    mitjanaPTGAS += inscription.getAssessment();
+                    contadorPTGAS++;
+                }
+            }
+
+            // Fem les mitjanes i les mostrem
+            System.out.println("Activitat '" + finishActivities.getActivity(i).getActivityName() + "' Valoracions - Student: " + (mitjanaStudent/contadorStudent) + ", PDI: " + (mitjanaPDI/contadorPDI) + ", PTGAS: " + (mitjanaPTGAS/contadorPTGAS));
+        }
     }
     //--------------------------------
 
 
     // ------ 20º OPCIÓ DEL MENU ------
-    public static void option20(){
+    public static void option20(UserList listUser){
         //20. Mostrar l'usuari més actiu del col·lectiu indicat: l'usuari més actiu serà el que s'ha apuntat a més activitats.
-        // En cas d'empat entre usuaris, s'escollirà a qualsevol usuari que cpmpleixi els requisits.
+        // En cas d'empat entre usuaris, s'escollirà a qualsevol usuari que compleixi els requisits.
+
+        System.out.println("Introdueix el colectiu que vols comprovar: ");
+        String collective = keyboard.nextLine();
+        if (!collective.equalsIgnoreCase("PDI") && !collective.equalsIgnoreCase("PTGAS") && !collective.equalsIgnoreCase("student")){
+            System.out.println("Error, aquest colectiu no existeix");
+            return;
+        }
+        User mostActive = null;
+        for (int i = 0; i < listUser.getNumElems(); i++){
+            if (listUser.getUser(i).getUserType().equalsIgnoreCase(collective)){
+                if (mostActive == null || mostActive.getNumInscriptions() < listUser.getUser(i).getNumInscriptions()){
+                    mostActive = listUser.getUser(i);
+                }
+            }
+            
+        }
+        if (mostActive == null){
+            System.out.println("No hi ha cap usuari en aquest colectiu");
+        }
+        else{
+            System.out.println("Usuari més actiu: " + mostActive);
+        }
     }
     //--------------------------------
 
 
     // ------ 21º OPCIÓ DEL MENU ------
-    public static void option21(){
+    public static void option21(ActivityList activities, LocalDate usedDate){
         //21. Baixa d'activitats: donar de baixa les activitats que ja han acabat el període d'inscripció sense omplir el 10% de les places.
         // En activitats en línia es donarà si el número d'inscrits es inferior a 20 persones.
+
+        for(int i=0; i<activities.getNumElems(); i++){
+            Activities activity = activities.getActivity(i); //Accés a cada activitat
+            InscriptionList maxPlaces = activity.getInscriptions(); //Màxim de places que té l'activitat
+            double places = (10.0/100)*(maxPlaces.getLenInscriptions());
+
+            int numPlaces = activity.getNumInscriptions(); //Número de places cobertes 
+
+            LocalDate finishDate = activity.getFinishDateInscriptions();
+            if(usedDate.isAfter(finishDate)){
+                //Comprovem si és activitat online
+                if(activity instanceof OnlineActivity){ //Comprovació que el tipus dinàmic sigui la classe filla
+                    if(numPlaces < 20){
+                        String name = activity.getActivityName();
+                        activities.removeActivity(name);
+                    }
+                } else {
+                    if(numPlaces < places){
+                        String name = activity.getActivityName();
+                        activities.removeActivity(name);
+                    }
+                }
+            }
+        }
     }
     //--------------------------------
 }

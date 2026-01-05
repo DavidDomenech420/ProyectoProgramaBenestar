@@ -152,7 +152,7 @@ public class AccioBotons implements ActionListener {
                                     information = "TOTS LES ACTIVITATS";
                                     phrase2 = "Has escollit que es mostri la informació de totes les activitats: \n";
                                     for(int i=0; i<activities.getNumElems(); i++){
-                                        phrase2 = phrase2 + activities.getActivity(i);
+                                        phrase2 = phrase2 + activities.getActivity(i) + "\n";
                                     }
                                 }
                                 //Opció 2 - Mostrar la informació de les activitats d'un dia
@@ -161,7 +161,7 @@ public class AccioBotons implements ActionListener {
                                     phrase2 = "Has escollit que es mostri la informació de les activitats d'un dia: \n";
                                     for(int i=0; i<activities.getNumElems(); i++){
                                         if(activities.getActivity(i).getActivityType().equalsIgnoreCase("OneDay")){
-                                            phrase2 = phrase2 + activities.getActivity(i);
+                                            phrase2 = phrase2 + activities.getActivity(i) + "\n";
                                         }
                                     }
                                 }
@@ -171,7 +171,7 @@ public class AccioBotons implements ActionListener {
                                     phrase2 = "Has escollit que es mostri la informació de les activitats periòdiques: \n";
                                     for(int i=0; i<activities.getNumElems(); i++){
                                         if(activities.getActivity(i).getActivityType().equalsIgnoreCase("Periodic")){
-                                            phrase2 = phrase2 + activities.getActivity(i);
+                                            phrase2 = phrase2 + activities.getActivity(i) + "\n";
                                         }
                                     }
                                 }
@@ -181,7 +181,7 @@ public class AccioBotons implements ActionListener {
                                     phrase2 = "Has escollit que es mostri la informació de les activitats Online: \n";
                                     for(int i=0; i<activities.getNumElems(); i++){
                                         if(activities.getActivity(i).getActivityType().equalsIgnoreCase("Online")){
-                                            phrase2 = phrase2 + activities.getActivity(i);
+                                            phrase2 = phrase2 + activities.getActivity(i) + "\n";
                                         }
                                     }
                                 }
@@ -439,6 +439,7 @@ public class AccioBotons implements ActionListener {
                     }
                     if(!trobat){
                         JOptionPane.showMessageDialog(null, "Ho sentim. L'activitat que has triat, no existeix o està fora de termini.", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
+                        return;
                 
                     }
                     else{ //Ara controlem si l'usuari ja està registrat
@@ -451,6 +452,7 @@ public class AccioBotons implements ActionListener {
                                 posUser = i;
                                 if(!activity.getCollectiveString().contains(users.getUser(i).getUserType())){ //Mirem si pertany al grup correcte per a fer l'activitat
                                     JOptionPane.showMessageDialog(null, "Ho sentim. No pertanys al grup correcte per a inscriure't en aquesta activitat.", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
+                                    return;
                                 }
                             }
                             i++;
@@ -477,7 +479,7 @@ public class AccioBotons implements ActionListener {
                             }
 
                             //Mirem si està permès que el tipus d'usuari faci l'activitat:
-                            boolean isPermited = !false;
+                            boolean isPermited = false;
                             i = 0;
                             while(!isPermited && i < activity.getLenCollective()){
                                 if(collective.equalsIgnoreCase(activity.getCollective()[i])){
@@ -522,9 +524,11 @@ public class AccioBotons implements ActionListener {
                                 if(newUser.getUserType().equalsIgnoreCase(activity.getCollective()[i])){
                                     isPermited = true;
                                 }
+                                i++;
                             }
                             if(!isPermited){
                                 JOptionPane.showMessageDialog(null, "Ho sentim. El teu grup d'usuaris no pot realitzar aquesta activitat.", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
+                                return;
                             }
                             
                         }
@@ -747,7 +751,7 @@ public class AccioBotons implements ActionListener {
 
                                 if(activityOfActivity != null){
                                     int weeksActivity = Integer.parseInt(JOptionPane.showInputDialog(null, "Introdueix el número de setmanes que perdurarà l'activitat: ", "Creació d'activitat periòdica", JOptionPane.QUESTION_MESSAGE));
-                                    double price = Double.parseDouble(JOptionPane.showInputDialog(null, "Introdueix el preu de l'activitat: (en decimals i amb coma)", "Creació d'activitat periòdica", JOptionPane.QUESTION_MESSAGE));
+                                    double price = Double.parseDouble(JOptionPane.showInputDialog(null, "Introdueix el preu de l'activitat: (en decimals i amb punt)", "Creació d'activitat periòdica", JOptionPane.QUESTION_MESSAGE));
                                     String centerName = JOptionPane.showInputDialog(null, "Introdueix el nom del centre on es realitza l'activitat: ", "Creació d'activitat periòdica", JOptionPane.QUESTION_MESSAGE);
 
                                     if(centerName != null){
@@ -855,7 +859,7 @@ public class AccioBotons implements ActionListener {
                     JOptionPane.showMessageDialog(null, "No hi ha cap usuari registrat!", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
                 
                 } else if (activities.getNumElems() > 0){
-                    String activity = JOptionPane.showInputDialog(null, "Escriu el nom de l'activitat que vols crear: ", "Valoració d'una activitat", JOptionPane.QUESTION_MESSAGE);
+                    String activity = JOptionPane.showInputDialog(null, "Escriu el nom de l'activitat que vols valorar: ", "Valoració d'una activitat", JOptionPane.QUESTION_MESSAGE);
                     found = false;
                     int i = 0;
                     while (i < activities.getNumElems() && !found){

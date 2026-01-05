@@ -137,105 +137,7 @@ public class AppProgramaBenestar {
         //1- IOException: Error de lectura del disc. El ObjectInpuStream falla. El fitxer no és vàlid.
         //2- ClassNotFoundException: Error de classe.
 
-        // Mostrem el menu
-        /*mostraMenu();
-        int option = keyboard.nextInt();
-        keyboard.nextLine();
-        while (option != 22){ //Mostrarem el menu fins que l'usuari vulgui sortir de l'aplicació
-            switch (option){
-                case 1:
-                    option1();
-                    break;
-                case 2:
-                    System.out.println("Escriu de què vols obtenir la informació (usuaris/activitats): ");
-                    String typeOp2 = keyboard.nextLine();
-                    if(typeOp2.equalsIgnoreCase("usuaris")){
-                        option2("usuaris", usersList, activities);
-                    }
-                    else if(typeOp2.equalsIgnoreCase("activitats")){
-                        option2("activitats", usersList, activities);
-                    }
-                    break;
-                case 3:
-                    // Llamamos la funcion que coge la informacion de las actividades con inscripciones abiertas
-                    option3(activities);
-                    break;
-                case 4:
-                    option4(activities);
-                    break;
-                case 5:
-                    option5(activities, usedDate);
-                    break;
-                case 6:
-                    option6(activities);
-                    break;
-                case 7:
-                    System.out.println("Indica el nom de l'activitat");
-                    String activityName7 = keyboard.nextLine();
-                    option7(activities, activityName7);
-                    break;
-                case 8:
-                    option8(usersList);
-                    break;
-                case 9:
-                    option9(activities, usersList);
-                    break;
-                case 10:
-                    option10(activities, usersList);
-                    break;
-                case 11:
-                    System.out.println("Indica el nom de l'activitat");
-                    String activityName11 = keyboard.nextLine();
-                    option11(activities, activityName11);
-                    break;
-                case 12:
-                    option12(activities, usersList);
-                    break;
-                case 13:
-                    option13(activities);
-                    break;
-                case 14:
-                    option14(activities);
-                    break;
-                case 15:
-                    option15(activities);
-                    break;
-                case 16:
-                    option16(usersList, activities);
-                    break;
-                case 17:
-                    option17(activities, usedDate);
-                    break;
-                case 18:
-                    System.out.println("Indica l'usuari del qual vols veure les valoracions: ");
-                    String user = keyboard.nextLine();
-                    option18(user, usersList, activities);
-                    break;
-                case 19:
-                    option19(activities);
-                    break;
-                case 20:
-                    option20(usersList);
-                    break;
-                case 21:
-                    System.out.println("Llista d'activitats abans de la baixa: ");
-                    for(int i=0; i<activities.getNumElems(); i++){
-                        Activities activity = activities.getActivity(i);
-                        System.out.println("- "+activity.getActivityName()); //(El guió és per estètica)
-                    }
-                    option21(activities, usedDate);
-                    System.out.println("\nLlista d'activitats actualitzada: ");
-                    for(int i=0; i<activities.getNumElems(); i++){
-                        Activities activity = activities.getActivity(i);
-                        System.out.println("- "+activity.getActivityName()); //(El guió és per estètica)
-                    }
-                    break;
-            }
-            mostraMenu();
-            option = keyboard.nextInt();
-            keyboard.nextLine();
-        }
-        */
+        //APLICACIÓ GRÀFICA
         new AppGrafica(activities, usersList);
     }
 
@@ -319,7 +221,7 @@ public class AppProgramaBenestar {
             JOptionPane.showMessageDialog(null, "Error guardant inscripcions .ser : " +e.getMessage(), "ERROR!", JOptionPane.WARNING_MESSAGE);
         }
     }
-
+/*
     public static void mostraMenu(){
         System.out.println("\n------ PROGRAMA BENESTAR URV ------");
         System.out.println("\nOPCIONS DEL MENÚ: ");
@@ -1267,4 +1169,5 @@ public class AppProgramaBenestar {
         }
     }
     //--------------------------------
+    */
 }

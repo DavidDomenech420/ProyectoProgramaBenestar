@@ -72,7 +72,7 @@ public class ActivityList {
     public ActivityList activitiesInscriptionOpen(LocalDate date){
         ActivityList activitiesInsOpen = new ActivityList(nElem);
         for (int i = 0; i < nElem; i++) {
-            if (!(list[i].getStartDateInscriptions().isBefore(date)) && !(list[i].getFinishDateInscriptions().isAfter(date))) {
+            if ((list[i].getStartDateInscriptions().isBefore(date)) && (list[i].getFinishDateInscriptions().isAfter(date))) {
                 activitiesInsOpen.addActivity(list[i]);
             }
         }
