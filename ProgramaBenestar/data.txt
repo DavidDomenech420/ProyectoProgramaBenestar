@@ -1,3 +1,4 @@
-OneDay;nameActivity;dd-mm-yyyy;dd-mm-yyyy;collective;29;city;dd-mm-yyyy;hh:mm;hh:mm;12.3
-Periodic;nameActivity;dd-mm-yyyy;dd-mm-yyyy;collective;29;dd-mm-yyyy;hh:mm;dd-mm-yyyy;21;14.5;centerName;cityName
-Online;nameActivity;dd-mm-yyyy;dd-mm-yyyy;collective;29;dd-mm-yyyy;dd-mm-yyyy;linkCurso
+OneDay;nameActivity;YYYY-MM-DD;YYYY-MM-DD;collective;int;city;YYYY-MM-DD;hh:mm;hh:mm;double
+Periodic;nameActivity;YYYY-MM-DD;YYYY-MM-DD;collective;int;YYYY-MM-DD;hh:mm;YYYY-MM-DD;int;double;centerName;cityName
+Online;nameActivity;YYYY-MM-DD;YYYY-MM-DD;collective;int;YYYY-MM-DD;YYYY-MM-DD;linkCurso
+Periodic;perio;2026-01-01;2026-01-10;Student;6;dilluns;11:30;12:30;2026-02-01;3;4.2;centro;vila

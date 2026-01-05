@@ -5,6 +5,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.io.*;
 import java.util.Scanner;
+import javax.swing.JOptionPane;
 
 import dades.Activities;
 import dades.Inscriptions;
@@ -24,8 +25,10 @@ public class AppProgramaBenestar {
     public static LocalDate usedDate = LocalDate.now(); //La variable haurà de ser 'public' per poder accedir des de la part d'interficies gràfiques
 
     public static void main(String[] args) throws Exception {
-        // Inicialitzem les variables per la llista d'activitats
+        // Inicialitzem les variables per la llista d'activitats i d'usuaris
         ActivityList activities = new ActivityList(300);
+        UserList usersList = new UserList(300);
+
         // Mirem si existeix el fitxer, si es aixi guardem la informació dels fitxers a les variables corresponents, si no estaran buides
         try {
             BufferedReader fileRead=new BufferedReader(new FileReader("data.txt"));
@@ -34,9 +37,10 @@ public class AppProgramaBenestar {
             frase=fileRead.readLine(); //Llegim capçalera 2
             frase=fileRead.readLine(); //Llegim capçalera 3
 
-            fileRead.readLine();
-            //Ara llegim primera línia amb informació:
-            frase=fileRead.readLine();
+            //fileRead.readLine();
+
+            //Llegim primera línia amb informació:
+            frase=fileRead.readLine();  
             
             Activities activity = null;
             while (frase != null) {
@@ -85,7 +89,6 @@ public class AppProgramaBenestar {
         }
 
         // ------ Fitxer .txt - usuaris -----
-        UserList usersList = new UserList(300);
         try{
             BufferedReader fileUser = new BufferedReader(new FileReader("users.txt"));
             System.out.println("READING...");
@@ -234,66 +237,64 @@ public class AppProgramaBenestar {
         }
         */
         new AppGrafica(activities, usersList);
+    }
 
-
-        // ------ Fitxer .txt ------
+    public static void guardarDades (ActivityList activities, UserList usersList){
+        // ------ Guardar informació a fitxer data.txt ------
         try{
             BufferedWriter file = new BufferedWriter(new FileWriter("data.txt"));
-            String frase= "OneDay;nameActivity;dd-mm-yyyy;dd-mm-yyyy;collective;29;city;dd-mm-yyyy;hh:mm;hh:mm;12.3";
-            file.write(frase);
+            file.write("OneDay;nameActivity;YYYY-MM-DD;YYYY-MM-DD;collective;int;city;YYYY-MM-DD;hh:mm;hh:mm;double");
             file.newLine();
-            frase="Periodic;nameActivity;dd-mm-yyyy;dd-mm-yyyy;collective;29;dd-mm-yyyy;hh:mm;dd-mm-yyyy;21;14.5;centerName;cityName";
-            file.write(frase);
+            file.write("Periodic;nameActivity;YYYY-MM-DD;YYYY-MM-DD;collective;int;YYYY-MM-DD;hh:mm;YYYY-MM-DD;int;double;centerName;cityName");
             file.newLine();
-            frase = "Online;nameActivity;dd-mm-yyyy;dd-mm-yyyy;collective;29;dd-mm-yyyy;dd-mm-yyyy;linkCurso";
-            file.write(frase);
-            file.newLine();
+            file.write("Online;nameActivity;YYYY-MM-DD;YYYY-MM-DD;collective;int;YYYY-MM-DD;YYYY-MM-DD;linkCurso");
+            file.write(""); file.newLine();
             // Es fa tres cops perquè hi ha 3 línies que contenen  la informació de les classes d'activitats.
+
             for(int i=0; i<activities.getNumElems(); i++){
-                file.newLine();
-                frase = activities.getActivity(i).getActivityType();
-                if (frase.equals("One Day")){
-                    frase = "OneDay";
-                } //to do (quitar)
-                if (frase.equals("OneDay")){
-                    OneDayActivity actOne = (OneDayActivity) activities.getActivity(i);
-                    frase += ";" + actOne.getActivityName() + ";" +  actOne.getStartDateInscriptions() + ";" + actOne.getFinishDateInscriptions() + ";" + actOne.getCollectiveString() + ";" + actOne.getInscriptions().getLenInscriptions() + ";" + actOne.getCity() + ";" + actOne.getDay() + ";" + actOne.getStartTime() + ";" + actOne.getFinishTime() + ";" + actOne.getPrice();
-                }
-                else if (frase.equals("Periodic")){
-                    PeriodicActivity actPer = (PeriodicActivity) activities.getActivity(i);
-                    frase += ";" + actPer.getActivityName() + ";" + actPer.getStartDateInscriptions() + ";" + actPer.getFinishDateInscriptions() + ";" + actPer.getCollectiveString() + ";" + actPer.getInscriptions().getLenInscriptions() + ";" + actPer.getDayOfActivity() + ";" + actPer.getInicialTime() + ";" + actPer.getFinalTime() + ";" + actPer.getInicialDate() + ";" + actPer.getWeeksOfActivity() + ";" + actPer.getPriceActivity() + ";" + actPer.getCenterName() + ";" + actPer.getCityName();
-                }
-                else if (frase.equals("Online")){
-                    OnlineActivity actOnl = (OnlineActivity) activities.getActivity(i);
-                    frase += ";" + actOnl.getActivityName() + ";" +actOnl.getStartDateInscriptions() + ";" +actOnl.getFinishDateInscriptions() + ";" + actOnl.getCollectiveString() + ";" + actOnl.getInscriptions().getLenInscriptions() + ";" + actOnl.getStartDateActivity() + ";" + actOnl.getFinishDateActivity() + ";" + actOnl.getLinkCourse();
+                Activities act = activities.getActivity(i);
+                String frase = act.getActivityType();
+                
+                if (act instanceof OneDayActivity){
+                    OneDayActivity actOne = (OneDayActivity) act;
+                    frase = "OneDay;" + actOne.getActivityName() + ";" +  actOne.getStartDateInscriptions() + ";" + actOne.getFinishDateInscriptions() + ";" + actOne.getCollectiveString() + ";" + actOne.getInscriptions().getLenInscriptions() + ";" + actOne.getCity() + ";" + actOne.getDay() + ";" + actOne.getStartTime() + ";" + actOne.getFinishTime() + ";" + actOne.getPrice();
+                
+                } else if (act instanceof PeriodicActivity){
+                    PeriodicActivity actPer = (PeriodicActivity) act;
+                    frase = "Periodic;" + actPer.getActivityName() + ";" + actPer.getStartDateInscriptions() + ";" + actPer.getFinishDateInscriptions() + ";" + actPer.getCollectiveString() + ";" + actPer.getInscriptions().getLenInscriptions() + ";" + actPer.getDayOfActivity() + ";" + actPer.getInicialTime() + ";" + actPer.getFinalTime() + ";" + actPer.getInicialDate() + ";" + actPer.getWeeksOfActivity() + ";" + actPer.getPriceActivity() + ";" + actPer.getCenterName() + ";" + actPer.getCityName();
+                
+                } else if (act instanceof OnlineActivity){
+                    OnlineActivity actOnl = (OnlineActivity) act; 
+                    frase = "Online;" + actOnl.getActivityName() + ";" +actOnl.getStartDateInscriptions() + ";" +actOnl.getFinishDateInscriptions() + ";" + actOnl.getCollectiveString() + ";" + actOnl.getInscriptions().getLenInscriptions() + ";" + actOnl.getStartDateActivity() + ";" + actOnl.getFinishDateActivity() + ";" + actOnl.getLinkCourse();
                 }
                 file.write(frase);
-                
+                file.newLine(); 
             }
+
             file.close();
 		} catch(IOException e) {
 			System.out.println("S'ha produit un error en els arxius");
         }
 
+        // ------ Guardar informació a fitxer users.txt ------
         try{
             BufferedWriter file = new BufferedWriter(new FileWriter("users.txt"));
             // Es fa tres cops perquè hi ha 3 línies que contenen  la informació de les classes d'activitats.
-            String frase;
             for(int i=0; i<usersList.getNumElems(); i++){
-                file.newLine();
                 User user = usersList.getUser(i);
-                frase = user.getUserType() + ";" + user.getNickname() + ";" + user.getEmail();
-                if (user.getUserType().equalsIgnoreCase("Student")) {
-                    StudentUser studentUser = (StudentUser) user;
-                    frase += ";" + studentUser.getDegree() + ";" + studentUser.getFirstYear();
-                } else if (user.getUserType().equalsIgnoreCase("PDI")) {
-                    PDIUser pdiUser = (PDIUser) user;
-                    frase += ";" + pdiUser.getCampus() + ";" + pdiUser.getDepartment();
-                } else if (user.getUserType().equalsIgnoreCase("PTGAS")) {
-                    PTGASUser ptgasUser = (PTGASUser) user;
-                    frase += ";" + ptgasUser.getCampus();
+                String frase = user.getUserType() + ";" + user.getNickname() + ";" + user.getEmail();
+                
+                if (user instanceof StudentUser){
+                    frase += ";" + ((StudentUser)user).getDegree() + ";" + ((StudentUser)user).getFirstYear();
+                
+                } else if (user instanceof PDIUser){
+                    frase += ";" + ((PDIUser)user).getCampus() + ";" +  ((PDIUser)user).getDepartment();
+                
+                } else if (user instanceof PTGASUser){
+                    frase += ";" + ((PTGASUser)user).getCampus();
                 }
                 file.write(frase);
+                file.newLine();
             }
             file.close();
 		} catch(IOException e) {
@@ -301,7 +302,7 @@ public class AppProgramaBenestar {
         }
 
 
-        // ---- Fitxer   .ser ----
+        // ------ Guardar informació a fitxer inscripcions.ser ------
         try{
             ObjectOutputStream fileInscriptions = new ObjectOutputStream(new FileOutputStream("inscriptions.ser"));
             System.out.println("WRITING...");
@@ -313,9 +314,9 @@ public class AppProgramaBenestar {
                     fileInscriptions.writeObject(act.getInscriptions().getInscription(j));
                 }
             }
+            fileInscriptions.close();
         } catch (IOException e){
-            System.out.println("Error en l'arxiu de sortida");
-            System.out.println(e);
+            JOptionPane.showMessageDialog(null, "Error guardant inscripcions .ser : " +e.getMessage(), "ERROR!", JOptionPane.WARNING_MESSAGE);
         }
     }
 
@@ -448,8 +449,7 @@ public class AppProgramaBenestar {
     // ------ 3º OPCIÓ DEL MENU ------
     public static void option3(ActivityList activities){
         //3. Mostrar informació activitats en període d'inscripció: places disponibles o en llista d'espera.
-        LocalDate today = LocalDate.now();
-        ActivityList openInscriptionActivities = activities.activitiesInscriptionOpen(today);
+        ActivityList openInscriptionActivities = activities.activitiesInscriptionOpen(usedDate);
         for (int i = 0; i < openInscriptionActivities.getNumElems(); i++) {
             int numPlazasDisp = openInscriptionActivities.getActivity(i).getInscriptions().getLenInscriptions() - openInscriptionActivities.getActivity(i).getNumInscriptions();
             System.out.println((i+1) + "- " + openInscriptionActivities.getActivity(i).getActivityName() + ", te " + numPlazasDisp + " places disponibles");

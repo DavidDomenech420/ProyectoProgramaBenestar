@@ -1,9 +1,27 @@
 package aplicació;
 
 import javax.swing.*; //importar per a que funcioni el 'extends JFrame'
+
+import Usuaris.PDIUser;
+import Usuaris.PTGASUser;
+import Usuaris.StudentUser;
+import Usuaris.User;
+import dades.Activities;
+import dades.Inscriptions;
+import dades.OneDayActivity;
+import dades.OnlineActivity;
+import dades.PeriodicActivity;
+
 import java.awt.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 import list.ActivityList;
 import list.UserList;
+
+
+
+
 
 public class AppGrafica extends JFrame {
     private static final long serialVersionUID = 1L;
@@ -13,7 +31,7 @@ public class AppGrafica extends JFrame {
 
     public AppGrafica (ActivityList activities, UserList users){
         super("PROGRAMA BENESTAR URV");
-
+        
         AccioBotons accio = new AccioBotons(activities, users);
 
         menu = new JPanel();
@@ -104,6 +122,13 @@ public class AppGrafica extends JFrame {
         button21.addActionListener(accio);
         menu.add(button21);
 
+        JButton button22 = new JButton("Guardar i Sortir");
+        button22.addActionListener(accio);
+        button22.setBackground(Color.ORANGE);
+        menu.add(button22);
+
+
+
         //------ PASSOS DE CREACIÓ DE LA FINESTRA ------
         //Si hi ha molts botons, els podrem veure tots fent scroll
         JScrollPane scroll = new JScrollPane(menu);
@@ -113,7 +138,6 @@ public class AppGrafica extends JFrame {
         this.setSize(800, 700); //Ajusta la mida de finestra al contingut
         this.setLocationRelativeTo(null);
         this.setVisible(true); //Per poder fer visible la finestra
-        
 
     }
 }
