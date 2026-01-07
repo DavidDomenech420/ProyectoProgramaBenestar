@@ -1,5 +1,8 @@
 package Usuaris;
 
+/**
+ * @author Autoria de la classe: David Doménech Aguilera
+ */
 public class PDIUser extends PTGASUser{
     private String department;
 

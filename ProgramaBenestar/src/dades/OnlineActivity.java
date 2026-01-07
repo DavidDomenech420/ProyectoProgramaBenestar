@@ -1,6 +1,9 @@
 package dades;
 import java.time.LocalDate;
 
+/**
+ * @author Autoria de la classe: David Doménech Aguilera
+ */
 public class OnlineActivity extends Activities {
     private LocalDate startDateActivity;
     private LocalDate finishDateActivity;

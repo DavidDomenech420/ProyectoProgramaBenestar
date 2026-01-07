@@ -5,6 +5,9 @@ import java.time.LocalDate;
 import Usuaris.User;
 import list.InscriptionList;
 
+/**
+ * @author Autoria de la classe: David Domènech Aguilera
+ */
 public abstract class Activities implements Serializable{
     private String activityType;
     private String activityName;

@@ -2,6 +2,9 @@ package dades;
 import java.time.LocalDate;   //Júlia Alquézar Duran and Sandra Serra Férriz
 import java.time.LocalTime;
 
+/**
+ * @author Autoria de la classe: Júlia Alquézar Duran i Sandra Serra Férriz
+ */
 public class PeriodicActivity extends Activities{
     private String dayOfActivity; //día on es fan les activitats
     private LocalTime inicialTime;

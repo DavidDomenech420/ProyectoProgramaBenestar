@@ -1,5 +1,8 @@
 package Usuaris;
 
+/**
+ * @author Autoria de la classe: Biel Sanz López-Hervás 
+ */
 public class StudentUser extends User{
     private String degree;
     private int firstYear;

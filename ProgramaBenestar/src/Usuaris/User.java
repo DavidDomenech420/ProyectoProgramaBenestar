@@ -1,6 +1,9 @@
 package Usuaris;
 import java.io.Serializable;
 
+/**
+ * @author Autoria de la classe: tot el grup
+ */
 public abstract class User implements Serializable {
     // Si la classe pare user és serialitzable, les classes filles també ho seran.
     private static final long serialVersionUID = 1L; // Controla la compatibilitat de les classes 

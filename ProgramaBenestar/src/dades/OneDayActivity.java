@@ -2,6 +2,9 @@ package dades;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+/**
+ * @author Autoria de la classe: Biel Sanz López-Hervás 
+ */
 public class OneDayActivity extends Activities{
     private String city;
     private LocalDate day;

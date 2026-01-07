@@ -19,7 +19,10 @@ import Usuaris.PDIUser;
 import Usuaris.PTGASUser;
 import Usuaris.StudentUser;
 
-//Aquesta classe és la responsable de tractar els esdeveniments dels botons.
+//Aquesta classe és la responsable de tractar els esdeveniments dels botons./**
+/**
+ * @author Autoria: Sandra Serra Férriz i Júlia Alquézar Duran
+ */
 public class AccioBotons implements ActionListener {
     private ActivityList activities;
     private UserList users;
@@ -33,9 +36,10 @@ public class AccioBotons implements ActionListener {
     public void actionPerformed (ActionEvent event) {
         String option = event.getActionCommand(); //S'ha d'utilitzar getActionCommand per saber quina opció s'ha escollit
 
-        //---------------------------- OPCIÓ 1 ----------------------------
-        //1. Mostrar informació sobre la data actual: pels jocs de proves farem diferents dates (per poder acceptar inscripcions o no).
-        // Es mostrarà la data per poder modificar-la i fer o no operacions.
+        //---------------------------- OPCIÓ 1 ---------------------------
+        /**
+         * Autoria interfície gràfica: Sandra Serra Férriz
+         */
         if(option.equalsIgnoreCase("Informació sobre la data actual")){
             JOptionPane.showMessageDialog(null, "Data actual al programa: " +AppProgramaBenestar.usedDate, "DATA DEL SISTEMA", JOptionPane.INFORMATION_MESSAGE);
 
@@ -58,7 +62,10 @@ public class AccioBotons implements ActionListener {
 
 
         //---------------------------- OPCIÓ 2 ----------------------------
-        //2. Mostrar dades d'una llista: demanem de quina es vol mostrar (usuaris o activitats).
+        //2. Mostrar dades d'una llista: demanem de quina es vol mostrar (usuaris o activitats).ç
+        /**
+         * Autoria interfície gràfica: Sandra Serra Férriz
+         */
         else if (option.equalsIgnoreCase("Informació de les dades d'una llista")){
             //Demanem l'opció a mostrar per pantalla
             String answer = JOptionPane.showInputDialog(null, "Escriu de què vols obtenir la informació (usuaris/activitats): ", "Informació de llista", JOptionPane.INFORMATION_MESSAGE);
@@ -200,6 +207,9 @@ public class AccioBotons implements ActionListener {
 
         //---------------------------- OPCIÓ 3 ----------------------------
         //3. Mostrar informació activitats en període d'inscripció: places disponibles o en llista d'espera.
+        /**
+         * Autoria interfície gràfica: Sandra Serra Férriz
+         */
         else if (option.equalsIgnoreCase("Informació de les activitats en període d'inscripció")){
             ActivityList openInscriptionActivities = activities.activitiesInscriptionOpen(AppProgramaBenestar.usedDate);
 
@@ -222,6 +232,9 @@ public class AccioBotons implements ActionListener {
 
         //---------------------------- OPCIÓ 4 ----------------------------
         //4. Mostrar informació d'activitats en data actual: tota la informació (places, llista d'espera, etc).
+        /**
+         * Autoria interfície gràfica: Sandra Serra Férriz
+         */
         else if (option.equalsIgnoreCase("Informació d'activitats amb classe en la data actual")){
             if(activities.getNumElems() == 0){
                 JOptionPane.showMessageDialog(null, "No hi ha activitats amb classe en la data actual", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
@@ -259,6 +272,9 @@ public class AccioBotons implements ActionListener {
 
         //---------------------------- OPCIÓ 5 ----------------------------
         //5. Mostrar activitats actives en la data actual: nom de les activitats; no cal classe, però la data actual entre la inicial i la final.
+        /**
+         * Autoria interfície gràfica: Sandra Serra Férriz
+         */
         else if (option.equalsIgnoreCase("Activitats actives en la data actual")){
             String message = "Activitats actives en la data actual ("+AppProgramaBenestar.usedDate+"): \n";
 
@@ -305,6 +321,9 @@ public class AccioBotons implements ActionListener {
 
         //---------------------------- OPCIÓ 6 ----------------------------
         //6. Mostrar activitats amb places disponibles: nom d'aquestes. Tant si estan en termini d'inscripció o no.
+        /**
+         * Autoria interfície gràfica: Sandra Serra Férriz
+         */
         else if (option.equalsIgnoreCase("Activitats amb places disponibles")){
             if(activities.getNumElems() == 0){
                 JOptionPane.showMessageDialog(null, "No hi ha activitats amb places disponibles", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
@@ -313,9 +332,13 @@ public class AccioBotons implements ActionListener {
                 String phrase = "Activitats amb places disponibles: \n";
 
                 for(int i = 0; i < activities.getNumElems(); i++){
-                    if(activities.getActivity(i).getNumInscriptions() < activities.getActivity(i).getInscriptions().getLenInscriptions()){
+                    if(activities.getActivity(i).getNumInscriptions() < activities.getActivity(i).getInscriptions().getLenInscriptions() || (activities.getActivity(i).getNumElemsWaitingList() < activities.getActivity(i).getWaitingList().length && activities.getActivity(i).getNumInscriptions() == activities.getActivity(i).getInscriptions().getLenInscriptions())){
                         int remaining = activities.getActivity(i).getInscriptions().getLenInscriptions() - activities.getActivity(i).getNumInscriptions();
                         phrase = phrase + activities.getActivity(i)+ " --> Places disponibles: "+remaining;
+                        if(activities.getActivity(i).getNumElemsWaitingList() < activities.getActivity(i).getWaitingList().length && activities.getActivity(i).getNumInscriptions() == activities.getActivity(i).getInscriptions().getLenInscriptions()){
+                            remaining = activities.getActivity(i).getWaitingList().length - activities.getActivity(i).getNumElemsWaitingList();
+                            phrase = phrase + activities.getActivity(i)+ " --> Places disponibles: "+remaining;
+                        }
                     }
                 }
                 JOptionPane.showMessageDialog(null, phrase, "Activitats amb places", JOptionPane.INFORMATION_MESSAGE);
@@ -327,6 +350,9 @@ public class AccioBotons implements ActionListener {
 
         //---------------------------- OPCIÓ 7 ----------------------------
         //7. Mostrar informació d'una activitat: informació detallada a partir del nom d'aquesta.
+        /**
+         * Autoria interfície gràfica: Sandra Serra Férriz
+         */
         else if (option.equalsIgnoreCase("Informació d'una activitat")){
             if(activities.getNumElems() == 0){
                 JOptionPane.showMessageDialog(null, "No hi ha activitats registrades", "ATENCIÓ!", JOptionPane.INFORMATION_MESSAGE);
@@ -349,6 +375,9 @@ public class AccioBotons implements ActionListener {
 
         //---------------------------- OPCIÓ 8 ----------------------------
         //8. Mostrar informació d'usuari: informació detallada a partir del nom d'aquest.
+        /**
+         * Autoria interfície gràfica: Sandra Serra Férriz
+         */
         else if (option.equalsIgnoreCase("Informació d'un usuari")){
             if(users.getNumElems() == 0){
                 JOptionPane.showMessageDialog(null, "No hi ha usuaris registrats!", "ATENCIÓ!", JOptionPane.INFORMATION_MESSAGE);
@@ -370,6 +399,9 @@ public class AccioBotons implements ActionListener {
 
         //---------------------------- OPCIÓ 9 ----------------------------
         //9. Mostrar activitats on estàs inscrit: totes a les que l'usuari s'ha apuntat.
+        /**
+         * Autoria interfície gràfica: Sandra Serra Férriz
+         */
         else if (option.equalsIgnoreCase("Activitats on estàs inscrit")){
             if(activities.getNumElems() == 0){
                 JOptionPane.showMessageDialog(null, "No hi han activitats registrades!", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
@@ -407,6 +439,9 @@ public class AccioBotons implements ActionListener {
         //10. Inscripció a una activitat: disponible si es dona dins el termini i si aquesta es s'ofereix al col·lectiu que pertanyem.
         //L'usuari pot estar a la llista (usar alies) o no, en aquest cas s'haurà de demanar la resta d'informació.
         //Control de places disponibles o llista d'espera. Si la llista d'espera està plena, prohibit cap tipus d'inscripció.
+        /**
+         * Autoria interfície gràfica: Júlia Alquézar Duran
+         */
         else if (option.equalsIgnoreCase("Inscripció a una activitat")){
             if(activities.getNumElems() == 0){
                 JOptionPane.showMessageDialog(null, "No hi han activitats registrades!", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
@@ -560,6 +595,9 @@ public class AccioBotons implements ActionListener {
 
         //---------------------------- OPCIÓ 11 ----------------------------
         //11. Mostrar els usuaris inscrits en activitats i els usuaris en llista d'espera: nom d'aquests.
+        /**
+         * Autoria interfície gràfica: Sandra Serra Férriz
+         */
         else if (option.equalsIgnoreCase("Usuaris inscrits en activitats i usuaris inscrits en llista d'espera")){
             if(users.getNumElems() == 0){
                 JOptionPane.showMessageDialog(null, "No hi han usuaris registrats!", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
@@ -641,6 +679,9 @@ public class AccioBotons implements ActionListener {
 
         //---------------------------- OPCIÓ 13 ----------------------------
         //13. Afegir una nova activitat d'un dia.
+        /**
+         * Autoria interfície gràfica: Sandra Serra Férriz
+         */
         else if (option.equalsIgnoreCase("Afegir una nova activitat d'un dia")){
             String activityName = JOptionPane.showInputDialog(null, "Introdueix el nom de l'activitat: ", "Creació d'activitat d'un dia", JOptionPane.QUESTION_MESSAGE);
             
@@ -710,6 +751,9 @@ public class AccioBotons implements ActionListener {
 
         //---------------------------- OPCIÓ 14 ----------------------------
         //14. Afegir una nova activitat periòdica.
+        /**
+         * Autoria interfície gràfica: Júlia Alquézar Duran
+         */
         else if (option.equalsIgnoreCase("Afegir una nova activitat periòdica")){
             String activityName = JOptionPane.showInputDialog(null, "Introdueix el nom de l'activitat: ", "Creació d'activitat periòdica", JOptionPane.QUESTION_MESSAGE);
             
@@ -776,6 +820,9 @@ public class AccioBotons implements ActionListener {
         //---------------------------- OPCIÓ 15 ----------------------------
         //15. Afegir una nova activitat online.
         // Demanem al usuari que ens digui la informació que vol afegir a l'activitat
+        /**
+         * Autoria interfície gràfica: Sandra Serra Férriz
+         */
         else if (option.equalsIgnoreCase("Afegir una nova activitat en línia")){
             String activityName = JOptionPane.showInputDialog(null, "Introdueix el nom de l'activitat", "Creació d'activitat online", JOptionPane.QUESTION_MESSAGE);
 
@@ -835,6 +882,9 @@ public class AccioBotons implements ActionListener {
         //Requisits per a que l'usuari la pugui valorar: 
             //1- l'activitat ha d'haver acabat.
             //2- l'usuari ha d'haver assistit a l'activitat.
+        /**
+         * Autoria interfície gràfica: Júlia Alquézar Duran
+         */
         else if (option.equalsIgnoreCase("Valoració d'una activitat")){
             activities = activities.activitiesFinished(AppProgramaBenestar.usedDate);
 
@@ -903,6 +953,9 @@ public class AccioBotons implements ActionListener {
 
         //---------------------------- OPCIÓ 17 ----------------------------
         //17. Mostrar resum de valoracions de les activitats: han d'estar acabades.
+        /**
+         * Autoria interfície gràfica: Júlia Alquézar Duran
+         */
         else if (option.equalsIgnoreCase("Resum de valoracions de les activitats")){
             
             //Agafarem les activitats acabades, ja que aquestes seran les que es poden valorar
@@ -935,6 +988,9 @@ public class AccioBotons implements ActionListener {
 
         //---------------------------- OPCIÓ 18 ----------------------------
         //18. Mostrar resum de valoracions d'un usuari: total de valoracions fetes per l'usuari indicat.
+        /**
+         * Autoria interfície gràfica: Júlia Alquézar Duran
+         */
         else if (option.equalsIgnoreCase("Resum de valoracions d'un usuari")){
             if(users.getNumElems() == 0){
                 JOptionPane.showMessageDialog(null, "Error! No hi ha usuaris registrats", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
@@ -974,6 +1030,9 @@ public class AccioBotons implements ActionListener {
         //---------------------------- OPCIÓ 19 ----------------------------
         //19. Mostrar mitjanes de valoracions dels col·lectius:
         // Objectiu -> comparar si els usuaris dels diferents col·lectius valoren igual o no.
+        /**
+         * Autoria interfície gràfica: Júlia Alquézar Duran
+         */
         else if (option.equalsIgnoreCase("MItjanes de valoracions dels col·lectius")){
             if(users.getNumElems() == 0){
                 JOptionPane.showMessageDialog(null, "Error! No hi ha usuaris registrats", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
@@ -1026,6 +1085,9 @@ public class AccioBotons implements ActionListener {
         //---------------------------- OPCIÓ 20 ----------------------------
         //20. Mostrar l'usuari més actiu del col·lectiu indicat: l'usuari més actiu serà el que s'ha apuntat a més activitats.
         // En cas d'empat entre usuaris, s'escollirà a qualsevol usuari que compleixi els requisits.
+        /**
+         * Autoria interfície gràfica: Júlia Alquézar Duran
+         */
         else if (option.equalsIgnoreCase("Usuari més actiu d'un col·lectiu")){
             if(users.getNumElems() == 0){
                 JOptionPane.showMessageDialog(null, "Error! No hi ha usuaris registrats", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
@@ -1060,6 +1122,9 @@ public class AccioBotons implements ActionListener {
         //---------------------------- OPCIÓ 21 ----------------------------
         //21. Baixa d'activitats: donar de baixa les activitats que ja han acabat el període d'inscripció sense omplir el 10% de les places.
         // En activitats en línia es donarà si el número d'inscrits es inferior a 20 persones.
+        /**
+         * Autoria interfície gràfica: Júlia Alquézar Duran
+         */
         else if (option.equalsIgnoreCase("Baixa d'activitats")){
             String phrase = "";
             if(activities.getNumElems() == 0){
@@ -1108,6 +1173,9 @@ public class AccioBotons implements ActionListener {
 
         //---------------------------- OPCIÓ 21 ----------------------------
         //22. Guardar i sortir
+        /**
+         * Autoria interfície gràfica: Sandra Serra Férriz
+         */
         else if (option.equalsIgnoreCase("Guardar i Sortir")){
             AppProgramaBenestar.guardarDades(activities, users);
             JOptionPane.showMessageDialog(null, "Dades guardades correctament!", "GUARDAT!", JOptionPane.INFORMATION_MESSAGE);

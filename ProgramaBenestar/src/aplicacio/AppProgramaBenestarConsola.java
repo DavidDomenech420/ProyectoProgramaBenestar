@@ -19,6 +19,9 @@ import Usuaris.PTGASUser;
 import Usuaris.StudentUser;
 import Usuaris.User;
 
+/**
+ * @author Autoria de la classe: tot el grup.
+ */
 public class AppProgramaBenestarConsola {
     static Scanner keyboard = new Scanner(System.in);
     public static LocalDate usedDate = LocalDate.now(); //La variable haurà de ser 'public' per poder accedir des de la part d'interficies gràfiques
@@ -347,6 +350,13 @@ public class AppProgramaBenestarConsola {
     }
 
     // ------ 1º OPCIÓ DEL MENU ------
+    /**
+     * @author Autoria: Sandra Serra Férriz
+     * 
+     * Permet visualitzar i modificar la data actual.
+     * Si el format introduït és incorrecte, captura l'error i avisa l'usuari.
+     * 
+     */
     public static void option1(){
         //1. Mostrar informació sobre la data actual: pels jocs de proves farem diferents dates (per poder acceptar inscripcions o no).
         // Es mostrarà la data per poder modificar-la i fer o no operacions.
@@ -366,10 +376,17 @@ public class AppProgramaBenestarConsola {
     }
     //--------------------------------
     
-
+    /**
+     * @author Autoria: Júlia Alquézar Duran
+     * 
+     * Mostra informació de les dades en les llistes, podent triat entre usuaris o activitats. 
+     * També es pot triar el subgrup de cada llista.
+     * @param tipus Defineix la categoria principal a consultar ("usuaris" o "activitats").
+     * @param usersList Llista que conté tots els usuaris registrats.
+     * @param activities Llista que conté totes les activitats del sistema.
+     */
     // ------ 2º OPCIÓ DEL MENU PER QUAN ENS DEMANEN USUARIS ------
     public static void option2(String tipus, UserList usersList, ActivityList activities){
-        //2. Mostrar dades d'una llista: demanem de quina es vol mostrar (usuaris o activitats).
         if(tipus.equalsIgnoreCase("usuaris")){
             try{
                 System.out.println("Escriu quin tipus d'usuari vols que es mosti:\n1: TOTS els usuaris\n2: professorat (PDI)\n3: personal tècnic i de gestió (PTGAS)\n4: estudiants\nEscriu la teva opció a continuació: ");
@@ -445,10 +462,14 @@ public class AppProgramaBenestarConsola {
 
 
     // ------ 3º OPCIÓ DEL MENU ------
+    /**
+     * @author Autoria: David Domènech Aguilera
+     * 
+     * Mostrar informació activitats en període d'inscripció: places disponibles o en llista d'espera.
+     * @param activities Llista que conté totes les activitats afegides.
+     */
     public static void option3(ActivityList activities){
-        //3. Mostrar informació activitats en període d'inscripció: places disponibles o en llista d'espera.
-        LocalDate today = LocalDate.now();
-        ActivityList openInscriptionActivities = activities.activitiesInscriptionOpen(today);
+        ActivityList openInscriptionActivities = activities.activitiesInscriptionOpen(usedDate);
         for (int i = 0; i < openInscriptionActivities.getNumElems(); i++) {
             int numPlazasDisp = openInscriptionActivities.getActivity(i).getInscriptions().getLenInscriptions() - openInscriptionActivities.getActivity(i).getNumInscriptions();
             System.out.println((i+1) + "- " + openInscriptionActivities.getActivity(i).getActivityName() + ", te " + numPlazasDisp + " places disponibles");
@@ -457,9 +478,14 @@ public class AppProgramaBenestarConsola {
     }
     //--------------------------------
 
-
+    /**
+     * @author Autoria: Biel Sanz López-Hervás
+     * 
+     * Mostrar informació d'activitats en data actual: tota la informació (places, llista d'espera, etc).
+     * Filtra segons el tipus d'activitat.
+     * @param activities Llista que conté totes les activitats afegides.
+     */
     public static void option4(ActivityList activities){
-        //4. Mostrar informació d'activitats en data actual: tota la informació (places, llista d'espera, etc).
         for (int i = 0; i < activities.getNumElems(); i++){
             if (activities.getActivity(i) instanceof OneDayActivity){
                 OneDayActivity OneDay = (OneDayActivity) activities.getActivity(i);
@@ -484,8 +510,15 @@ public class AppProgramaBenestarConsola {
 
 
     // ------ 5º OPCIÓ DEL MENU ------
+    /**
+     * @author Autoria: Sandra Serra Férriz
+     * 
+     * Mostrar activitats actives en la data actual: nom de les activitats; no cal classe, però la data actual entre la inicial i la final.
+     * El mètode recorre la llista i classifica les activitats actives en esl tres possibles grups.
+     * @param activities Llista que conté totes les activitats afegides.
+     * @param usedDate Data sobre la que busca les activitats actives.
+     */
     public static void option5(ActivityList activities, LocalDate usedDate){
-        //5. Mostrar activitats actives en la data actual: nom de les activitats; no cal classe, però la data actual entre la inicial i la final.
         boolean thereAre = false; 
         boolean activeOneDay = false;
         boolean activePeriodic = false;
@@ -551,28 +584,59 @@ public class AppProgramaBenestarConsola {
 
 
     // ------ 6º OPCIÓ DEL MENU ------
+    /**
+     * @author Autoria: Júlia Alquézar Duran
+     * 
+     * Mostra totes les activitats que encara tenen places disponibles (aforament no complet).
+     * Mira si les inscripcions estan plenes, i en cas afirmatiu, mira si la llista d'espera està plena
+     * @param activities Llista que conté totes les activitats afegides.
+     */
     public static void option6(ActivityList activities){
-        //6. Mostrar activitats amb places disponibles: nom d'aquestes. Tant si estan en termini d'inscripció o no.
+        String phrase = "";
         for(int i = 0; i < activities.getNumElems(); i++){
-            if(activities.getActivity(i).getNumInscriptions() < activities.getActivity(i).getInscriptions().getLenInscriptions()){
-                System.out.println(activities.getActivity(i));
+            if(activities.getActivity(i).getNumInscriptions() < activities.getActivity(i).getInscriptions().getLenInscriptions() || (activities.getActivity(i).getNumElemsWaitingList() < activities.getActivity(i).getWaitingList().length && activities.getActivity(i).getNumInscriptions() == activities.getActivity(i).getInscriptions().getLenInscriptions())){
+                int remaining = activities.getActivity(i).getInscriptions().getLenInscriptions() - activities.getActivity(i).getNumInscriptions();
+                phrase = phrase + activities.getActivity(i)+ " --> Places disponibles: "+remaining;
+                if(activities.getActivity(i).getNumElemsWaitingList() < activities.getActivity(i).getWaitingList().length && activities.getActivity(i).getNumInscriptions() == activities.getActivity(i).getInscriptions().getLenInscriptions()){
+                    remaining = activities.getActivity(i).getWaitingList().length - activities.getActivity(i).getNumElemsWaitingList();
+                    phrase = phrase + activities.getActivity(i)+ " --> Places disponibles (llista d'espera): "+remaining;
+                }
+                
             }
+            if(phrase.equalsIgnoreCase("")){
+                System.out.println("No hi ha activitats amb places disponibles.");
+            }
+            else{
+                System.out.println(phrase);
+            }
+            
         }
     }
     //--------------------------------
 
 
     // ------ 7º OPCIÓ DEL MENU ------
+    /**
+     * @author Autoria: David Domènech Aguilera
+     * 
+     * Mostrar informació d'una activitat: informació detallada a partir del nom d'aquesta.
+     * @param activities Llista que conté totes les activitats afegides.
+     * @param nameActivity Nom de l'activitat que es vol consultar.
+     */
     public static void option7(ActivityList activities, String nameActivity){
-        //7. Mostrar informació d'una activitat: informació detallada a partir del nom d'aquesta.
         System.out.println(activities.getActivity(nameActivity));
     }
     //--------------------------------
 
 
     // ------ 8º OPCIÓ DEL MENU ------
+    /**
+     * @author Autoria: Biel Sanz López-Hervás 
+     * 
+     * Mostra informació d'usuari: informació detallada a partir del nom d'aquest.
+     * @param List Llista d'usuaris on es farà la cerca.
+     */
     public static void option8(UserList List){
-        //8. Mostrar informació d'usuari: informació detallada a partir del nom d'aquest.
         System.out.println("Escriu el teu nom: ");
         String Name = keyboard.nextLine();
         User aux = List.getUser(Name);
@@ -582,8 +646,14 @@ public class AppProgramaBenestarConsola {
 
 
     // ------ 9º OPCIÓ DEL MENU ------
+    /**
+     * @author Autoria: Sandra Serra Férriz
+     * 
+     * Mostra les activitats a les quals, un usuari especificat, està inscrit: totes a les que l'usuari s'ha apuntat.
+     * @param activities Llista que conté totes les activitats afegides.
+     * @param users Llista que conté tots els usuaris afegits.
+     */
     public static void option9(ActivityList activities, UserList users){
-        //9. Mostrar activitats on estàs inscrit: totes a les que l'usuari s'ha apuntat.
         System.out.println("Introdueix el teu nom d'usuari: ");
         String nomUsuari = keyboard.nextLine();
         System.out.println("Activitats on estàs inscrit: ");
@@ -604,11 +674,18 @@ public class AppProgramaBenestarConsola {
 
 
     // ------ 10º OPCIÓ DEL MENU ------
+    /**
+     * @author Autoria: Júlia Alquézar Duran
+     * 
+     * Gestiona el procés complet d'inscripció d'un usuari a una activitat.
+     * Verifica que l'activitat que existeix i que està en termini d'inscripció.
+     * Identifica l'usuari, i en cas de que no existeixi (no el trobi en la llista), crea un nou usuari i el registra
+     * Valida que el col·lectiu de l'usuari tingui accés a l'activitat triada.
+     * Inscriu l'usuari a l'activitat desitjada.
+     * @param activities Llista que conté totes les activitats afegides.
+     * @param usersList Llista que conté tots els usuaris afegits.
+     */
     public static void option10(ActivityList activities, UserList usersList){
-        //10. Inscripció a una activitat: disponible si es dona dins el termini i si aquesta es s'ofereix al col·lectiu que pertanyem.
-        //L'usuari pot estar a la llista (usar alies) o no, en aquest cas s'haurà de demanar la resta d'informació.
-        //Control de places disponibles o llista d'espera. Si la llista d'espera està plena, prohibit cap tipus d'inscripció.
-
         System.out.println("Ha triat inscriure's a una activitat. Aquestes son les activitats disponibles actualment: ");
         option3(activities); // Cridem a la opció que ens mostra les activitats actives i amb places.
         System.out.println("Perfecte! Ara, indica el nom de l'activitat a la qual et vols inscriure: ");
@@ -752,8 +829,14 @@ public class AppProgramaBenestarConsola {
 
 
     // ------ 11º OPCIÓ DEL MENU ------
+    /**
+     * @author Autoria: David Domènech Aguilera
+     * 
+     * Mostra els usuaris inscrits en activitats i els usuaris en llista d'espera: nom d'aquests.
+     * @param activities Llista que conté totes les activitats afegides.
+     * @param activityName  Nom de l'activitat de la qual es vol veure tots els usuaris inscrits + llista d'espera.
+     */
     public static void option11(ActivityList activities, String activityName){
-        //11. Mostrar els usuaris inscrits en activitats i els usuaris en llista d'espera: nom d'aquests.
         Activities activity = activities.getActivity(activityName);
         System.out.println("Usuaris Inscrits a l'activitat");
         System.out.println((activity.getInscriptions()));
@@ -764,9 +847,16 @@ public class AppProgramaBenestarConsola {
 
 
     // ------ 12º OPCIÓ DEL MENU ------
+    /**
+     * @author Autoria: Biel Sanz López-Hervás 
+     * 
+     * Eliminació d'una activitat
+     * Quan s'elimini un usuari que podia accedir a l'activitat, el primer de la llista d'espera passarà a ocupar el seu lloc.
+     * @param listAct Llista de totes les activitats
+     * @param listUser Llista de tots els usuaris
+     */
     public static void option12(ActivityList listAct, UserList listUser){
-        //12. Eliminicació d'usuari d'una activitat:
-        //Quan s'elimini un usuari que podia accedir a l'activitat, el primer de la llista d'espera passarà a ocupar el seu lloc.
+      
         System.out.println("Escriu l'activitat de la que vols eliminar l'usuari");
         String activity = keyboard.nextLine();
         boolean found = false;
@@ -804,9 +894,14 @@ public class AppProgramaBenestarConsola {
 
 
     // ------ 13º OPCIÓ DEL MENU ------
+    /**
+     * @author Autoria: Sandra Serra Férriz
+     * 
+     * Afegeix una nova acticitat d'un dia
+     * va preguntant per consola totes les dades, i posteriorment, crea l'objecte corresponent en la llista d'activitats.
+     * @param activities Llista de totes les activitats
+     */
     public static void option13(ActivityList activities){
-        //13. Afegir una nova activitat d'un dia.
-
         //----- Nom de l'activitat -----
         System.out.print("Introdueix el nom de l'activitat: "); //Demanem el nom de la nova activitat
         String activityName = keyboard.nextLine();
@@ -900,8 +995,14 @@ public class AppProgramaBenestarConsola {
 
 
     // ------ 14º OPCIÓ DEL MENU ------
+    /**
+     * @author Autoria: Júlia Alquézar Duran
+     * 
+     * Afegeix una activitat periòdica
+     * va preguntant per consola totes les dades, i posteriorment, crea l'objecte corresponent en la llista d'activitats.
+     * @param activities Llista total d'activitats.
+     */
     public static void option14(ActivityList activities){
-        //14. Afegir una nova activitat periòdica.
         System.out.println("has triat afegir una nova activitat periòdica.");
         System.out.println("Quin és el nom de l'activitat? :");
         String activityName = keyboard.nextLine();
@@ -990,10 +1091,14 @@ public class AppProgramaBenestarConsola {
 
 
     // ------ 15º OPCIÓ DEL MENU ------
+    /**
+     * @author Autoria: David Domènech Aguilera
+     * 
+     * Afegeix una nova activitat online.
+     * va preguntant per consola totes les dades, i posteriorment, crea l'objecte corresponent en la llista d'activitats.
+     * @param activities Llista amb totes les activitats afegides.
+     */
     public static void option15(ActivityList activities){
-        //15. Afegir una nova activitat online.
-        // Demanem al usuari que ens digui la informació que vol afegir a l'activitat
-        System.out.print("Nom de l'activitat: ");
         String activityName = keyboard.nextLine();
         
 
@@ -1045,11 +1150,15 @@ public class AppProgramaBenestarConsola {
 
 
     // ------ 16º OPCIÓ DEL MENU ------
+    /**
+     * @author Autoria: Biel Sanz López-Hervás 
+     * 
+     * Valoració d'una activitat.
+     * Per a que es pugui valorar, l'activitat ha d'haver acabat i l'usuari ha d'haver-hi asssistit.
+     * @param listUser Llista de totes els usuaris
+     * @param listAct Llista de totes les activitats afegides.
+     */
     public static void option16(UserList listUser, ActivityList listAct){
-        //16. Valoració d'una activitat: 
-        //requisits per a que l'usuari la pugui valorar: 
-            //1- l'activitat ha d'haver acabat.
-            //2- l'usuari ha d'haver assistit a l'activitat.
         listAct = listAct.activitiesFinished(usedDate);
         System.out.println("Escriu el teu nom: ");
         String user = keyboard.nextLine();
@@ -1110,8 +1219,16 @@ public class AppProgramaBenestarConsola {
 
 
     // ------ 17º OPCIÓ DEL MENU ------
+    /**
+     * @author Autoria: Sandra Serra Férriz
+     * 
+     * Mostra el resum de valoracions de les activitats.
+     * Requisit: han d'estar acabades.
+     * @param activities llista amb totes les activitats.
+     * @param usedDate Data que s'utilitzarà per mostrar el resum de les valoracions.
+     */
     public static void option17(ActivityList activities, LocalDate usedDate){
-        //17. Mostrar resum de valoracions de les activitats: han d'estar acabades.
+
         
         System.out.println("VALORACIONS: ");
 
@@ -1137,8 +1254,16 @@ public class AppProgramaBenestarConsola {
 
 
     // ------ 18º OPCIÓ DEL MENU ------
+    /**
+     * @author Autoria: Júlia Alquézar Duran
+     * 
+     * Mostra el resum de valoracions d'un usuari: total de valoracions fetes per l'usuari indicat.
+     * Comprova que l'usuari estigui a la llista.
+     * @param user Nom de l'usuari del qual es volen veure les valoracions.
+     * @param usersList Llista amb tots els usuaris.
+     * @param activities Llista amb totes les activitats afegides.
+     */
     public static void option18(String user, UserList usersList, ActivityList activities){
-        //18. Mostrar resum de valoracions d'un usuari: total de valoracions fetes per l'usuari indicat.
         boolean found = false;
         int i = 0;
         while(!found && i < usersList.getNumElems()){
@@ -1166,10 +1291,14 @@ public class AppProgramaBenestarConsola {
 
 
     // ------ 19º OPCIÓ DEL MENU ------
+    /**
+     * @author Autoria: David Domènech Aguilera
+     * 
+     * Mostra les mitjanes de valoracions de cada col·lectiu.
+     *  Objectiu -> comparar si els usuaris dels diferents col·lectius valoren igual o no.
+     * @param activities Llista amb totes les activitats afegides.
+     */
     public static void option19(ActivityList activities){
-        //19. Mostrar mitjanes de valoracions dels col·lectius:
-        // Objectiu -> comparar si els usuaris dels diferents col·lectius valoren igual o no.
-
         // Agafem totes les activitats que ja s'han acabat
         ActivityList finishActivities = activities.activitiesFinished(usedDate);
         // Recorrem totes les activitats i hem de mirar les inscripcions de cada activitat, despres recorrem les inscripcions i segons el colectiu sumem una variable de mitjana i altre i el contador
@@ -1207,9 +1336,14 @@ public class AppProgramaBenestarConsola {
 
 
     // ------ 20º OPCIÓ DEL MENU ------
+    /**
+     * @author Autoria: Biel Sanz López-Hervás 
+     * 
+     * Mostra l'usuari més actiu del col·lectiu indicat: l'usuari més actiu serà el que s'ha apuntat a més activitats.
+     * En cas d'empat entre usuaris, s'escollirà a qualsevol usuari que compleixi els requisits.
+     * @param listUser Llista amb tots els usuaris afegits.
+     */
     public static void option20(UserList listUser){
-        //20. Mostrar l'usuari més actiu del col·lectiu indicat: l'usuari més actiu serà el que s'ha apuntat a més activitats.
-        // En cas d'empat entre usuaris, s'escollirà a qualsevol usuari que compleixi els requisits.
 
         System.out.println("Introdueix el colectiu que vols comprovar: ");
         String collective = keyboard.nextLine();
@@ -1237,10 +1371,15 @@ public class AppProgramaBenestarConsola {
 
 
     // ------ 21º OPCIÓ DEL MENU ------
+    /**
+     * @author Autoria: Sandra Serra Férriz
+     * 
+     * Baixa d'activitats: donar de baixa les activitats que ja han acabat el període d'inscripció sense omplir el 10% de les places.
+     * En activitats en línia es donarà si el número d'inscrits es inferior a 20 persones.
+     * @param activities Llista amb totes les activitats.
+     * @param usedDate Data utilitzada per donar de baixa activitats.
+     */
     public static void option21(ActivityList activities, LocalDate usedDate){
-        //21. Baixa d'activitats: donar de baixa les activitats que ja han acabat el període d'inscripció sense omplir el 10% de les places.
-        // En activitats en línia es donarà si el número d'inscrits es inferior a 20 persones.
-
         for(int i=0; i<activities.getNumElems(); i++){
             Activities activity = activities.getActivity(i); //Accés a cada activitat
             InscriptionList maxPlaces = activity.getInscriptions(); //Màxim de places que té l'activitat

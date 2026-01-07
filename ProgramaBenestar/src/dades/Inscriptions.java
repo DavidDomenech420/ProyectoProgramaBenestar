@@ -4,6 +4,9 @@ import java.io.Serializable;
 
 import Usuaris.User;
 
+/**
+ * @author Autoria de la classe: Sandra Serra Férriz
+ */
 public class Inscriptions implements Serializable{
     private User user;
     private int assessment;

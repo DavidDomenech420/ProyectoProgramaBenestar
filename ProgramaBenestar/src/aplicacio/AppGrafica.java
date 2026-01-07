@@ -22,13 +22,21 @@ import list.UserList;
 
 
 
-
+/**
+ * @author Autoria de la classe: Sandra Serra Férriz i Júlia Alquézar Duran
+ */
 public class AppGrafica extends JFrame {
     private static final long serialVersionUID = 1L;
     ActivityList activities;
     UserList users;
     private JPanel menu;
 
+    /**
+     * Finestra principal de la interfície gràfica (GUI)
+     * @param activities Llista que conté totes les activitats del sistema.
+     * @param users Llista que conté tots els usuaris registrats.
+     * genera un menú amb botons que permeten a l'usuari accedir a totes les funcionalitats de gestió d'activitats i usuaris
+     */
     public AppGrafica (ActivityList activities, UserList users){
         super("PROGRAMA BENESTAR URV");
         
@@ -38,6 +46,7 @@ public class AppGrafica extends JFrame {
         menu.setLayout(new GridLayout(0, 1));
 
         //------ BOTONS ------
+        
         JButton button1 = new JButton("Informació sobre la data actual");
         button1.addActionListener(accio);
         menu.add(button1);

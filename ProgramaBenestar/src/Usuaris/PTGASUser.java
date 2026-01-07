@@ -1,5 +1,8 @@
 package Usuaris;
 
+/**
+ * @author Autoria de la classe: Sandra Serra Férriz i Júlia Alquézar Duran
+ */
 public class PTGASUser extends User{
     private String campus;
     
