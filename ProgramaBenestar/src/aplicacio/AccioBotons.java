@@ -1,4 +1,4 @@
-package aplicació;
+package aplicacio;
 
 import java.awt.event.*;
 import java.time.LocalDate;

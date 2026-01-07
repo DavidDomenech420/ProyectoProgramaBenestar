@@ -1,4 +1,4 @@
-package aplicació;
+package aplicacio;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

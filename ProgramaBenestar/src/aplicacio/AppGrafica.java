@@ -1,4 +1,4 @@
-package aplicació;
+package aplicacio;
 
 import javax.swing.*; //importar per a que funcioni el 'extends JFrame'
 
