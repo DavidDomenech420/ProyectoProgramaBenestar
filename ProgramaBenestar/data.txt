@@ -2,3 +2,5 @@ OneDay;nameActivity;YYYY-MM-DD;YYYY-MM-DD;collective;int;city;YYYY-MM-DD;hh:mm;h
 Periodic;nameActivity;YYYY-MM-DD;YYYY-MM-DD;collective;int;YYYY-MM-DD;hh:mm;YYYY-MM-DD;int;double;centerName;cityName
 Online;nameActivity;YYYY-MM-DD;YYYY-MM-DD;collective;int;YYYY-MM-DD;YYYY-MM-DD;linkCurso
 Periodic;perio;2026-01-01;2026-01-10;Student;6;dilluns;11:30;12:30;2026-02-01;3;4.2;centro;vila
+OneDay;hola;2026-01-01;2026-01-03;PDI;6;vila;2026-01-07;16:30;20:30;4.2
+OneDay;costura;2026-01-01;2026-01-02;PDI;5;vila;2026-01-07;16:30;20:30;4.2

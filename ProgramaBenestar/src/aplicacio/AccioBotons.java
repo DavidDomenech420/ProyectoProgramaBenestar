@@ -32,7 +32,7 @@ public class AccioBotons implements ActionListener {
 
     public void actionPerformed (ActionEvent event) {
         String option = event.getActionCommand(); //S'ha d'utilitzar getActionCommand per saber quina opció s'ha escollit
-
+        
         //---------------------------- OPCIÓ 1 ----------------------------
         //1. Mostrar informació sobre la data actual: pels jocs de proves farem diferents dates (per poder acceptar inscripcions o no).
         // Es mostrarà la data per poder modificar-la i fer o no operacions.
@@ -260,53 +260,18 @@ public class AccioBotons implements ActionListener {
         //---------------------------- OPCIÓ 5 ----------------------------
         //5. Mostrar activitats actives en la data actual: nom de les activitats; no cal classe, però la data actual entre la inicial i la final.
         else if (option.equalsIgnoreCase("Activitats actives en la data actual")){
-            String message = "Activitats actives en la data actual ("+AppProgramaBenestar.usedDate+"): \n";
-
-            if(activities.getNumElems() == 0){
-                JOptionPane.showMessageDialog(null, "No hi ha activitats actives en la data actual", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
-            
-            } else if (activities.getNumElems() > 0){
-                for(int i=0; i<activities.getNumElems(); i++){
-                    Activities activity = activities.getActivity(i);
-
-                    //Comprovació per activitats d'un dia
-                    if(activity instanceof OneDayActivity){ //Comprovació que el tipus dinàmic sigui la classe filla
-                        OneDayActivity oneDayAct = (OneDayActivity) activity;
-                        if(oneDayAct.getDay().isEqual(AppProgramaBenestar.usedDate)){
-                            message = message + oneDayAct.getActivityName()+ "(D'un dia)\n";
-                        }
-                    //Comprovació per activitats online
-                    } else if(activity instanceof OnlineActivity){ //Comprovació que el tipus dinàmic sigui la classe filla
-                        OnlineActivity onlineAct = (OnlineActivity) activity;
-                        LocalDate start = onlineAct.getStartDateActivity();
-                        LocalDate finish = onlineAct.getFinishDateActivity();
-                        if(!AppProgramaBenestar.usedDate.isBefore(start) && !AppProgramaBenestar.usedDate.isAfter(finish)){ //Si posem 'usedDate.isAfter(start) && usedDate.isBefore(finish)', exclou els extrems
-                            message = message + onlineAct.getActivityName()+ "(Online)\n";
-                        }
-
-                    //Comprovació per activitats periòdiques
-                    } else if(activity instanceof PeriodicActivity){ //Comprovació que el tipus dinàmic sigui la classe filla
-                        PeriodicActivity periodicAct = (PeriodicActivity) activity;
-                        LocalDate start = periodicAct.getInicialDate();
-                        int weeks = periodicAct.getWeeksOfActivity();
-                        LocalDate finish = start.plusWeeks(weeks);
-                        if(!AppProgramaBenestar.usedDate.isBefore(start) && !AppProgramaBenestar.usedDate.isAfter(finish)){
-                            message = message + periodicAct.getActivityName()+ "(Periòdica)";
-                            
-                        }
-                    }
-                }
-                JOptionPane.showMessageDialog(null, message, "Activitats actives", JOptionPane.INFORMATION_MESSAGE);
-            }
+            activeActivities(activities, users);
             AppProgramaBenestar.guardarDades(activities, users);
         }
         //-----------------------------------------------------------------
 
-
         //---------------------------- OPCIÓ 5a ----------------------------
         else if (option.equalsIgnoreCase("Calendari de les Activitats Actives")){
-            // Abrimos la nueva ventana pasándole la lista de actividades
-            new GraficaCalendari(activities);
+            if(activities.getNumElems() == 0){
+                JOptionPane.showMessageDialog(null, "No hi ha activitats registrades!", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
+            } else if (activities.getNumElems() > 0){
+                new GraficaCalendari(activities, users,  7, 6);
+            }
         }
         //-----------------------------------------------------------------
 
@@ -1123,4 +1088,56 @@ public class AccioBotons implements ActionListener {
         }
         //-----------------------------------------------------------------
     }
+    
+    //---------------------------- FUNCIÓ PER OPCIÓ 5 I PER GRAFICACALENDARI A OPCIÓ 5a ----------------------------
+        public static void activeActivities(ActivityList activities, UserList users){
+            String message = "Activitats actives en la data actual ("+AppProgramaBenestar.usedDate+"): \n";
+
+            if(activities.getNumElems() == 0){
+                JOptionPane.showMessageDialog(null, "No hi ha activitats actives en la data actual", "ATENCIÓ!", JOptionPane.WARNING_MESSAGE);
+            
+            } else if (activities.getNumElems() > 0){
+                for(int i=0; i<activities.getNumElems(); i++){
+                    Activities activity = activities.getActivity(i);
+
+                    //Comprovació per activitats d'un dia
+                    if(activity instanceof OneDayActivity){ //Comprovació que el tipus dinàmic sigui la classe filla
+                        OneDayActivity oneDayAct = (OneDayActivity) activity;
+                        if(oneDayAct.getDay().isEqual(AppProgramaBenestar.usedDate)){
+                            String name = oneDayAct.getActivityName().toUpperCase();
+                            oneDayAct.setActivityName(name);
+                            message = message + oneDayAct+ " (D'un dia)\n";
+                        }
+                    //Comprovació per activitats online
+                    } else if(activity instanceof OnlineActivity){ //Comprovació que el tipus dinàmic sigui la classe filla
+                        OnlineActivity onlineAct = (OnlineActivity) activity;
+                        LocalDate start = onlineAct.getStartDateActivity();
+                        LocalDate finish = onlineAct.getFinishDateActivity();
+                        if(!AppProgramaBenestar.usedDate.isBefore(start) && !AppProgramaBenestar.usedDate.isAfter(finish)){ //Si posem 'usedDate.isAfter(start) && usedDate.isBefore(finish)', exclou els extrems
+                            String name = onlineAct.getActivityName().toUpperCase();
+                            onlineAct.setActivityName(name);
+                            message = message + onlineAct+ " (Online)\n";
+                        }
+
+                    //Comprovació per activitats periòdiques
+                    } else if(activity instanceof PeriodicActivity){ //Comprovació que el tipus dinàmic sigui la classe filla
+                        PeriodicActivity periodicAct = (PeriodicActivity) activity;
+                        LocalDate start = periodicAct.getInicialDate();
+                        int weeks = periodicAct.getWeeksOfActivity();
+                        LocalDate finish = start.plusWeeks(weeks);
+                        if(!AppProgramaBenestar.usedDate.isBefore(start) && !AppProgramaBenestar.usedDate.isAfter(finish)){
+                            String name = periodicAct.getActivityName().toUpperCase();
+                            periodicAct.setActivityName(name);
+                            message = message + periodicAct+ " (Periòdica)";
+                        }
+                    }
+                }
+                JOptionPane.showMessageDialog(null, message, "Activitats actives", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+        //-----------------------------------------------------------------
+
+
+
+
 }
