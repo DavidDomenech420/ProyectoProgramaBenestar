@@ -1,6 +1,6 @@
 package aplicacio;
 
-import javax.swing.*; //importar per a que funcioni el 'extends JFrame'
+import javax.swing.*; //importar per a que funcioni el 'extends JFrame
 
 import Usuaris.PDIUser;
 import Usuaris.PTGASUser;
@@ -18,9 +18,6 @@ import java.time.LocalTime;
 
 import list.ActivityList;
 import list.UserList;
-
-
-
 
 
 public class AppGrafica extends JFrame {
@@ -57,6 +54,13 @@ public class AppGrafica extends JFrame {
         JButton button5 = new JButton("Activitats actives en la data actual");
         button5.addActionListener(accio);
         menu.add(button5);
+
+        //--------- CALENDARI DE LES ACTIVITATS ACTIVES ---------
+        JButton button23 = new JButton("Calendari de les Activitats Actives");
+        button23.addActionListener(accio);
+        button23.setBackground(Color.PINK);
+        menu.add(button23);
+        //-------------------------------------------------------
 
         JButton button6 = new JButton("Activitats amb places disponibles");
         button6.addActionListener(accio);
@@ -135,7 +139,7 @@ public class AppGrafica extends JFrame {
         this.add(scroll, BorderLayout.CENTER); 
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //Per tancar la finestra, l'aplicació... Tot
-        this.setSize(800, 700); //Ajusta la mida de finestra al contingut
+        this.setSize(800, 700);
         this.setLocationRelativeTo(null);
         this.setVisible(true); //Per poder fer visible la finestra
 

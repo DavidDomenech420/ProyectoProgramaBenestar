@@ -303,6 +303,14 @@ public class AccioBotons implements ActionListener {
         //-----------------------------------------------------------------
 
 
+        //---------------------------- OPCIÓ 5a ----------------------------
+        else if (option.equalsIgnoreCase("Calendari de les Activitats Actives")){
+            // Abrimos la nueva ventana pasándole la lista de actividades
+            new GraficaCalendari(activities);
+        }
+        //-----------------------------------------------------------------
+
+
         //---------------------------- OPCIÓ 6 ----------------------------
         //6. Mostrar activitats amb places disponibles: nom d'aquestes. Tant si estan en termini d'inscripció o no.
         else if (option.equalsIgnoreCase("Activitats amb places disponibles")){
